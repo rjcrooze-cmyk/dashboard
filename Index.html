@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Daily Dashboard</title>
+<meta name="theme-color" content="#faf9f7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Dashboard">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Crect%20width='512'%20height='512'%20rx='110'%20fill='%233b6ea5'/%3E%3Ccircle%20cx='256'%20cy='256'%20r='96'%20fill='%23ffd66b'/%3E%3C/svg%3E">
+<style>
+:root{ color-scheme: light; --bg:#faf9f7; --card:#ffffff; --ink:#1f2328; --muted:#6b7280; --line:#e7e5e1; --accent:#3b6ea5; --accent2:#7a5cc4; --chip:#f1efea; --good:#2f7d5b; }
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.wrap{max-width:760px;margin:0 auto;padding:18px 16px 60px}
+header{display:flex;flex-direction:column;gap:10px;margin-bottom:6px}
+.titlerow{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap}
+h1{font-size:20px;margin:0;letter-spacing:-.2px}
+.date{color:var(--muted);font-size:13px}
+.affirm{background:linear-gradient(90deg,#f3effa,#eef4fb);border:1px solid var(--line);border-radius:12px;padding:10px 14px;font-size:14px;display:flex;align-items:center;gap:10px}
+.affirm b{font-weight:600}
+.affirm .a-text{flex:1}
+.icon-btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:3px 8px;cursor:pointer;font-size:13px;color:var(--muted)}
+.icon-btn:hover{color:var(--ink);border-color:#d8d5cf}
+nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1px solid var(--line);padding-bottom:10px}
+.tab{display:inline-flex;align-items:center;gap:6px;border:1px solid transparent;background:transparent;border-radius:999px;padding:6px 13px;cursor:pointer;font-size:13.5px;color:var(--muted)}
+.tab .ico{font-size:14px;line-height:1}
+.tab:hover{color:var(--ink)}
+.tab.active{background:var(--ink);color:#fff}
+.panel{display:none;animation:fade .2s ease}
+.panel.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.grp{margin:0 0 22px}
+.grp h2{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--muted);margin:0 0 10px;font-weight:600}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px}
+.card .t{font-weight:600;font-size:15px;margin:0 0 4px}
+.card .t a{color:var(--ink);text-decoration:none}
+.card .t a:hover{text-decoration:underline}
+.card .s{color:#3a3f45;margin:0}
+.eli{background:#fbf7ee;border:1px dashed #e3d9c2;border-radius:9px;padding:7px 10px;margin-top:8px;font-size:13.5px;color:#5a4e33}
+.eli b{color:#7a6a3f}
+.more{margin-top:6px}
+.more .exp{background:#f6f8fb;border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:7px 11px;margin:7px 0 0;font-size:13.5px;color:#2a2f35}
+.more .exp.loading{color:var(--muted);font-style:italic}
+.card-actions{display:flex;gap:8px;margin-top:9px}
+.mini{border:1px solid var(--line);background:var(--chip);border-radius:7px;padding:3px 10px;cursor:pointer;font-size:12.5px;color:#444}
+.mini:hover{border-color:#d2cec7}
+.headlines{list-style:none;margin:6px 0 0;padding:0}
+.headlines li{padding:6px 0;border-top:1px solid var(--line);font-size:13.7px}
+.headlines li:first-child{border-top:none}
+.headlines a{color:var(--ink);text-decoration:none}
+.headlines a:hover{text-decoration:underline}
+.aim-wrap{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:13px 14px;margin-bottom:10px}
+.aim-wrap .aim-h{font-weight:600;margin:0 0 8px;display:flex;align-items:center;gap:8px}
+.aim-wrap .aim-h .tag{background:#eef4fb;color:var(--accent);font-size:11px;padding:2px 7px;border-radius:6px}
+.tool{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:14px}
+.tool h3{margin:0 0 8px;font-size:14.5px}
+.tool textarea,.tool input[type=text]{width:100%;border:1px solid var(--line);border-radius:8px;padding:8px 10px;font:inherit;background:#fff;resize:vertical}
+.btn{background:var(--ink);color:#fff;border:none;border-radius:8px;padding:7px 14px;cursor:pointer;font-size:13.5px}
+.btn:hover{opacity:.92}
+.row{display:flex;gap:8px;align-items:center;margin-top:8px;flex-wrap:wrap}
+.timer-display{font-size:34px;font-weight:600;letter-spacing:1px;font-variant-numeric:tabular-nums}
+.list{list-style:none;margin:10px 0 0;padding:0}
+.list li{display:flex;gap:8px;align-items:flex-start;padding:7px 0;border-top:1px solid var(--line);font-size:13.7px}
+.list li:first-child{border-top:none}
+.list .x{margin-left:auto;color:var(--muted);cursor:pointer;border:none;background:none;font-size:15px;line-height:1}
+.list .when{color:var(--muted);font-size:12px}
+.out{margin-top:10px;background:#f6f8fb;border-radius:8px;padding:10px 12px;font-size:13.7px;white-space:pre-wrap}
+.empty{color:var(--muted);font-size:13px;font-style:italic}
+.src{color:var(--muted);font-size:12px;margin-top:5px}
+.src b{font-weight:600;color:#5a6473}
+.refresh-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
+.refresh-bar .when{color:var(--muted);font-size:12px}
+.verified{display:inline-block;background:#e9f5ee;color:var(--good);font-size:11px;padding:1px 7px;border-radius:6px;margin-bottom:8px}
+.foot{color:var(--muted);font-size:12px;text-align:center;margin-top:26px}
+@media (max-width:560px){
+  body{font-size:15.5px;padding-bottom:74px}
+  .wrap{padding:14px 12px 28px}
+  h1{font-size:18px}
+  .titlerow{align-items:flex-start}
+  .affirm{font-size:13.5px}
+  nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;margin:0;gap:0;flex-wrap:nowrap;background:var(--card);border-top:1px solid var(--line);border-bottom:none;padding:5px 4px;padding-bottom:calc(5px + env(safe-area-inset-bottom));box-shadow:0 -2px 12px rgba(0,0,0,.06)}
+  .tab{flex:1;flex-direction:column;gap:2px;border-radius:10px;padding:6px 2px;font-size:10.5px}
+  .tab .ico{font-size:19px}
+  .tab .lbl{white-space:nowrap}
+  .tab.active{background:transparent;color:var(--accent)}
+  .card{padding:13px 13px}
+  .card-actions{gap:6px}
+  .mini{padding:7px 11px;font-size:13px}
+  .btn{padding:9px 14px}
+  .tool input[type=text],.tool textarea{font-size:16px}
+  .timer-display{font-size:40px}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="titlerow">
+      <h1>☀️ Daily Dashboard</h1>
+      <span class="date" id="dateLbl"></span>
+    </div>
+    <div class="affirm">
+      <b>✨ Today</b>
+      <span class="a-text" id="affirm"></span>
+      <button class="icon-btn" id="shuffleAff" title="New one">↻</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="tabs"></nav>
+
+  <section class="panel" id="p-briefing"></section>
+  <section class="panel" id="p-news"></section>
+  <section class="panel" id="p-youtube"></section>
+  <section class="panel" id="p-elon"></section>
+  <section class="panel" id="p-loa"></section>
+  <section class="panel" id="p-tools">
+    <div class="tool">
+      <h3>🧠 ELI5 — explain anything simply</h3>
+      <textarea id="eliIn" rows="3" placeholder="Paste a confusing sentence, term, or paragraph…"></textarea>
+      <div class="row"><button class="btn" id="eliGo">Explain simply</button></div>
+      <div class="out" id="eliOut" style="display:none"></div>
+    </div>
+    <div class="tool">
+      <h3>⏱️ Focus timer</h3>
+      <div class="timer-display" id="tDisp">25:00</div>
+      <div class="row">
+        <button class="btn" id="tStart">Start</button>
+        <button class="mini" id="tPause">Pause</button>
+        <button class="mini" id="tReset">Reset</button>
+        <button class="mini" data-min="25">25</button>
+        <button class="mini" data-min="15">15</button>
+        <button class="mini" data-min="5">5</button>
+      </div>
+    </div>
+    <div class="tool">
+      <h3>🔖 Save for later</h3>
+      <div class="row">
+        <input type="text" id="saveIn" placeholder="Paste a link or note…" style="flex:1">
+        <button class="btn" id="saveGo">Add</button>
+      </div>
+      <ul class="list" id="saveList"></ul>
+    </div>
+    <div class="tool">
+      <h3>🌱 Gratitude / win log</h3>
+      <div class="row">
+        <input type="text" id="gratIn" placeholder="One good thing today…" style="flex:1">
+        <button class="btn" id="gratGo">Log</button>
+      </div>
+      <ul class="list" id="gratList"></ul>
+    </div>
+  </section>
+
+  <div class="foot" id="foot"></div>
+</div>
+
+<script>
+/*DATA_START*/
+const DATA = {
+  date: "Friday, June 12, 2026",
+  updated: "2026-06-12T08:40:00",
+  affirmations: [
+    "I am aligned with the version of me that already has what I want.",
+    "I release the oars and let well-being carry me today.",
+    "What I expect, I move toward. I expect good things.",
+    "I am a clear channel for ideas, energy, and opportunity.",
+    "I do not chase; I attract. The right things are finding me.",
+    "My focus is my superpower. Where attention goes, momentum grows.",
+    "I am allowed to take the easier, lighter path.",
+    "Abundance is my natural state; I simply stop resisting it.",
+    "Today I notice evidence that things are working out for me.",
+    "I am building a life I don't need a vacation from."
+  ],
+  briefing: [
+    { h: "Tech & AI Breakthroughs", items: [
+      { t:"Google open-sources DiffusionGemma", url:"https://www.youtube.com/watch?v=q5kX1IzNF5E",
+        s:"A diffusion-based text model that generates a whole block of text at once instead of word-by-word — ~4x faster (1,000+ tokens/sec on an H100).",
+        eli:"Today's chatbots type one word at a time; this drafts a full paragraph at once and sharpens it like a photo coming into focus, so answers appear much faster — especially for local and coding use." },
+      { t:"Light-powered chip generates, steers and reads optical data on one device", url:"https://www.sciencedaily.com/releases/2026/06/260601025343.htm",
+        s:"Using atomically thin materials, a single chip handles light-based information end-to-end — a step toward ultra-fast, energy-efficient AI and quantum computing." }
+    ]},
+    { h: "Science & Health Breakthroughs", items: [
+      { t:"“Indestructible” medicine survives heat without refrigeration", url:"https://www.youtube.com/watch?v=IgJatH3qwtY",
+        s:"Stabilitech's “insilication” wraps each drug protein in a microscopic silica shell — 99.7% efficacy after boiling, shippable in an envelope.",
+        eli:"Many vaccines spoil out of the fridge. Coating each molecule in a tiny glass shell lets them survive desert heat and be mailed normally — reaching remote areas and cutting vaccine cost up to 50%." },
+      { t:"First human test of an AI-designed universal coronavirus vaccine", url:"https://www.sciencedaily.com/news/top/health/",
+        s:"Found safe and well tolerated, generating immune responses against SARS-CoV-2, SARS and related bat viruses." },
+      { t:"GLP-1 drugs linked to ~30% lower breast-cancer risk", url:"https://www.sciencedaily.com/news/health_medicine/",
+        s:"A large study found women on GLP-1 medications were about 30% less likely to develop breast cancer — promising, not yet proof." }
+    ]},
+    { h: "Consciousness Studies", items: [
+      { t:"No major new breakthroughs in the last 24h", url:"",
+        s:"A slow-moving field. Recent context worth knowing: MIT's transcranial-ultrasound method for probing conscious perception, and the large IIT-vs-GNWT experiment suggesting how we see may matter more than how we think." }
+    ]},
+    { h: "ScienceDaily Top Picks", items: [
+      { t:"Brain scans reveal two distinct types of autism", url:"https://www.sciencedaily.com/releases/2026/06/260602021634.htm",
+        s:"~1,000 scans suggest autism has at least two biologically distinct subtypes with different brain-connectivity patterns." },
+      { t:"A single protein (NFIL3) may be holding back CAR-T cancer therapy", url:"https://www.sciencedaily.com/releases/2026/06/260602021641.htm",
+        s:"Removing NFIL3 stopped engineered immune cells from exhausting and restored their cancer-fighting power." },
+      { t:"Hydrogen breakthrough turns waste heat into clean fuel", url:"https://www.sciencedaily.com/releases/2026/06/260601025345.htm",
+        s:"A perovskite catalyst splits water into hydrogen at far lower temperatures, potentially making clean fuel cheaper." }
+    ]}
+  ],
+  youtube: {
+    count: 33,
+    groups: [
+      { h:"AI", items:[
+        { t:"Anthropic begged the world to stop AI… then shipped this", url:"https://www.youtube.com/watch?v=1PBRhm5ZnjU",
+          s:"Fireship — Anthropic urged labs to slow frontier development, then released its most powerful model yet, Claude Fable (Mythos-class). Snarky hands-on review; ~2x the price of Opus 4.8, free to try until June 22." },
+        { t:"The Internet Is Being Poisoned For AI Agents", url:"https://www.youtube.com/watch?v=A4shPMwa0HQ",
+          s:"AI Uncovered — researchers find hidden instructions planted on web pages to hijack AI agents that browse and click.",
+          eli:"As AI assistants start doing things for you online, scammers hide invisible commands in web pages that the AI reads as orders — a brand-new attack the old web's safety tools don't catch." },
+        { t:"HeyGen AI video generator just changed the game", url:"https://www.youtube.com/watch?v=rAWB8-qiVQo",
+          s:"Wes Roth (sponsored) — “digital twin” avatars: a lifelike talking video version of yourself from one 15-second clip." }
+      ]},
+      { type:"aim", h:"AIM Network", count:15, keys:[
+        { t:"Google open-sources DiffusionGemma", url:"https://www.youtube.com/watch?v=q5kX1IzNF5E",
+          s:"Generates text a whole block at a time instead of word-by-word, ~4x faster.",
+          eli:"Drafts a full paragraph at once and sharpens it, so AI answers appear much faster." },
+        { t:"Dario Amodei calls for an FAA-style AI regulator", url:"https://www.youtube.com/watch?v=YT8AxUWbQHI",
+          s:"Anthropic's CEO wants mandatory third-party safety audits that could block a frontier model's release if it fails." },
+        { t:"Is Claude Hiding Its True IQ?", url:"https://www.youtube.com/watch?v=Kvow03fHoU4",
+          s:"Developers allege Claude Fable 5 quietly gives weaker answers to people doing frontier AI-research work — a benchmark-trust problem." }
+      ], headlines:[
+        { t:"TCS brings Claude to 50,000 staff", url:"https://www.youtube.com/watch?v=mWa_uuKO2DA" },
+        { t:"Shunya Labs launches voice AI for 216 languages", url:"https://www.youtube.com/watch?v=08F3w6lSDq8" },
+        { t:"India builds its first AI star tracker (IN-SPACe)", url:"https://www.youtube.com/watch?v=ldfFtFiTWKU" },
+        { t:"Intel, SAP & Applied Materials back India", url:"https://www.youtube.com/watch?v=sskPcRgAAMI" },
+        { t:"Non-gaming apps overtake gaming revenue", url:"https://www.youtube.com/watch?v=yjVowt1Gjko" },
+        { t:"Indeed: 83% of Indian women reject inflexible jobs", url:"https://www.youtube.com/watch?v=D0dVUhOZ1UQ" },
+        { t:"Zoho's Vembu calls Salesforce's 40% discount a “bait-and-switch”", url:"https://www.youtube.com/watch?v=D_8_jGQJ5pQ" },
+        { t:"SpaceX debuts at $1.77T IPO", url:"https://www.youtube.com/watch?v=DgLxY9aTQhI" }
+      ]},
+      { h:"Tech & Gadgets", items:[
+        { t:"Microsoft's $1 Billion Phone Disaster", url:"https://www.youtube.com/watch?v=rgsa_-u8miE",
+          s:"ColdFusion — the story of Microsoft's 2010 “Kin” phone: no app store, too pricey for teens, killed after 48 days, ~$1B lost." },
+        { t:"Apple WWDC 2026 / the new AI Siri", url:"https://www.youtube.com/watch?v=ldvuHKdgtq0",
+          s:"TechRadar podcast — the long-awaited AI Siri arrives but only on newer iPhones; mixed reactions to Apple Intelligence and a hollow goodbye to Tim Cook." },
+        { t:"Siri AI vs Galaxy AI, Part 1", url:"https://www.youtube.com/watch?v=b6V2KG3P8KQ",
+          s:"Beebom — photo-editing AI face-off (object removal, expand, reframe); verdict: Samsung wins on features and consistency." },
+        { t:"Mobi Fold vs Microsoft Arc Mouse", url:"https://www.youtube.com/watch?v=fCbt5nihkG0",
+          s:"Cameron Dougherty — Logitech's folding portable mouse vs the classic Surface Arc; close call, Logitech adds multi-device + rechargeable at $80 vs $90." }
+      ]},
+      { h:"Business", items:[
+        { t:"All-In's Best Ideas Pitch Competition", url:"https://www.youtube.com/watch?v=fO5sC7qS04E",
+          s:"Four investors pitch their top trades live — 24/7 asset trading, contrarian biotech, nuclear, equities optimism." }
+      ]},
+      { h:"World News", items:[
+        { t:"IDF: Hezbollah weapons found near Dabin, S. Lebanon", url:"https://www.youtube.com/watch?v=0elCk6Vao7I",
+          s:"Short clip from the IDF's official channel on a stated weapons find in southern Lebanon. (Presented as the channel's own posting.)" }
+      ]}
+    ]
+  },
+  elon: {
+    day: "June 11, 2026",
+    count: 33,
+    items: [
+      { t:"SpaceX — Starship update + Oppenheimer coverage", url:"https://x.com/elonmusk",
+        s:"Shared a 42-min internal Starship update (Starbase progress, Raptor improvements, possible 2026 Mars landing) and noted Oppenheimer initiated SpaceX coverage with an outperform rating and $190 target." },
+      { t:"Tesla FSD approved in the Netherlands", url:"https://x.com/elonmusk",
+        s:"Reposted that Full Self-Driving is now approved in five European countries (after Denmark, Lithuania, Estonia, Belgium)." },
+      { t:"X / Grok", url:"https://x.com/elonmusk/status/2065112374709719329",
+        s:"Praised a Community Notes interview as “super helpful for truth seeking”; highlighted new Grok memory features and a Tesla site rebuilt with Grok Build; posted “Grok is maximally truthful.”" },
+      { t:"Politics (reposts)", url:"https://x.com/elonmusk",
+        s:"Reposted a string of politically charged commentary, mostly UK-focused (immigration/policing, Restore Britain, Tommy Robinson), plus a birth-rate thread and a Babylon Bee item. Reposts amplifying others' views — described neutrally, not endorsed." },
+      { t:"Misc", url:"https://x.com/elonmusk",
+        s:"Reposted Sagrada Família tower-lighting imagery with Pope Leo's remarks, a Howard Lutnick post about the DC reflecting pool, and a Babylon Bee AI satire video." }
+    ]
+  },
+  elonNewsUpdated: "2026-06-12T08:40:00",
+  elonNews: [
+    { t:"SpaceX goes public today — the largest IPO in history", url:"https://www.cnbc.com/2026/06/09/spacex-ipo-explained-stock-price-date.html",
+      s:"SpaceX debuts on Nasdaq (SPCX) at $135/share, targeting a ~$1.77 trillion valuation and raising about $75 billion. Musk retains roughly 82% voting control after the offering.",
+      src:"CNBC (verified across multiple outlets)" },
+    { t:"SpaceX filing: 2025 revenue up 33%, but a net loss", url:"https://www.cnbc.com/2026/06/03/spacex-ipo-stock-price-roadshow-musk.html",
+      s:"IPO disclosures show 2025 revenue rose 33% to $18.7 billion, while the company posted a $4.9 billion net loss for the year.",
+      src:"CNBC" },
+    { t:"Tesla expands driverless Robotaxi across Austin — but fleet stays tiny", url:"https://www.automotiveworld.com/news/tesla-robotaxi-fleet-hits-25-as-musk-defers-scale-to-fsd-v15/",
+      s:"Tesla's unsupervised Robotaxi now covers the full Austin metro, yet only ~20-25 vehicles run, far behind Waymo. Musk ties real scaling to the upcoming FSD v15 rewrite (late 2026/early 2027). Belgium also became the 5th EU country to approve FSD (June 10).",
+      src:"Automotive World, Teslarati (verified across multiple outlets)" },
+    { t:"xAI puts a SpaceX/Starlink engineer in charge of training Grok", url:"https://www.bloomberg.com/news/articles/2026-06-09/musk-s-xai-taps-starlink-staffer-to-run-grok-training-team",
+      s:"xAI moved Jack Garabedian, a longtime Starlink engineer, to lead the human-data team that trains Grok — part of a restructuring of its model-training effort.",
+      src:"Bloomberg" },
+    { t:"xAI launches a plugin marketplace for Grok Build", url:"https://x.ai/news",
+      s:"xAI opened a built-in plugin marketplace for its Grok Build coding tool (June 11), letting developers add integrations like MongoDB, Vercel, Sentry and Cloudflare from the terminal.",
+      src:"xAI (official announcement)" }
+  ],
+  loa: [
+    { t:"Release The Oars And Let Well-Being Turn You Around", url:"https://www.youtube.com/watch?v=cEAeFA_qcxA",
+      s:"AH Universe (Abraham Hicks) — expectation is the driving force of the universe. Stop resisting (“release the oars”) and let your larger expectation of well-being carry you, rather than reacting from recent fears." },
+    { t:"Only Future Millionaires Will See This Video", url:"https://www.youtube.com/watch?v=evGisZr6em8",
+      s:"Elmer O. Locker Jr — a Neville Goddard–style talk arguing your “state of consciousness” predetermines your choices, with a method to shift into a state of abundance." }
+  ],
+  newsUpdated: "2026-06-12T08:40:00",
+  news: {
+    world: [
+      { t:"World Bank cuts 2026 global growth forecast to 2.5%", s:"The weakest pace since the pandemic, with the World Bank citing Middle East conflict pushing up energy prices, inflation and borrowing costs.", src:"World Bank (reported by multiple outlets)" },
+      { t:"Trump says he called off new strikes on Iran, claims a settlement is near", s:"He said a memorandum could be signed within days; Iran's foreign ministry called the reports “speculative” and said nothing is finalised.", src:"AP / Al Jazeera (multiple outlets)" },
+      { t:"Italy to raise defence spending to 2.8% of GDP", s:"PM Giorgia Meloni urged NATO allies to rethink priorities as warfare shifts toward drones, satellites and data.", src:"Reuters / Euronews" },
+      { t:"FIFA World Cup 2026 kicks off", url:"https://www.espn.com/soccer/story/_/id/49038092/world-cup-2026-today-blog-12-06-2026-live-updates-news-fixtures-schedule-results-mexico-south-korea", s:"Mexico beat South Africa 2-0 in the opener at Estadio Azteca; Julián Quiñones scored the tournament's first goal.", src:"ESPN" }
+    ],
+    techai: [
+      { t:"Microsoft unveils its own AI models to cut OpenAI reliance", url:"https://www.cnbc.com/2026/06/02/microsoft-unveils-new-ai-models-lessen-reliance-on-openai-lower-costs.html", s:"New in-house models aim to lower costs for developers and reduce dependence on OpenAI.", src:"CNBC" },
+      { t:"Microsoft and Google take on Anthropic and OpenAI in AI coding", url:"https://www.cnbc.com/2026/06/01/microsoft-and-google-take-on-anthropic-and-openai-in-ai-coding-models.html", s:"Both launched new coding-focused AI models, intensifying competition in developer tools.", src:"CNBC" },
+      { t:"OpenAI ships a Responses API for agentic apps; files for IPO", s:"New API adds built-in web search, file search and computer use; OpenAI also confidentially filed draft IPO paperwork and opened access via Oracle Cloud.", src:"CNBC / OpenAI" },
+      { t:"Google launches Gemini 3.1 Flash-Lite", s:"An efficiency model ~2.5x faster and much cheaper ($0.25 per million input tokens), part of the industry's push to cut AI costs.", src:"Reported" }
+    ],
+    business: [
+      { t:"US stocks rally; chipmakers surge", url:"https://www.schwab.com/learn/story/stock-market-update-open", s:"Dow +1.86%, S&P 500 +1.75%, Nasdaq +2.54% Thursday. Micron +11%, Intel +10% (BofA upgrade), Lam Research +12.7%.", src:"Schwab / Trading Economics" },
+      { t:"SpaceX IPO set to be the largest in history", s:"Pricing ~$135/share (~$1.78T valuation, ~$75B raised) helped lift tech shares ahead of the debut.", src:"Multiple outlets" },
+      { t:"Oracle slides ~9% on cloud-revenue miss", s:"Shares fell on a cloud miss and rising AI-infrastructure costs, despite an overall earnings beat.", src:"Reported" },
+      { t:"Fed expected to hold rates next week", s:"Markets price ~70% odds of one 0.25% hike by December (CME FedWatch); new Fed Chair Kevin Warsh to present projections.", src:"CME FedWatch / reported" }
+    ],
+    india: [
+      { t:"India ranked world's 5th most digitalised economy in 2026", s:"Driven by rapid AI adoption and expanding digital infrastructure.", src:"Business Standard" },
+      { t:"Govt scraps capital-gains & interest withholding tax for FPIs in G-Secs", s:"Foreign portfolio investors get tax relief on government securities, with expanded FAR access.", src:"Business Standard" },
+      { t:"Google's Gemini Omni launches in India", s:"Lets users transform videos through conversational AI prompts without traditional editing tools.", src:"Reported" },
+      { t:"India's startup base tops 207,000 with 112 unicorns", s:"Collective value $350B+, with deeptech (AI, robotics, quantum) about 12% of startups.", src:"Inc42" }
+    ]
+  }
+};
+/*DATA_END*/
+
+const TABS = [
+  {id:"briefing", icon:"📰", label:"Briefing"},
+  {id:"news",     icon:"🌍", label:"News"},
+  {id:"youtube",  icon:"▶️", label:"YouTube"},
+  {id:"elon",     icon:"𝕏",  label:"Elon"},
+  {id:"loa",      icon:"🌙", label:"Mindset"},
+  {id:"tools",    icon:"🧰", label:"Tools"}
+];
+
+const store = {
+  get(k,d){ try{ return JSON.parse(localStorage.getItem("dash_"+k)) ?? d; }catch(e){ return d; } },
+  set(k,v){ try{ localStorage.setItem("dash_"+k, JSON.stringify(v)); }catch(e){} }
+};
+const esc = s => (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+const ord = n => ["","first","second","third","fourth","fifth","sixth","seventh"][n] || (n+"th");
+
+/* ---------- header ---------- */
+document.getElementById("dateLbl").textContent = DATA.date;
+document.getElementById("foot").textContent = "Auto-updates each morning · last refreshed " + new Date(DATA.updated).toLocaleString();
+
+function dayIndex(){ const d=new Date(); return Math.floor((d - new Date(d.getFullYear(),0,0)) / 86400000); }
+function showAffirm(rand){
+  const arr = DATA.affirmations;
+  let i = rand ? Math.floor(Math.random()*arr.length) : dayIndex()%arr.length;
+  document.getElementById("affirm").textContent = arr[i];
+}
+document.getElementById("shuffleAff").onclick = ()=>showAffirm(true);
+showAffirm(false);
+
+/* ---------- card rendering ---------- */
+function card(item){
+  const div = document.createElement("div");
+  div.className = "card";
+  div.dataset.title = item.t;
+  div.dataset.summary = item.s || "";
+  div.dataset.level = "0";
+  const titleHtml = item.url ? `<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.t)}</a>` : esc(item.t);
+  div.innerHTML =
+    `<p class="t">${titleHtml}</p>` +
+    (item.s ? `<p class="s">${esc(item.s)}</p>` : "") +
+    (item.src ? `<p class="src"><b>Source:</b> ${esc(item.src)}</p>` : "") +
+    (item.eli ? `<div class="eli"><b>ELI5:</b> ${esc(item.eli)}</div>` : "") +
+    `<div class="more"></div>` +
+    `<div class="card-actions">
+       <button class="mini act-more">Tell me more ▸</button>
+       <button class="mini act-save">🔖 Save</button>
+     </div>`;
+  div.querySelector(".act-more").onclick = (e)=>tellMore(e.target);
+  div.querySelector(".act-save").onclick = ()=>{ addSave((item.url?item.t+" — "+item.url:item.t)); flash(div.querySelector(".act-save"),"Saved ✓"); };
+  return div;
+}
+function flash(btn,txt){ const o=btn.textContent; btn.textContent=txt; setTimeout(()=>btn.textContent=o,1200); }
+
+async function tellMore(btn){
+  const c = btn.closest(".card");
+  if(!(window.cowork && window.cowork.askClaude)){
+    window.open("https://www.google.com/search?q="+encodeURIComponent(c.dataset.title), "_blank", "noopener");
+    return;
+  }
+  const level = parseInt(c.dataset.level||"0",10)+1;
+  c.dataset.level = level;
+  const box = c.querySelector(".more");
+  const p = document.createElement("p");
+  p.className = "exp loading";
+  p.textContent = "thinking…";
+  box.appendChild(p);
+  const prompt =
+    `You are expanding a single news item inside a personal daily dashboard.\n`+
+    `Item title: "${c.dataset.title}".\n`+
+    `Summary already shown: "${c.dataset.summary}".\n`+
+    `The reader clicked "tell me more" for the ${ord(level)} time. Give ONE concise paragraph (2-4 sentences) adding the NEXT layer of detail — the most important context first (early clicks), finer / more technical detail at higher click levels. Be factual and neutral; if exact specifics are uncertain, give widely-known background. Do not repeat the summary verbatim.`;
+  try{
+    if(!(window.cowork && window.cowork.askClaude)) throw new Error("no askClaude");
+    const res = await window.cowork.askClaude(prompt, []);
+    const text = typeof res === "string" ? res : (res && (res.text || res.content || res.output)) || JSON.stringify(res);
+    p.classList.remove("loading");
+    p.textContent = text.trim();
+  }catch(e){
+    p.classList.remove("loading");
+    p.textContent = "More detail isn't available right now — open the source link for the full story.";
+  }
+}
+
+/* ---------- panels ---------- */
+function group(title){ const g=document.createElement("div"); g.className="grp"; if(title){const h=document.createElement("h2");h.textContent=title;g.appendChild(h);} return g; }
+
+function renderBriefing(){
+  const p = document.getElementById("p-briefing"); p.innerHTML="";
+  DATA.briefing.forEach(sec=>{ const g=group(sec.h); sec.items.forEach(it=>g.appendChild(card(it))); p.appendChild(g); });
+}
+function renderYouTube(){
+  const p = document.getElementById("p-youtube"); p.innerHTML="";
+  const intro=document.createElement("p"); intro.className="empty"; intro.textContent=DATA.youtube.count+" relevant videos in the last 24h, curated below.";
+  p.appendChild(intro);
+  DATA.youtube.groups.forEach(sec=>{
+    if(sec.type==="aim"){
+      const g=group(null);
+      const w=document.createElement("div"); w.className="aim-wrap";
+      w.innerHTML=`<p class="aim-h">${esc(sec.h)} <span class="tag">${sec.count} videos · condensed</span></p>`;
+      sec.keys.forEach(it=> w.appendChild(card(it)));
+      if(sec.headlines && sec.headlines.length){
+        const ul=document.createElement("ul"); ul.className="headlines";
+        sec.headlines.forEach(h=>{ const li=document.createElement("li"); li.innerHTML = h.url?`<a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.t)}</a>`:esc(h.t); ul.appendChild(li); });
+        w.appendChild(ul);
+      }
+      g.appendChild(w); p.appendChild(g);
+    } else {
+      const g=group(sec.h); sec.items.forEach(it=>g.appendChild(card(it))); p.appendChild(g);
+    }
+  });
+}
+function renderElon(){
+  const p=document.getElementById("p-elon"); p.innerHTML="";
+
+  // News & company updates (fact-checked)
+  const ng=group("📰 Latest News & Company Updates");
+  const badge=document.createElement("div"); badge.className="verified"; badge.textContent="✓ reputable sources, cross-checked";
+  ng.appendChild(badge);
+  const bar=document.createElement("div"); bar.className="refresh-bar";
+  bar.innerHTML='<span class="when" id="elonNewsWhen"></span><button class="mini" id="elonRefresh">↻ Refresh news</button>';
+  ng.appendChild(bar);
+  const news = DATA.elonNews || [];
+  if(news.length){ news.forEach(it=>ng.appendChild(card(it))); }
+  else { const e=document.createElement("p"); e.className="empty"; e.textContent="No news loaded yet — tap Refresh."; ng.appendChild(e); }
+  p.appendChild(ng);
+
+  // X posts recap
+  const rg=group("𝕏 Posts recap");
+  const note=document.createElement("p"); note.className="empty"; note.textContent="Recap of "+DATA.elon.day+" · "+DATA.elon.count+" posts (via @jcub2x).";
+  rg.appendChild(note);
+  DATA.elon.items.forEach(it=>rg.appendChild(card(it)));
+  p.appendChild(rg);
+
+  // wire updated-time + refresh
+  const when=document.getElementById("elonNewsWhen");
+  if(DATA.elonNewsUpdated){ when.textContent="Updated "+new Date(DATA.elonNewsUpdated).toLocaleString(); }
+  const rb=document.getElementById("elonRefresh");
+  rb.onclick=async ()=>{
+    if(!(window.cowork && window.cowork.runScheduledTask)){ location.reload(); return; }
+    rb.disabled=true; const o=rb.textContent; rb.textContent="Refreshing…";
+    try{
+      await window.cowork.runScheduledTask("elon-news-update");
+      when.textContent="Refreshing in the background — reload this view in a minute or two.";
+    }catch(e){
+      when.textContent="Couldn't start a refresh here — it still updates automatically each morning and evening.";
+    }
+    setTimeout(()=>{ rb.disabled=false; rb.textContent=o; }, 4000);
+  };
+}
+function renderLoa(){
+  const p=document.getElementById("p-loa"); p.innerHTML="";
+  const g=group(null); DATA.loa.forEach(it=>g.appendChild(card(it))); p.appendChild(g);
+}
+function renderNews(){
+  const p=document.getElementById("p-news"); p.innerHTML="";
+  const badge=document.createElement("div"); badge.className="verified"; badge.textContent="✓ reputable sources, cross-checked"; p.appendChild(badge);
+  const bar=document.createElement("div"); bar.className="refresh-bar";
+  bar.innerHTML='<span class="when" id="newsWhen"></span><button class="mini" id="newsRefresh">↻ Refresh news</button>';
+  p.appendChild(bar);
+  const N=DATA.news||{};
+  const secs=[["🌍 World",N.world],["💻 Tech & AI",N.techai],["📈 Business & Markets",N.business],["🇮🇳 India",N.india]];
+  let any=false;
+  secs.forEach(([h,arr])=>{ if(arr&&arr.length){ any=true; const g=group(h); arr.forEach(it=>g.appendChild(card(it))); p.appendChild(g); } });
+  if(!any){ const e=document.createElement("p"); e.className="empty"; e.textContent="No news loaded yet — tap Refresh."; p.appendChild(e); }
+  const when=document.getElementById("newsWhen");
+  if(DATA.newsUpdated) when.textContent="Updated "+new Date(DATA.newsUpdated).toLocaleString();
+  const rb=document.getElementById("newsRefresh");
+  rb.onclick=async ()=>{
+    if(!(window.cowork && window.cowork.runScheduledTask)){ location.reload(); return; }
+    rb.disabled=true; const o=rb.textContent; rb.textContent="Refreshing…";
+    try{
+      await window.cowork.runScheduledTask("news-update");
+      when.textContent="Refreshing in the background — reload this view in a minute or two.";
+    }catch(e){ when.textContent="Couldn't start a refresh here — it still updates automatically each morning and evening."; }
+    setTimeout(()=>{ rb.disabled=false; rb.textContent=o; },4000);
+  };
+}
+
+/* ---------- tabs ---------- */
+const nav=document.getElementById("tabs");
+TABS.forEach(t=>{
+  const b=document.createElement("button"); b.className="tab"; b.dataset.id=t.id;
+  b.innerHTML=`<span class="ico">${t.icon}</span><span class="lbl">${t.label}</span>`;
+  b.onclick=()=>activate(t.id); nav.appendChild(b);
+});
+function activate(id){
+  TABS.forEach(t=>{
+    document.getElementById("p-"+t.id).classList.toggle("active", t.id===id);
+  });
+  [...nav.children].forEach(b=>b.classList.toggle("active", b.dataset.id===id));
+  store.set("tab", id);
+}
+
+/* ---------- tools: ELI5 ---------- */
+document.getElementById("eliGo").onclick = async ()=>{
+  const v=document.getElementById("eliIn").value.trim(); if(!v) return;
+  const out=document.getElementById("eliOut");
+  if(!(window.cowork && window.cowork.askClaude)){
+    out.style.display="block"; out.textContent="Opening a web search…";
+    window.open("https://www.google.com/search?q="+encodeURIComponent("explain like I'm 5: "+v), "_blank", "noopener");
+    return;
+  }
+  out.style.display="block"; out.textContent="thinking…";
+  try{
+    const res=await window.cowork.askClaude("Explain the following in plain, simple language like I'm 5 — 2-4 short sentences, friendly and concrete:\n\n"+v, []);
+    out.textContent = (typeof res==="string"?res:(res&&(res.text||res.content))||String(res)).trim();
+  }catch(e){ out.textContent="Couldn't generate an explanation right now — try the web search instead."; }
+};
+
+/* ---------- tools: timer ---------- */
+let tSecs=25*60, tInt=null, tBase=25*60;
+const tDisp=document.getElementById("tDisp");
+function tShow(){ const m=String(Math.floor(tSecs/60)).padStart(2,"0"), s=String(tSecs%60).padStart(2,"0"); tDisp.textContent=m+":"+s; }
+document.getElementById("tStart").onclick=()=>{ if(tInt) return; tInt=setInterval(()=>{ if(tSecs>0){tSecs--;tShow();} else {clearInterval(tInt);tInt=null;tDisp.textContent="done ✓";} },1000); };
+document.getElementById("tPause").onclick=()=>{ clearInterval(tInt); tInt=null; };
+document.getElementById("tReset").onclick=()=>{ clearInterval(tInt); tInt=null; tSecs=tBase; tShow(); };
+document.querySelectorAll("[data-min]").forEach(b=> b.onclick=()=>{ clearInterval(tInt); tInt=null; tBase=tSecs=parseInt(b.dataset.min,10)*60; tShow(); });
+tShow();
+
+/* ---------- tools: save-for-later ---------- */
+function renderSave(){
+  const ul=document.getElementById("saveList"); const items=store.get("saved",[]);
+  ul.innerHTML = items.length ? "" : '<li class="empty">Nothing saved yet.</li>';
+  items.forEach((it,i)=>{
+    const li=document.createElement("li");
+    const isUrl=/^https?:\/\//.test(it) || it.includes("http");
+    li.innerHTML = `<span>${esc(it)}</span><button class="x" title="remove">×</button>`;
+    li.querySelector(".x").onclick=()=>{ const a=store.get("saved",[]); a.splice(i,1); store.set("saved",a); renderSave(); };
+    ul.appendChild(li);
+  });
+}
+function addSave(v){ if(!v) return; const a=store.get("saved",[]); a.unshift(v); store.set("saved",a); renderSave(); }
+document.getElementById("saveGo").onclick=()=>{ const el=document.getElementById("saveIn"); addSave(el.value.trim()); el.value=""; };
+document.getElementById("saveIn").addEventListener("keydown",e=>{ if(e.key==="Enter") document.getElementById("saveGo").click(); });
+
+/* ---------- tools: gratitude ---------- */
+function renderGrat(){
+  const ul=document.getElementById("gratList"); const items=store.get("grat",[]);
+  ul.innerHTML = items.length ? "" : '<li class="empty">No entries yet — add one good thing.</li>';
+  items.forEach((it,i)=>{
+    const li=document.createElement("li");
+    li.innerHTML = `<span>${esc(it.text)}<br><span class="when">${esc(it.when)}</span></span><button class="x">×</button>`;
+    li.querySelector(".x").onclick=()=>{ const a=store.get("grat",[]); a.splice(i,1); store.set("grat",a); renderGrat(); };
+    ul.appendChild(li);
+  });
+}
+document.getElementById("gratGo").onclick=()=>{
+  const el=document.getElementById("gratIn"); const v=el.value.trim(); if(!v) return;
+  const a=store.get("grat",[]); a.unshift({text:v, when:new Date().toLocaleDateString()}); store.set("grat",a); el.value=""; renderGrat();
+};
+document.getElementById("gratIn").addEventListener("keydown",e=>{ if(e.key==="Enter") document.getElementById("gratGo").click(); });
+
+/* ---------- init ---------- */
+renderBriefing(); renderNews(); renderYouTube(); renderElon(); renderLoa(); renderSave(); renderGrat();
+activate(store.get("tab","briefing"));
+
+/* Install-as-app: inject a web manifest so "Add to Home screen" launches standalone */
+(function(){
+  try{
+    var icon="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Crect%20width='512'%20height='512'%20rx='110'%20fill='%233b6ea5'/%3E%3Ccircle%20cx='256'%20cy='256'%20r='96'%20fill='%23ffd66b'/%3E%3C/svg%3E";
+    var m={name:"Daily Dashboard",short_name:"Dashboard",display:"standalone",orientation:"portrait",background_color:"#faf9f7",theme_color:"#faf9f7",start_url:".",icons:[{src:icon,sizes:"512x512",type:"image/svg+xml",purpose:"any maskable"}]};
+    var blob=new Blob([JSON.stringify(m)],{type:"application/manifest+json"});
+    var link=document.createElement("link"); link.rel="manifest"; link.href=URL.createObjectURL(blob); document.head.appendChild(link);
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
