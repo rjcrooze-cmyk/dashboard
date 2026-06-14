@@ -1,17 +1,4 @@
-<!doctype html><script type="application/json" id="cowork-artifact-meta">
-{
-  "name": "Daily Dashboard",
-  "schemaVersion": 1,
-  "description": "Personal Daily Dashboard — tabbed app with Today's Briefing (breakthroughs), YouTube Catch-Up, Elon's posts, and Law of Attraction, plus tools (ELI5, focus timer, save-for-later, gratitude log), an affirmation-of-the-day, and a progressive \"tell me more\" expander powered by askClaude. Content auto-refreshed each morning by the scheduled briefing/youtube/elon tasks.",
-  "mcpTools": [
-    "mcp__scheduled-tasks__list_scheduled_tasks"
-  ],
-  "mcpServerNames": [
-    "scheduled-tasks"
-  ]
-}
-</script>
-<html lang="en">
+<!doctype html><html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -197,8 +184,8 @@ nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1p
 <script>
 /*DATA_START*/
 const DATA = {
-  date: "Saturday, June 13, 2026",
-  updated: "2026-06-14T01:30:00",
+  date: "Sunday, June 14, 2026",
+  updated: "2026-06-14T02:36:08",
   topstories: {
     updated: "2026-06-13T13:25:00",
     items: [
@@ -238,33 +225,31 @@ const DATA = {
   ],
   briefing: [
     { h: "Tech & AI Breakthroughs", items: [
-      { t:"Google's TurboQuant slashes the memory bottleneck in big AI models", url:"https://www.crescendo.ai/news/latest-ai-news-and-updates",
-        s:"Unveiled at ICLR 2026, TurboQuant sharply cuts the KV-cache memory overhead that slows and inflates the cost of running large language models.",
-        eli:"As an AI answers, it keeps a running memory of the conversation (the “KV cache”) that balloons and hogs the chip. TurboQuant shrinks that memory, so models run faster and cheaper on the same hardware." },
-      { t:"MiniMax M3 cuts per-token compute to ~1/20th of prior models", url:"https://www.crescendo.ai/news/latest-ai-news-and-updates",
-        s:"A new multimodal model that dramatically lowers the compute needed per token, making high-end AI far cheaper to run.",
-        eli:"Every word an AI generates costs computing power. M3 does the same work for a fraction of it — meaning cheaper, faster AI." },
-      { t:"AI makes climate models run ~25x faster", url:"https://scitechdaily.com/",
-        s:"UC San Diego researchers combined generative AI with physics-based data to speed up climate simulations about 25-fold, enabling faster forecasting and scenario testing." }
+      { t:"Brain-inspired chip runs near absolute zero, a boost for quantum computing", url:"https://www.sciencedaily.com/releases/2026/06/260612032024.htm",
+        s:"University of Hong Kong engineers turned a standard silicon-carbide transistor into a single artificial neuron that 'spikes' like a brain cell at temperatures as low as 10 millikelvin — thousands of times more energy-efficient than conventional silicon, aimed at the control-wiring bottleneck that limits scaling up quantum computers (Nature Communications).",
+        eli:"Quantum computers must run insanely cold, but the control chips beside them waste heat and power. This chip mimics a brain cell while staying ultra-cold and sipping energy, so far more qubits could be wired up." },
+      { t:"A burst of new frontier AI models: Microsoft's MAI Thinking One and Alibaba's Qwen 3.7 Plus", url:"https://www.buildfastwithai.com/blogs/ai-news-today-june-13-2026",
+        s:"At Build 2026 Microsoft unveiled seven in-house models led by 'MAI Thinking One' for reasoning, coding and image generation, while Alibaba released Qwen 3.7 Plus, a single system combining vision, language and code — underscoring how sharply the model-release cadence has compressed." }
     ]},
     { h: "Science & Health Breakthroughs", items: [
-      { t:"Stanford: blocking an aging protein regrew lost cartilage in mice", url:"https://www.sciencedaily.com/news/health_medicine/",
-        s:"A treatment that blocks an aging-related protein restored lost cartilage in old mice and helped prevent arthritis after knee injuries — a promising lead for joint disease.",
-        eli:"Cartilage is the cushion in your joints, and once it wears down it doesn't grow back. Switching off one aging protein let it regrow in mice, hinting at a future arthritis treatment." },
-      { t:"Blood-cancer mutations may help trigger Alzheimer's", url:"https://www.sciencedaily.com/news/health_medicine/",
-        s:"Researchers found mutations linked to blood cancers can create overly inflammatory immune cells in the brain, potentially helping set off Alzheimer's disease." }
-    ]},
-    { h: "Consciousness Studies", items: [
-      { t:"No major new breakthroughs in the last 24h", url:"",
-        s:"A slow-moving field. Recent context worth knowing: MIT's transcranial-ultrasound method for probing conscious perception, and the large IIT-vs-GNWT experiment suggesting how we see may matter more than how we think." }
+      { t:"China's JUNO observatory delivers world-best neutrino measurements in its first results", url:"https://www.science.org/content/article/first-results-put-neutrino-experiment-china-track-breakthrough",
+        s:"From just 59 days of data, the giant Jiangmen Underground Neutrino Observatory published its debut physics result as a Nature cover, tightening two key neutrino-oscillation parameters by about 1.6x over decades of prior experiments combined — putting it on track to settle the ordering of neutrino masses.",
+        eli:"Neutrinos are ghostly particles that shape-shift as they fly. A huge new detector in China already measured that shape-shifting more precisely than every past experiment combined, a step toward ranking the particles by mass." },
+      { t:"Just 90–120 minutes of strength training a week is the longevity 'sweet spot'", url:"https://www.sciencedaily.com/releases/2026/06/260611024609.htm",
+        s:"Tracking 147,000+ adults for up to 30 years, researchers found 90–119 minutes of weekly strength training linked to a 13% lower risk of death from any cause, 19% lower from heart disease and 27% lower from neurological disease — with no extra benefit beyond 120 minutes (British Journal of Sports Medicine)." },
+      { t:"Blocking an aging-related protein regrew lost cartilage in mice", url:"https://www.sciencedaily.com/news/health_medicine/",
+        s:"A treatment that switches off an aging-linked protein restored worn cartilage in old mice and helped prevent arthritis after knee injuries — an early but promising lead for joint disease, which currently has no way to rebuild lost cartilage.",
+        eli:"Joint cushioning normally never grows back once it wears away. Turning off one 'aging' protein let it regrow in mice, hinting at a possible future arthritis fix." }
     ]},
     { h: "ScienceDaily Top Picks", items: [
-      { t:"Just 90–120 min of weekly strength training brings big long-term gains", url:"https://www.sciencedaily.com/news/health_medicine/",
-        s:"A study tracking 147,000+ people over 30 years found a modest weekly dose of strength training delivered some of the largest long-term health rewards." },
-      { t:"A fasting-style diet cut gum-disease inflammation", url:"https://www.sciencedaily.com/news/health_medicine/",
-        s:"In a small clinical study, a low-calorie, fasting-style diet significantly reduced the inflammation tied to gum disease." },
-      { t:"Falling phosphatidylcholine linked to cellular aging", url:"https://www.sciencedaily.com/news/top/science/",
-        s:"Declining levels of the lipid phosphatidylcholine may be a major cause of age-related mitochondrial dysfunction and lost cellular energy." }
+      { t:"A single protein may be holding back CAR T cancer therapy", url:"https://www.sciencedaily.com/releases/2026/06/260602021641.htm",
+        s:"Researchers identified NFIL3 as a major driver of the 'exhaustion' that makes engineered CAR T immune cells lose their cancer-fighting power over time; switching it off kept the cells potent longer — a possible route to more durable cell therapies. (ScienceDaily's top page is serving an early-June snapshot.)" },
+      { t:"New catalyst turns waste heat into clean hydrogen fuel", url:"https://www.sciencedaily.com/releases/2026/06/260601025345.htm",
+        s:"A perovskite-based catalyst from the University of Birmingham splits water into hydrogen at far lower temperatures than usual, potentially making clean hydrogen cheaper and easier to produce from low-grade waste heat." },
+      { t:"New light-powered chip could speed up AI and quantum computing", url:"https://www.sciencedaily.com/releases/2026/06/260601025343.htm",
+        s:"A tiny chip that can generate, steer and read light-based information in a single device — built from atomically thin materials — marks a step toward ultra-fast, energy-efficient optical computing." },
+      { t:"A stellar 'Rosetta Stone' cracks a mystery class of repeating cosmic signals", url:"https://www.sciencedaily.com/releases/2026/06/260602021631.htm",
+        s:"Using Australia's ASKAP radio telescope, astronomers traced a long-baffling class of repeating long-period radio signals to a specific stellar source, helping explain where these strange emissions come from." }
     ]}
   ],
   youtube: {
@@ -299,19 +284,19 @@ const DATA = {
     ]
   },
   elon: {
-    day: "June 11, 2026",
-    count: 33,
+    day: "June 13, 2026",
+    count: 22,
     items: [
-      { t:"SpaceX — Starship update + Oppenheimer coverage", url:"https://x.com/elonmusk",
-        s:"Shared a 42-min internal Starship update (Starbase progress, Raptor improvements, possible 2026 Mars landing) and noted Oppenheimer initiated SpaceX coverage with an outperform rating and $190 target." },
-      { t:"Tesla FSD approved in the Netherlands", url:"https://x.com/elonmusk",
-        s:"Reposted that Full Self-Driving is now approved in five European countries (after Denmark, Lithuania, Estonia, Belgium)." },
-      { t:"X / Grok", url:"https://x.com/elonmusk/status/2065112374709719329",
-        s:"Praised a Community Notes interview as “super helpful for truth seeking”; highlighted new Grok memory features and a Tesla site rebuilt with Grok Build; posted “Grok is maximally truthful.”" },
-      { t:"Politics (reposts)", url:"https://x.com/elonmusk",
-        s:"Reposted a string of politically charged commentary, mostly UK-focused (immigration/policing, Restore Britain, Tommy Robinson), plus a birth-rate thread and a Babylon Bee item. Reposts amplifying others' views — described neutrally, not endorsed." },
-      { t:"Misc", url:"https://x.com/elonmusk",
-        s:"Reposted Sagrada Família tower-lighting imagery with Pope Leo's remarks, a Howard Lutnick post about the DC reflecting pool, and a Babylon Bee AI satire video." }
+      { t:"SpaceX — historic IPO debut", url:"https://x.com/elonmusk",
+        s:"Most of the day centered on SpaceX's stock-market debut. Elon thanked Nvidia ('looking forward to taking our partnership to the next level'), JP Morgan as lead bookrunner, and the Morgan Stanley trading crew, and replied with hearts to a wave of congratulations; he reposted that SpaceX has now launched more satellites than the rest of humanity combined and predicted ~5x as many as the rest of the world within five years." },
+      { t:"Becoming the first trillionaire", url:"https://x.com/elonmusk",
+        s:"Reacting to the IPO making him the world's first (paper) trillionaire, Elon said it was 'only possible in America.' Reposting Ron Baron's recap of his JP Morgan talk with Jamie Dimon, he reflected that he has 'made mistakes and still has much to learn,' adding 'maybe the future AI will say: not bad for a human.'" },
+      { t:"Starship and a Tesla cameo", url:"https://x.com/elonmusk",
+        s:"Replied 'Starship is a very big rocket' to a photo, and laughed at jokes about the Tesla CEO turning up for SpaceX's bell-ringing. Charles Liang/Supermicro and others touted plans for new gigawatt-scale AI data centers for SpaceX and xAI, which Elon acknowledged with thanks." },
+      { t:"Optimism and 'makers vs takers' reposts", url:"https://x.com/elonmusk",
+        s:"Reposted several optimism-themed posts ('pessimists sound smart; optimists build the world'; 'immaculate vibes' at the SpaceX AI office). One reposted item framed Musk as a 'maker' versus 'takers like Bernie Sanders' — a politically charged repost, described here neutrally and not endorsed." },
+      { t:"Misc reposts", url:"https://x.com/elonmusk",
+        s:"Laughed off a Financial Times 'real-life Bond villain' piece via a sarcastic reply listing his ventures. Also responded with exclamation marks to a graphic post about an Austin repeat offender's criminal record — noted here without amplifying the content." }
     ]
   },
   elonNewsUpdated: "2026-06-13T13:45:00",
