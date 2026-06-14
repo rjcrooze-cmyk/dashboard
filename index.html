@@ -91,6 +91,7 @@ nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1p
 .empty{color:var(--muted);font-size:13px;font-style:italic}
 .src{color:var(--muted);font-size:12px;margin-top:5px}
 .src b{font-weight:600;color:#5a6473}
+.card-when{color:var(--muted);font-size:11.5px;margin:0 0 6px;display:flex;align-items:center;gap:4px}
 .refresh-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px;flex-wrap:wrap}
 .refresh-bar .when{color:var(--muted);font-size:12px}
 .verified{display:inline-block;background:#e9f5ee;color:var(--good);font-size:11px;padding:1px 7px;border-radius:6px;margin-bottom:8px}
@@ -426,6 +427,12 @@ const store = {
   set(k,v){ try{ localStorage.setItem("dash_"+k, JSON.stringify(v)); }catch(e){} }
 };
 const esc = s => (s||"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;"}[c]));
+function fmtWhen(v){
+  if(!v) return "";
+  const d = new Date(v);
+  if(isNaN(d.getTime())) return String(v);
+  return d.toLocaleString(undefined,{month:"short",day:"numeric",year:"numeric",hour:"numeric",minute:"2-digit"});
+}
 const ord = n => ["","first","second","third","fourth","fifth","sixth","seventh"][n] || (n+"th");
 
 document.getElementById("dateLbl").textContent = DATA.date;
@@ -460,16 +467,18 @@ document.getElementById("updateAll").onclick = async function(){
   setTimeout(()=>{ btn.disabled = false; btn.textContent = orig; }, 6000);
 };
 
-function card(item){
+function card(item, when){
   const div = document.createElement("div");
   div.className = "card";
   div.dataset.title = item.t;
   div.dataset.summary = item.s || "";
   div.dataset.level = "0";
   const titleHtml = item.url ? `<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.t)}</a>` : esc(item.t);
+  const whenStr = fmtWhen(item.when || when);
   div.innerHTML =
     (item.tag ? `<span class="ts-tag">${esc(item.tag)}</span>` : "") +
     `<p class="t">${titleHtml}</p>` +
+    (whenStr ? `<p class="card-when">🕒 ${esc(whenStr)}</p>` : "") +
     (item.s ? `<p class="s">${esc(item.s)}</p>` : "") +
     (item.src ? `<p class="src"><b>Source:</b> ${esc(item.src)}</p>` : "") +
     (item.eli ? `<div class="eli"><b>ELI5:</b> ${esc(item.eli)}</div>` : "") +
@@ -575,14 +584,14 @@ function renderBriefing(){
     const note=document.createElement("p"); note.className="empty"; note.style.marginTop="-2px";
     note.textContent = "The biggest stories across every feed" + (T.updated ? " · updated "+new Date(T.updated).toLocaleString() : "");
     g.appendChild(note);
-    ti.forEach(it=>g.appendChild(card(it)));
+    ti.forEach(it=>g.appendChild(card(it, T.updated)));
     p.appendChild(g);
   }
 
   // 2) Breakthroughs (Consciousness moved to the Mind tab, so skip it here)
   (DATA.briefing||[]).forEach(sec=>{
     if(/conscious/i.test(sec.h||"")) return;
-    const g=group(sec.h); sec.items.forEach(it=>g.appendChild(card(it))); p.appendChild(g);
+    const g=group(sec.h); sec.items.forEach(it=>g.appendChild(card(it, DATA.updated))); p.appendChild(g);
   });
 
   // 3) Latest news
@@ -595,7 +604,7 @@ function renderBriefing(){
   p.appendChild(head);
   const newsSecs=[["🌍 World",N.world],["💻 Tech & AI",N.techai],["📈 Business & Markets",N.business],["🇮🇳 India",N.india]];
   let anyNews=false;
-  newsSecs.forEach(([h,arr])=>{ if(arr&&arr.length){ anyNews=true; const g=group(h); arr.forEach(it=>g.appendChild(card(it))); p.appendChild(g); } });
+  newsSecs.forEach(([h,arr])=>{ if(arr&&arr.length){ anyNews=true; const g=group(h); arr.forEach(it=>g.appendChild(card(it, DATA.newsUpdated))); p.appendChild(g); } });
   if(!anyNews){ const e=document.createElement("p"); e.className="empty"; e.textContent="No news loaded yet — tap Refresh."; p.appendChild(e); }
   const when=document.getElementById("newsWhen");
   if(DATA.newsUpdated && when) when.textContent="Updated "+new Date(DATA.newsUpdated).toLocaleString();
@@ -619,7 +628,7 @@ function renderMind(){
   intro.textContent="Daily breakthroughs in neuroscience, brain–computer interfaces, psychology & cognition, and consciousness.";
   p.appendChild(intro);
   const groups=M.groups||[]; let any=false;
-  groups.forEach(sec=>{ if(sec.items&&sec.items.length){ any=true; const g=group(sec.h); sec.items.forEach(it=>g.appendChild(card(it))); p.appendChild(g); } });
+  groups.forEach(sec=>{ if(sec.items&&sec.items.length){ any=true; const g=group(sec.h); sec.items.forEach(it=>g.appendChild(card(it, M.updated))); p.appendChild(g); } });
   if(!any){ const e=document.createElement("p"); e.className="empty"; e.textContent="No items loaded yet — tap Refresh or check back after the next daily update."; p.appendChild(e); }
   const when=document.getElementById("mindWhen");
   if(M.updated && when) when.textContent="Updated "+new Date(M.updated).toLocaleString();
@@ -641,7 +650,7 @@ function renderYouTube(){
       const g=group(null);
       const w=document.createElement("div"); w.className="aim-wrap";
       w.innerHTML=`<p class="aim-h">${esc(sec.h)} <span class="tag">${sec.count} videos · condensed</span></p>`;
-      sec.keys.forEach(it=> w.appendChild(card(it)));
+      sec.keys.forEach(it=> w.appendChild(card(it, DATA.updated)));
       if(sec.headlines && sec.headlines.length){
         const ul=document.createElement("ul"); ul.className="headlines";
         sec.headlines.forEach(h=>{ const li=document.createElement("li"); li.innerHTML = h.url?`<a href="${esc(h.url)}" target="_blank" rel="noopener">${esc(h.t)}</a>`:esc(h.t); ul.appendChild(li); });
@@ -649,7 +658,7 @@ function renderYouTube(){
       }
       g.appendChild(w); p.appendChild(g);
     } else {
-      const g=group(sec.h); sec.items.forEach(it=>g.appendChild(card(it))); p.appendChild(g);
+      const g=group(sec.h); sec.items.forEach(it=>g.appendChild(card(it, DATA.updated))); p.appendChild(g);
     }
   });
 }
@@ -662,13 +671,13 @@ function renderElon(){
   bar.innerHTML='<span class="when" id="elonNewsWhen"></span><button class="mini" id="elonRefresh">↻ Refresh news</button>';
   ng.appendChild(bar);
   const news = DATA.elonNews || [];
-  if(news.length){ news.forEach(it=>ng.appendChild(card(it))); }
+  if(news.length){ news.forEach(it=>ng.appendChild(card(it, DATA.elonNewsUpdated))); }
   else { const e=document.createElement("p"); e.className="empty"; e.textContent="No news loaded yet — tap Refresh."; ng.appendChild(e); }
   p.appendChild(ng);
   const rg=group("𝕏 Posts recap");
   const note=document.createElement("p"); note.className="empty"; note.textContent="Recap of "+DATA.elon.day+" · "+DATA.elon.count+" posts (via @jcub2x).";
   rg.appendChild(note);
-  DATA.elon.items.forEach(it=>rg.appendChild(card(it)));
+  DATA.elon.items.forEach(it=>rg.appendChild(card(it, DATA.elon.day)));
   p.appendChild(rg);
   const when=document.getElementById("elonNewsWhen");
   if(DATA.elonNewsUpdated){ when.textContent="Updated "+new Date(DATA.elonNewsUpdated).toLocaleString(); }
