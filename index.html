@@ -57,6 +57,23 @@ nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1p
 .msg-link a:hover{text-decoration:underline}
 .eli{background:#fbf7ee;border:1px dashed #e3d9c2;border-radius:9px;padding:7px 10px;margin-top:8px;font-size:13.5px;color:#5a4e33}
 .eli b{color:#7a6a3f}
+.pts{margin-top:9px;border:1px solid var(--line);border-radius:9px;background:#fbfbfa;overflow:hidden}
+.pts>summary{cursor:pointer;list-style:none;padding:8px 12px;font-size:13px;font-weight:600;color:var(--accent);user-select:none}
+.pts>summary::-webkit-details-marker{display:none}
+.pts>summary::after{content:"  ▾";color:var(--muted);font-weight:400}
+.pts[open]>summary::after{content:"  ▴"}
+.pts[open]>summary{border-bottom:1px solid var(--line)}
+.pt{padding:8px 12px;border-top:1px solid var(--line);font-size:13.5px}
+.pt:first-of-type{border-top:none}
+.pt .pt-t{font-weight:600;color:var(--ink)}
+.pt .pt-s{display:block;color:#3a3f45;margin-top:2px}
+.tw{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.tw:first-of-type{border-top:none}
+.tw a.tw-time{flex:0 0 auto;background:#eef4fb;color:var(--accent);font-size:11.5px;font-weight:700;padding:2px 8px;border-radius:6px;text-decoration:none;font-variant-numeric:tabular-nums;margin-top:2px}
+.tw a.tw-time:hover{background:#dce8f6}
+.tw .tw-body{flex:1}
+.tw .tw-ctx{color:var(--muted);font-size:13px;margin:0 0 2px}
+.tw .tw-said{margin:0;font-size:14.5px;color:#1f2328}
 .more{margin-top:6px}
 .more .exp{background:#f6f8fb;border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:7px 11px;margin:7px 0 0;font-size:13.5px;color:#2a2f35}
 .more .exp.loading{color:var(--muted);font-style:italic}
@@ -254,9 +271,26 @@ const DATA = {
     groups: [
       { h:"🤖 AI", items:[
         { t:"theAIsearch — RIP Claude Fable, open-source AI unleashed, full-body avatars", url:"https://www.youtube.com/watch?v=SxiRANj0xLs", published:"2026-06-14T03:29:00",
-          s:"A fast AI-news roundup: Anthropic pulling Claude Fable, a wave of new open-source models, photoreal full-body AI avatars, and fresh Google features." },
+          s:"TLDR: a wild week for open-source AI — Claude Fable 5 came and went in days, and a flood of open models (Google, Kimi, GLM 5.2, MiniMax) plus new video/avatar tools landed.",
+          points:[
+            { t:"Claude Fable 5: launched, then killed in under a week", s:"Anthropic's best model was pulled days after release." },
+            { t:"Scale 2 — best open-source motion transfer", s:"Animate any character from a reference video (even animals/anime); ~81GB, runs locally." },
+            { t:"Google: a very fast open-source model + a free real-time translator" },
+            { t:"Kimi shipped a powerful new flagship model" },
+            { t:"ZAI quietly dropped GLM 5.2", s:"One of the top open-source models." },
+            { t:"MiniMax released its best open model + a highly efficient architecture" },
+            { t:"New tool generates 4D full-body avatars" },
+            { t:"Plus several new 3D-model generators and a top text-to-speech model" }
+          ] },
         { t:"AI Master — GPT-6 is launching into a world OpenAI no longer controls", url:"https://www.youtube.com/watch?v=PKnyxxMoKWQ", published:"2026-06-13T19:54:00",
-          s:"Argues OpenAI's grip is slipping as it preps GPT-6 — rivals like Anthropic and Google have caught up and partners are drifting away." },
+          s:"TLDR: OpenAI shipped GPT-5.5 (not GPT-6), missed its own benchmark targets, lost a head-to-head to Claude — and key partners (Microsoft, Apple) are walking.",
+          points:[
+            { t:"It shipped as GPT-5.5, in four variants", s:"Base, Think, Pro and Instant tiers — not the promised GPT-6." },
+            { t:"Benchmarks missed internal targets", s:"88.7% on SWE-Bench but only 58.6% on the tougher SWE-Bench Pro (leaked targets were high-70s)." },
+            { t:"Lost a 7-category head-to-head to Claude Opus 4.7", s:"Tom's Guide: Claude swept writing, reasoning, coding and image analysis." },
+            { t:"The 'goblin incident'", s:"A contaminated reward model inserted goblins/gremlins unprompted; OpenAI postmortem 'Where the Goblins Came From'." },
+            { t:"Microsoft pulls away", s:"From Aug 2026, Microsoft's in-house Project Polaris becomes Copilot's default engine." }
+          ] },
         { t:"Varun Mayya — Claude Fable 5 is now banned by the US government", url:"https://www.youtube.com/watch?v=IyUXXlZVHQ0", published:"2026-06-13T10:52:00",
           s:"Breaks down the US export-control directive that forced Anthropic to disable Fable 5 (and Mythos 5) for everyone, and what it means for developers." },
         { t:"Varun Mayya — Claude Fable 5 built a Mumbai local-train simulator in one shot", url:"https://www.youtube.com/watch?v=ncc-6Hka6kQ", published:"2026-06-13T15:52:00",
@@ -335,11 +369,33 @@ const DATA = {
   elon: {
     day: "June 13, 2026",
     count: 22,
+    videoUrl: "https://www.youtube.com/watch?v=9iCPeAhPF-c",
+    source: "@jcub2x daily recap",
+    published: "2026-06-13T17:00:00",
     items: [
-      { t:"SpaceX dominated the feed (21 of 22 posts)", url:"https://x.com/elonmusk", published:"2026-06-13T20:00:00",
-        s:"In the day after SpaceX's record IPO, almost all of Musk's posts were about the company - amplifying the listing, Starship and broader SpaceX milestones and supporter reactions. (Summarized from a daily X-recap; reposts amplify others' views and are described neutrally, not endorsed.)" },
-      { t:"One post touched on violence", url:"https://x.com/elonmusk", published:"2026-06-13T20:00:00",
-        s:"A single post during the day referenced violence, the only item outside the SpaceX theme in an otherwise IPO-focused feed." }
+      { time:"0:08", sec:8, t:"Nvidia congratulates SpaceX on its historic IPO", s:"“Looking forward to taking our exciting partnership with Nvidia to the next level.”" },
+      { time:"0:14", sec:14, t:"Andrej Karpathy: in awe of SpaceX's story", s:"Elon: “Huge congrats to the team ❤️”" },
+      { time:"0:25", sec:25, t:"JP Morgan / Morgan Stanley mark the debut", s:"Reposted 🚀 and thanked the trading crew in mission control; shared “the moment of first trade.”" },
+      { time:"0:39", sec:39, t:"Joke that bankers must wear green shoes for the green-shoe option", s:"Elon: “True.”" },
+      { time:"0:57", sec:57, t:"Photo of Starship", s:"Elon: “Starship is a very big rocket.”" },
+      { time:"1:02", sec:62, t:"Post: the IPO remarks were about hope, not profit", s:"Reposted — “the inspiring future that excited us when we were young… we have found it again.”" },
+      { time:"1:15", sec:75, t:"“SpaceX has launched more satellites than the rest of humanity combined”", s:"Elon: “Within 5 years, probably 5× as many satellites as the rest of the world.”" },
+      { time:"1:26", sec:86, t:"“…making Tony Stark look underfunded”", s:"Elon laughed 😂" },
+      { time:"1:31", sec:91, t:"FT calls him a “real-life Bond villain”; a user mocks the framing", s:"Elon laughed 😂 at the rebuttal (decarbonized autos, global internet, helped paralyzed people)." },
+      { time:"1:46", sec:106, t:"Ashley Vance: nostalgia for the early Falcon 1 / Kwajalein days", s:"Reposted — framed as “the ultimate next chapter to The Right Stuff.”" },
+      { time:"2:17", sec:137, t:"Throwback clip of an aerospace CEO calling SpaceX reusability “a dream”", s:"Reposted." },
+      { time:"2:26", sec:146, t:"Palmer Luckey: “only ~25 satellites launched a year, and that won't change”", s:"Elon: “That is what they told me.”" },
+      { time:"2:36", sec:156, t:"Ron Baron recaps the Elon–Jamie Dimon talk at JP Morgan", s:"Elon's line: “Maybe the future AI will say — not bad for a human.” “Feels like day one.”" },
+      { time:"3:02", sec:182, t:"“There is no next Elon. Elon Musk is a mensch.”", s:"Elon replied ❤️" },
+      { time:"3:12", sec:192, t:"“The vibes at the SpaceX AI office in Palo Alto are immaculate”", s:"Reposted." },
+      { time:"3:18", sec:198, t:"“Pessimists sound smart. Optimists build the world.”", s:"Reposted." },
+      { time:"3:23", sec:203, t:"Post: first trillionaire, “more makers like Musk, fewer takers”", s:"Elon: “Only possible in America.”" },
+      { time:"3:42", sec:222, t:"“I'm going to tell my kids this was the world's first trillionaire”", s:"Elon laughed 😂" },
+      { time:"3:46", sec:226, t:"“They even got the CEO of Tesla to show up to SpaceX's bell ringing”", s:"Elon laughed 😂" },
+      { time:"3:54", sec:234, t:"Charles: proud to co-build a new gigawatt AI data center for SpaceX & xAI within a year", s:"Shared." },
+      { time:"4:12", sec:252, t:"Super Micro: “Congrats, wishing the entire team success”", s:"Elon: “Thanks.”" },
+      { time:"4:17", sec:257, t:"Goudang: “SpaceX feels like sci-fi… harness a fraction of the sun's energy”", s:"Elon replied ❤️" },
+      { time:"4:31", sec:271, t:"The one non-SpaceX post — a graphic crime thread about a repeat-offender Austin man", s:"Elon replied with exclamation marks. (Graphic content; the only post outside the IPO theme.)" }
     ]
   },
   elonNewsUpdated: "2026-06-14T07:50:00",
@@ -508,6 +564,7 @@ function card(item, when){
     `<p class="t">${titleHtml}</p>` +
     (ageStr ? `<p class="card-when" title="published ${esc(pubDate(item))}">🕒 ${esc(ageStr)}</p>` : "") +
     (item.s ? `<p class="s">${esc(item.s)}</p>` : "") +
+    ((item.points && item.points.length) ? `<details class="pts"><summary>${item.points.length} points discussed</summary>${item.points.map(pt=>`<div class="pt"><span class="pt-t">${esc(pt.t)}</span>${pt.s?`<span class="pt-s">${esc(pt.s)}</span>`:""}</div>`).join("")}</details>` : "") +
     (item.src ? `<p class="src"><b>Source:</b> ${esc(item.src)}</p>` : "") +
     (item.eli ? `<div class="eli"><b>ELI5:</b> ${esc(item.eli)}</div>` : "") +
     ((item.seen && item.seen.length) ? `<p class="ts-seen"><b>Also in:</b> ${item.seen.map(esc).join(" · ")}</p>` : "") +
@@ -702,10 +759,25 @@ function renderElon(){
   if(news.length){ news.forEach(it=>ng.appendChild(card(it, DATA.elonNewsUpdated))); }
   else { const e=document.createElement("p"); e.className="empty"; e.textContent="No news loaded yet — tap Refresh."; ng.appendChild(e); }
   p.appendChild(ng);
-  const rg=group("𝕏 Posts recap");
-  const note=document.createElement("p"); note.className="empty"; note.textContent="Recap of "+DATA.elon.day+" · "+DATA.elon.count+" posts (via @jcub2x).";
+  const rg=group("𝕏 Every post · "+DATA.elon.day);
+  const E=DATA.elon||{};
+  const note=document.createElement("p"); note.className="empty";
+  note.textContent="Each of Elon's "+ (E.count||(E.items||[]).length) +" posts, replies & reactions that day — tap a timestamp to jump to that moment in the "+(E.source||"daily recap")+".";
   rg.appendChild(note);
-  DATA.elon.items.forEach(it=>rg.appendChild(card(it, DATA.elon.day)));
+  (E.items||[]).forEach(it=>{
+    const row=document.createElement("div"); row.className="tw";
+    const tlink = (E.videoUrl && (it.sec!=null)) ? E.videoUrl+(E.videoUrl.indexOf("?")>=0?"&":"?")+"t="+it.sec+"s" : (E.videoUrl||"");
+    const timeHtml = it.time ? (tlink?`<a class="tw-time" href="${esc(tlink)}" target="_blank" rel="noopener">${esc(it.time)}</a>`:`<span class="tw-time">${esc(it.time)}</span>`) : "";
+    row.innerHTML = timeHtml +
+      `<div class="tw-body">`+
+      (it.t?`<p class="tw-ctx">${esc(it.t)}</p>`:"")+
+      (it.s?`<p class="tw-said">${esc(it.s)}</p>`:"")+
+      `</div>`;
+    rg.appendChild(row);
+  });
+  if(E.videoUrl){ const src=document.createElement("p"); src.className="src"; src.style.marginTop="10px";
+    src.innerHTML=`<b>Source:</b> <a href="${esc(E.videoUrl)}" target="_blank" rel="noopener">${esc(E.source||"daily X recap")}</a> · reposts amplify others' views, described neutrally.`;
+    rg.appendChild(src); }
   p.appendChild(rg);
   const when=document.getElementById("elonNewsWhen");
   if(DATA.elonNewsUpdated){ when.textContent="Updated "+new Date(DATA.elonNewsUpdated).toLocaleString(); }
