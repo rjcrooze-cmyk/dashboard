@@ -74,6 +74,7 @@ nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1p
 .tw .tw-body{flex:1}
 .tw .tw-ctx{color:var(--muted);font-size:13px;margin:0 0 2px}
 .tw .tw-said{margin:0;font-size:14.5px;color:#1f2328}
+.tw .tw-kind{display:inline-block;background:#f1efea;color:#5a6473;font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;padding:1px 6px;border-radius:5px}
 a.thumb-link{display:block;position:relative;margin:0 0 10px}
 a.thumb-link .thumb{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;background:#ece9e4}
 a.thumb-link .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;pointer-events:none}
@@ -373,34 +374,20 @@ const DATA = {
   },
   elon: {
     day: "June 13, 2026",
-    count: 22,
-    videoUrl: "https://www.youtube.com/watch?v=9iCPeAhPF-c",
-    source: "@jcub2x daily recap",
-    published: "2026-06-13T17:00:00",
+    count: 19,
+    source: "x.com/elonmusk",
+    note: "Pulled directly from X — times are exact (your local time). Reposts use the original post's time (X doesn't expose the repost moment); pure likes have no public timestamp.",
     items: [
-      { time:"0:08", sec:8, t:"Nvidia congratulates SpaceX on its historic IPO", s:"“Looking forward to taking our exciting partnership with Nvidia to the next level.”" },
-      { time:"0:14", sec:14, t:"Andrej Karpathy: in awe of SpaceX's story", s:"Elon: “Huge congrats to the team ❤️”" },
-      { time:"0:25", sec:25, t:"JP Morgan / Morgan Stanley mark the debut", s:"Reposted 🚀 and thanked the trading crew in mission control; shared “the moment of first trade.”" },
-      { time:"0:39", sec:39, t:"Joke that bankers must wear green shoes for the green-shoe option", s:"Elon: “True.”" },
-      { time:"0:57", sec:57, t:"Photo of Starship", s:"Elon: “Starship is a very big rocket.”" },
-      { time:"1:02", sec:62, t:"Post: the IPO remarks were about hope, not profit", s:"Reposted — “the inspiring future that excited us when we were young… we have found it again.”" },
-      { time:"1:15", sec:75, t:"“SpaceX has launched more satellites than the rest of humanity combined”", s:"Elon: “Within 5 years, probably 5× as many satellites as the rest of the world.”" },
-      { time:"1:26", sec:86, t:"“…making Tony Stark look underfunded”", s:"Elon laughed 😂" },
-      { time:"1:31", sec:91, t:"FT calls him a “real-life Bond villain”; a user mocks the framing", s:"Elon laughed 😂 at the rebuttal (decarbonized autos, global internet, helped paralyzed people)." },
-      { time:"1:46", sec:106, t:"Ashley Vance: nostalgia for the early Falcon 1 / Kwajalein days", s:"Reposted — framed as “the ultimate next chapter to The Right Stuff.”" },
-      { time:"2:17", sec:137, t:"Throwback clip of an aerospace CEO calling SpaceX reusability “a dream”", s:"Reposted." },
-      { time:"2:26", sec:146, t:"Palmer Luckey: “only ~25 satellites launched a year, and that won't change”", s:"Elon: “That is what they told me.”" },
-      { time:"2:36", sec:156, t:"Ron Baron recaps the Elon–Jamie Dimon talk at JP Morgan", s:"Elon's line: “Maybe the future AI will say — not bad for a human.” “Feels like day one.”" },
-      { time:"3:02", sec:182, t:"“There is no next Elon. Elon Musk is a mensch.”", s:"Elon replied ❤️" },
-      { time:"3:12", sec:192, t:"“The vibes at the SpaceX AI office in Palo Alto are immaculate”", s:"Reposted." },
-      { time:"3:18", sec:198, t:"“Pessimists sound smart. Optimists build the world.”", s:"Reposted." },
-      { time:"3:23", sec:203, t:"Post: first trillionaire, “more makers like Musk, fewer takers”", s:"Elon: “Only possible in America.”" },
-      { time:"3:42", sec:222, t:"“I'm going to tell my kids this was the world's first trillionaire”", s:"Elon laughed 😂" },
-      { time:"3:46", sec:226, t:"“They even got the CEO of Tesla to show up to SpaceX's bell ringing”", s:"Elon laughed 😂" },
-      { time:"3:54", sec:234, t:"Charles: proud to co-build a new gigawatt AI data center for SpaceX & xAI within a year", s:"Shared." },
-      { time:"4:12", sec:252, t:"Super Micro: “Congrats, wishing the entire team success”", s:"Elon: “Thanks.”" },
-      { time:"4:17", sec:257, t:"Goudang: “SpaceX feels like sci-fi… harness a fraction of the sun's energy”", s:"Elon replied ❤️" },
-      { time:"4:31", sec:271, t:"The one non-SpaceX post — a graphic crime thread about a repeat-offender Austin man", s:"Elon replied with exclamation marks. (Graphic content; the only post outside the IPO theme.)" }
+      { iso:"2026-06-13T00:01:33Z", kind:"repost", t:"↻ Reposted @PeterDiamandis", s:"“Pessimists sound smart. Optimists build the world.”", href:"https://x.com/PeterDiamandis/status/2065585327087980687" },
+      { iso:"2026-06-13T00:38:44Z", kind:"repost", t:"↻ Reposted @niccruzpatane", s:"The green-shoe joke — “Elon agreed to the ‘greenshoe’ IPO option, but only if the bankers wore green shoes.”", href:"https://x.com/niccruzpatane/status/2065594684899021116" },
+      { iso:"2026-06-13T00:57:30Z", kind:"reply", t:"Reply to Super Micro's congratulations", s:"“Thanks!”", href:"https://x.com/elonmusk/status/2065599528170848589" },
+      { iso:"2026-06-13T02:09:00Z", kind:"reply", t:"On the IPO green-shoe joke", s:"“True”", href:"https://x.com/elonmusk/status/2065617636797325473" },
+      { iso:"2026-06-13T02:11:00Z", kind:"reply", t:"Replying to @PalmerLuckey (“only ~25 satellites launched a year, and that won't change”)", s:"“That is what they told me”", href:"https://x.com/elonmusk/status/2065617932718059544" },
+      { iso:"2026-06-13T07:48:49Z", kind:"post", t:"Quote-posting a Starship photo", s:"“Starship is a very big rocket”", href:"https://x.com/elonmusk/status/2065702920427896916" },
+      { iso:"2026-06-13T07:58:11Z", kind:"post", t:"On SpaceX having launched more satellites than the rest of the world combined", s:"“Within ~5 years, probably ~5 times as many satellites as the rest of the world.”", href:"https://x.com/elonmusk/status/2065705276334833951" },
+      { iso:"2026-06-13T08:04:00Z", kind:"reply", t:"Replying to a graphic crime thread about a repeat-offender Austin man (the one non-SpaceX post)", s:"“!!”", href:"https://x.com/elonmusk/status/2065706985878675838" },
+      { iso:"2026-06-13T12:07:42Z", kind:"repost", t:"↻ Reposted @arjunkhemani", s:"The Starbase-tour story — a worker walks up, hugs Elon and says “We're going to make it.”", href:"https://x.com/arjunkhemani/status/2065768071068057830" },
+      { iso:"2026-06-13T19:14:52Z", kind:"repost", t:"↻ Reposted @niccruzpatane", s:"SpaceX President Gwynne Shotwell on CNBC: “I think he is very misunderstood across the board…”", href:"https://x.com/niccruzpatane/status/2065875567816376744" }
     ]
   },
   elonNewsUpdated: "2026-06-14T07:50:00",
@@ -780,22 +767,24 @@ function renderElon(){
   const rg=group("𝕏 Every post · "+DATA.elon.day);
   const E=DATA.elon||{};
   const note=document.createElement("p"); note.className="empty";
-  note.textContent="Each of Elon's "+ (E.count||(E.items||[]).length) +" posts, replies & reactions that day — tap a timestamp to jump to that moment in the "+(E.source||"daily recap")+".";
+  note.textContent="Each of Elon's "+ (E.count||(E.items||[]).length) +" posts, replies & reposts that day, with the exact time it went out (your local time). Tap a time to open the tweet.";
   rg.appendChild(note);
+  function fmtTime(iso){ const d=new Date(iso); if(isNaN(d.getTime())) return ""; return d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"}); }
   (E.items||[]).forEach(it=>{
     const row=document.createElement("div"); row.className="tw";
-    const tlink = (E.videoUrl && (it.sec!=null)) ? E.videoUrl+(E.videoUrl.indexOf("?")>=0?"&":"?")+"t="+it.sec+"s" : (E.videoUrl||"");
-    const timeHtml = it.time ? (tlink?`<a class="tw-time" href="${esc(tlink)}" target="_blank" rel="noopener">${esc(it.time)}</a>`:`<span class="tw-time">${esc(it.time)}</span>`) : "";
+    const t=fmtTime(it.iso);
+    const timeHtml = t ? (it.href?`<a class="tw-time" href="${esc(it.href)}" target="_blank" rel="noopener">${esc(t)}</a>`:`<span class="tw-time">${esc(t)}</span>`) : "";
+    const kindLbl = it.kind==="repost" ? "Repost" : (it.kind==="reply" ? "Reply" : "Post");
     row.innerHTML = timeHtml +
       `<div class="tw-body">`+
-      (it.t?`<p class="tw-ctx">${esc(it.t)}</p>`:"")+
+      `<p class="tw-ctx"><span class="tw-kind">${esc(kindLbl)}</span>${it.t?" · "+esc(it.t):""}</p>`+
       (it.s?`<p class="tw-said">${esc(it.s)}</p>`:"")+
       `</div>`;
     rg.appendChild(row);
   });
-  if(E.videoUrl){ const src=document.createElement("p"); src.className="src"; src.style.marginTop="10px";
-    src.innerHTML=`<b>Source:</b> <a href="${esc(E.videoUrl)}" target="_blank" rel="noopener">${esc(E.source||"daily X recap")}</a> · reposts amplify others' views, described neutrally.`;
-    rg.appendChild(src); }
+  const src=document.createElement("p"); src.className="src"; src.style.marginTop="10px";
+  src.innerHTML=`<b>Source:</b> <a href="https://x.com/elonmusk" target="_blank" rel="noopener">@elonmusk on X</a> · ${esc(E.note||"")}`;
+  rg.appendChild(src);
   p.appendChild(rg);
   const when=document.getElementById("elonNewsWhen");
   if(DATA.elonNewsUpdated){ when.textContent="Updated "+new Date(DATA.elonNewsUpdated).toLocaleString(); }
