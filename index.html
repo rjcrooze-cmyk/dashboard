@@ -32,7 +32,7 @@ h1{font-size:20px;margin:0;letter-spacing:-.2px}
 .affirm .a-text{flex:1}
 .icon-btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:3px 8px;cursor:pointer;font-size:13px;color:var(--muted)}
 .icon-btn:hover{color:var(--ink);border-color:#d8d5cf}
-nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1px solid var(--line);padding-bottom:10px}
+nav.tabs{position:relative;display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1px solid var(--line);padding-bottom:10px}
 .tab{display:inline-flex;align-items:center;gap:6px;border:1px solid transparent;background:transparent;border-radius:999px;padding:6px 13px;cursor:pointer;font-size:13.5px;color:var(--muted)}
 .tab .ico{font-size:14px;line-height:1}
 .tab:hover{color:var(--ink)}
@@ -497,20 +497,39 @@ const DATA = {
   elon: {
     day: "June 14, 2026",
     source: "x.com/elonmusk",
-    note: "Every post, reply & repost from Elon that day, ranked by engagement (likes & views). Reposts amplify others' views and are described neutrally, not endorsed; contested claims are flagged. Counts and times are pulled live from X.",
+    note: "Every post, reply & repost from Elon (Jun 13-14), ranked by engagement (likes & views). Reposts amplify others' views (described neutrally, not endorsed); contested claims flagged. Counts/times pulled live from X.",
     items: [
-      { kind:"post", imp:"critical", t:"On SpaceX out-launching the rest of the world on satellites", s:"“Within ~5 years, probably ~5 times as many satellites as rest of world.”", likes:127720, views:18579360, iso:"2026-06-13T07:58:00Z", href:"https://x.com/elonmusk/status/2065705276334833951" },
-      { kind:"reply", imp:"critical", t:"Reply in a UK-politics thread", s:"“They will.”", likes:95879, views:30683515, iso:"2026-06-14T00:00:00Z", href:"https://x.com/elonmusk/status/2066082785668878479" },
-      { kind:"post", imp:"critical", t:"Pinned — SpaceX's reusability cost chart", s:"“SpaceX AI Satellites” — his pinned post on Starship's step-change in launch cost per kg.", likes:75027, views:42588190, iso:"2026-06-11T00:00:00Z", href:"https://x.com/elonmusk/status/2064187087184650253" },
-      { kind:"repost", imp:"important", t:"Reposted @JessicaTetreau — a jibe at a politician criticising the wealthy", s:"“Is she actually lecturing us about rich people from the back of a limousine?”", likes:111102, views:2132096, iso:"2026-06-13T00:00:00Z", href:"https://x.com/JessicaTetreau/status/2065554626158420266" },
-      { kind:"reply", imp:"important", t:"Reply (one-word reaction)", s:"“Wow.”", likes:57807, views:3478845, iso:"2026-06-14T00:00:00Z", href:"https://x.com/elonmusk/status/2066196905151864967" },
-      { kind:"repost", imp:"important", t:"Reposted @TimRunsHisMouth — a politically charged take on US politics (amplified, not endorsed)", s:"A commentary contrasting visions for America's 250th July 4th. Partisan opinion.", likes:73463, views:825835, iso:"2026-06-13T00:00:00Z", href:"https://x.com/TimRunsHisMouth/status/2065847141466083560" },
-      { kind:"reply", imp:"important", t:"On the UK arrest of activist Tommy Robinson", s:"“He used words that the pro-stabbing politicians didn't like.” (Elon's own framing of a contested UK case.)", likes:46496, views:529014, iso:"2026-06-14T00:00:00Z", href:"https://x.com/elonmusk/status/2066082075468263701" },
-      { kind:"repost", imp:"important", t:"Reposted @w_terrence — commentary on race relations in the US (amplified, not endorsed)", s:"A personal opinion piece about racism in America. Sensitive, partisan content.", likes:47864, views:521972, iso:"2026-06-13T00:00:00Z", href:"https://x.com/w_terrence/status/2065667256411967956" },
-      { kind:"repost", imp:"interesting", t:"Reposted @JohnCleese — part of the same UK thread", s:"“Did he stab someone?”", likes:43824, views:1973714, iso:"2026-06-14T00:00:00Z", href:"https://x.com/JohnCleese/status/2066048781766758426" },
-      { kind:"reply", imp:"interesting", t:"One-word reaction", s:"“Terrible.”", likes:35524, views:358500, iso:"2026-06-13T00:00:00Z", href:"https://x.com/elonmusk/status/2065911856523288917" },
-      { kind:"repost", imp:"interesting", t:"Reposted @WarClandestine — a claim about US-funded biolabs in Ukraine (contested / unverified)", s:"A post asserting mainstream media is 'finally admitting' the biolabs story. Treat as an unverified claim.", likes:33277, views:423546, iso:"2026-06-13T00:00:00Z", href:"https://x.com/WarClandestine/status/2065910009205068007" },
-      { kind:"repost", imp:"interesting", t:"Reposted @BasilTheGreat — a report tied to a UK migration/crime story", s:"News-style post about a man attacked in the UK. Single-source; sensitive topic.", likes:30119, views:1993583, iso:"2026-06-13T00:00:00Z", href:"https://x.com/BasilTheGreat/status/2065858457916391803" }
+      { kind:"post", imp:"critical", t:"Post", s:"“Starship is a very big rocket”", likes:177695, views:20930766, href:"https://x.com/elonmusk/status/2065702920427896916" },
+      { kind:"post", imp:"critical", t:"Post", s:"“Within ~5 years, probably ~5 times as many satellites as rest of world”", likes:128677, views:18714460, href:"https://x.com/elonmusk/status/2065705276334833951" },
+      { kind:"reply", imp:"critical", t:"Reply", s:"“They will”", likes:100324, views:32194979, href:"https://x.com/elonmusk/status/2066082785668878479" },
+      { kind:"reply", imp:"important", t:"↩ In a thread with @TimRunsHisMouth", s:"A politically charged commentary on US politics. Partisan opinion — opens on X.", likes:75771, views:878518, href:"https://x.com/TimRunsHisMouth/status/2065847141466083560" },
+      { kind:"reply", imp:"important", t:"Reply", s:"“Wow”", likes:75561, views:4723105, href:"https://x.com/elonmusk/status/2066196905151864967" },
+      { kind:"repost", imp:"important", t:"↻ Reposted @w_terrence", s:"Personal commentary about race in America. Sensitive / partisan — opens on X.", likes:49934, views:606881, href:"https://x.com/w_terrence/status/2065667256411967956" },
+      { kind:"post", imp:"important", t:"Post", s:"“He used words that the pro-stabbing politicians didn't like”", likes:47651, views:546084, href:"https://x.com/elonmusk/status/2066082075468263701" },
+      { kind:"repost", imp:"important", t:"↻ Reposted @JohnCleese", s:"Did he stab someone?", likes:45631, views:2052866, href:"https://x.com/JohnCleese/status/2066048781766758426" },
+      { kind:"reply", imp:"important", t:"Reply", s:"“Terrible”", likes:35856, views:363462, href:"https://x.com/elonmusk/status/2065911856523288917" },
+      { kind:"repost", imp:"important", t:"↻ Reposted @WarClandestine", s:"Amplifies a claim about US-funded biolabs in Ukraine — a contested, unverified narrative.", likes:35098, views:509649, href:"https://x.com/WarClandestine/status/2065910009205068007" },
+      { kind:"reply", imp:"important", t:"↩ In a thread with @BasilTheGreat", s:"A report tied to a UK migration/crime story (single-source, sensitive).", likes:30345, views:2040165, href:"https://x.com/BasilTheGreat/status/2065858457916391803" },
+      { kind:"post", imp:"important", t:"Post", s:"Photo / quoted post — open to view.", likes:27976, views:589556, href:"https://x.com/elonmusk/status/2065704199531155560" },
+      { kind:"repost", imp:"important", t:"↻ Reposted @arjunkhemani", s:"A Starbase-tour story: a worker tells Elon 'We're going to make it.'", likes:27820, views:1331276, href:"https://x.com/arjunkhemani/status/2065768071068057830" },
+      { kind:"reply", imp:"interesting", t:"Reply", s:"“Yup”", likes:22869, href:"https://x.com/elonmusk/status/2066083351451124172" },
+      { kind:"reply", imp:"interesting", t:"Reply", s:"“Interesting”", likes:21549, href:"https://x.com/elonmusk/status/2066197971616551109" },
+      { kind:"post", imp:"interesting", t:"Post", s:"Photo / quoted post — open to view.", likes:15529, href:"https://x.com/elonmusk/status/2066217102793433092" },
+      { kind:"post", imp:"interesting", t:"Post", s:"“That is what they told me”", likes:15402, href:"https://x.com/elonmusk/status/2065617932718059544" },
+      { kind:"reply", imp:"interesting", t:"↩ In a thread with @PalmerLuckey", s:"“There are only 25 satellites launched a year, and that won't change”", likes:13302, href:"https://x.com/PalmerLuckey/status/2065606667958620562" },
+      { kind:"repost", imp:"interesting", t:"↻ Reposted @niccruzpatane", s:"SpaceX President Gwynne Shotwell on CNBC on Elon Musk", likes:13155, href:"https://x.com/niccruzpatane/status/2065875567816376744" },
+      { kind:"post", imp:"interesting", t:"Post", s:"Photo / quoted post — open to view.", likes:12819, href:"https://x.com/elonmusk/status/2065618945885753378" },
+      { kind:"reply", imp:"interesting", t:"↩ In a thread with @naval", s:"“Science is not a process, a credential, or an institution… it is the unflinching pursuit of truth.”", likes:11619, href:"https://x.com/naval/status/2066017412974088341" },
+      { kind:"repost", imp:"interesting", t:"↻ Reposted @yunta_tsai", s:"On the IPO remarks being about hope, not profit", likes:8473, href:"https://x.com/yunta_tsai/status/2065646527947964784" },
+      { kind:"repost", imp:"interesting", t:"↻ Reposted @boringcompany", s:"The Boring Company tunneling across 3 geologies in 3 US cities", likes:8265, href:"https://x.com/boringcompany/status/2065936408972325323" },
+      { kind:"repost", imp:"noise", t:"↻ Reposted @niccruzpatane", s:"The green-shoe IPO joke ('only if the bankers wore green shoes')", likes:7462, href:"https://x.com/niccruzpatane/status/2065594684899021116" },
+      { kind:"reply", imp:"noise", t:"Reply", s:"“True”", likes:6675, href:"https://x.com/elonmusk/status/2066226701567230419" },
+      { kind:"reply", imp:"noise", t:"↩ In a thread with @AustinJustice", s:"A graphic crime thread (sensitive content) — opens on X.", likes:6497, href:"https://x.com/AustinJustice/status/2065653127487906011" },
+      { kind:"reply", imp:"noise", t:"↩ In a thread with @paulg", s:"Paul Graham: 'How to Earn a Billion Dollars' (essay)", likes:5745, href:"https://x.com/paulg/status/2066124279448559907" },
+      { kind:"reply", imp:"noise", t:"↩ In a thread with @TheAliceSmith", s:"A lighthearted post he engaged with", likes:4519, href:"https://x.com/TheAliceSmith/status/2066086202311164055" },
+      { kind:"reply", imp:"noise", t:"Reply", s:"“True”", likes:4273, href:"https://x.com/elonmusk/status/2065617636797325473" },
+      { kind:"reply", imp:"noise", t:"Reply", s:"“!!”", likes:2908, href:"https://x.com/elonmusk/status/2065706985878675838" },
+      { kind:"reply", imp:"noise", t:"Reply", s:"“True”", likes:2552, href:"https://x.com/elonmusk/status/2066217882988482587" }
     ]
   },
   elonNewsUpdated: "2026-06-14T07:50:00",
@@ -1170,10 +1189,10 @@ if(overflow.length){
   moreBtn.innerHTML=`<span class="ico">⋯</span><span class="lbl">More</span>`;
   moreMenu=document.createElement("div"); moreMenu.className="more-menu";
   overflow.forEach(t=>moreMenu.appendChild(mkTab(t)));
-  moreBtn.appendChild(moreMenu);
-  moreBtn.onclick=(e)=>{ e.stopPropagation(); moreMenu.classList.toggle("open"); };
   nav.appendChild(moreBtn);
-  document.addEventListener("click",()=>closeMore());
+  nav.appendChild(moreMenu);   // sibling of the button (NOT a child) so tapping items doesn't re-toggle
+  moreBtn.addEventListener("click",(e)=>{ e.stopPropagation(); moreMenu.classList.toggle("open"); });
+  document.addEventListener("click",(e)=>{ if(moreMenu.classList.contains("open") && !moreBtn.contains(e.target) && !moreMenu.contains(e.target)) moreMenu.classList.remove("open"); });
 }
 function closeMore(){ if(moreMenu) moreMenu.classList.remove("open"); }
 function activate(id){
