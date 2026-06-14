@@ -74,6 +74,11 @@ nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1p
 .tw .tw-body{flex:1}
 .tw .tw-ctx{color:var(--muted);font-size:13px;margin:0 0 2px}
 .tw .tw-said{margin:0;font-size:14.5px;color:#1f2328}
+a.thumb-link{display:block;position:relative;margin:0 0 10px}
+a.thumb-link .thumb{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;background:#ece9e4}
+a.thumb-link .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:46px;height:46px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;pointer-events:none}
+a.thumb-link .play::after{content:"";border-style:solid;border-width:9px 0 9px 15px;border-color:transparent transparent transparent #fff;margin-left:3px}
+.msg-thumb{display:block;width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:10px;margin:0 0 11px;background:#ece9e4}
 .more{margin-top:6px}
 .more .exp{background:#f6f8fb;border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:7px 11px;margin:7px 0 0;font-size:13.5px;color:#2a2f35}
 .more .exp.loading{color:var(--muted);font-style:italic}
@@ -505,6 +510,13 @@ function urlDate(u){
 }
 // the publish moment for an item: explicit field wins, else parsed from its URL
 function pubDate(item){ return (item && (item.published || urlDate(item.url))) || null; }
+// extract a YouTube video id from a watch/share/embed url (for thumbnails)
+function ytId(u){
+  if(!u) return null;
+  let m = u.match(/[?&]v=([A-Za-z0-9_-]{11})/) || u.match(/youtu\.be\/([A-Za-z0-9_-]{11})/) || u.match(/\/(?:embed|shorts)\/([A-Za-z0-9_-]{11})/);
+  return m ? m[1] : null;
+}
+function ytThumb(id){ return "https://i.ytimg.com/vi/"+id+"/mqdefault.jpg"; }
 // human "how long ago", recomputed every page load
 function relAge(v){
   if(!v) return "";
@@ -559,7 +571,10 @@ function card(item, when){
   div.dataset.level = "0";
   const titleHtml = item.url ? `<a href="${esc(item.url)}" target="_blank" rel="noopener">${esc(item.t)}</a>` : esc(item.t);
   const ageStr = relAge(pubDate(item));
+  const vid = ytId(item.url);
+  const thumbHtml = vid ? `<a class="thumb-link" href="${esc(item.url)}" target="_blank" rel="noopener"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumb-link').style.display='none'"><span class="play"></span></a>` : "";
   div.innerHTML =
+    thumbHtml +
     (item.tag ? `<span class="ts-tag">${esc(item.tag)}</span>` : "") +
     `<p class="t">${titleHtml}</p>` +
     (ageStr ? `<p class="card-when" title="published ${esc(pubDate(item))}">🕒 ${esc(ageStr)}</p>` : "") +
@@ -807,8 +822,11 @@ function renderLoa(){
       const d=document.createElement("div"); d.className="msg-card";
       const link = m.url ? `<div class="msg-link"><a href="${esc(m.url)}" target="_blank" rel="noopener">watch the latest ▸</a></div>` : "";
       const age = relAge(pubDate(m));
+      const mvid = ytId(m.url);
+      const mthumb = mvid ? `<a class="thumb-link" href="${esc(m.url)}" target="_blank" rel="noopener"><img class="msg-thumb" loading="lazy" alt="" src="${esc(ytThumb(mvid))}" onerror="this.style.display='none'"><span class="play"></span></a>` : "";
       d.innerHTML =
         `<div class="msg-author">${esc(m.author)}${m.title?` · <span class="msg-title">${esc(m.title)}</span>`:""}</div>`+
+        mthumb+
         (age ? `<p class="card-when" title="published ${esc(pubDate(m))}">🕒 ${esc(age)}</p>` : "")+
         `<p class="msg-body">${esc(m.msg)}</p>`+ link;
       g.appendChild(d);
