@@ -12,6 +12,8 @@
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Crect%20width='512'%20height='512'%20rx='110'%20fill='%233b6ea5'/%3E%3Ccircle%20cx='256'%20cy='256'%20r='96'%20fill='%23ffd66b'/%3E%3C/svg%3E">
 <style>
 :root{ color-scheme: light; --bg:#faf9f7; --card:#ffffff; --ink:#1f2328; --muted:#6b7280; --line:#e7e5e1; --accent:#3b6ea5; --accent2:#7a5cc4; --chip:#f1efea; --good:#2f7d5b; }
+:root[data-theme="dark"]{ color-scheme: dark; --bg:#15171a; --card:#1e2126; --ink:#e8eaed; --muted:#9aa3ad; --line:#2c3036; --accent:#6ea3da; --accent2:#a98ce0; --chip:#262a30; --good:#5fc28c; }
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ color-scheme: dark; --bg:#15171a; --card:#1e2126; --ink:#e8eaed; --muted:#9aa3ad; --line:#2c3036; --accent:#6ea3da; --accent2:#a98ce0; --chip:#262a30; --good:#5fc28c; } }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
 .wrap{max-width:760px;margin:0 auto;padding:18px 16px 60px}
@@ -147,7 +149,61 @@ a.thumb-link .play::after{content:"";border-style:solid;border-width:6px 0 6px 1
   .btn{padding:9px 14px}
   .tool input[type=text],.tool textarea{font-size:16px}
   .timer-display{font-size:40px}
+  .more-menu{position:fixed;left:8px;right:8px;bottom:calc(64px + env(safe-area-inset-bottom));top:auto;min-width:0}
 }
+/* theme toggle */
+.theme-btn{border:1px solid var(--line);background:var(--card);border-radius:8px;padding:4px 9px;cursor:pointer;font-size:14px;color:var(--muted);line-height:1}
+.theme-btn:hover{color:var(--ink);border-color:#d8d5cf}
+/* NEW badge + read state */
+.badge-new{display:inline-block;background:var(--good);color:#fff;font-size:9.5px;font-weight:700;letter-spacing:.5px;padding:1px 6px;border-radius:5px;margin:0 0 6px;vertical-align:middle}
+.card.read{opacity:.5}
+.card.read .badge-new{display:none}
+.act-read.on{color:var(--good);border-color:var(--good)}
+/* "More" tab overflow menu */
+.tab.more-btn{position:relative}
+.more-menu{position:absolute;top:calc(100% + 6px);right:0;z-index:40;background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:0 6px 24px rgba(0,0,0,.12);padding:6px;display:none;flex-direction:column;gap:2px;min-width:150px}
+.more-menu.open{display:flex}
+.more-menu .tab{justify-content:flex-start;border-radius:8px}
+/* importance dots */
+.imp{display:inline-block;width:9px;height:9px;border-radius:50%;flex:0 0 auto;margin-top:6px}
+.imp-critical{background:#e0443e}
+.imp-important{background:#e8912d}
+.imp-interesting{background:var(--accent)}
+.imp-noise{background:#b8bcc2}
+.imp-inline{margin:0 6px 0 0;vertical-align:middle;margin-top:0}
+/* why it matters */
+.why{margin:6px 0 0;font-size:13.5px;color:#3a3f45;background:rgba(123,92,196,.08);border-left:3px solid var(--accent2);border-radius:0 8px 8px 0;padding:5px 10px}
+.why b{color:var(--accent2)}
+:root[data-theme="dark"] .why{background:rgba(169,140,224,.12)}
+.readtime{color:var(--muted);font-size:11.5px;margin:5px 0 0}
+/* "Today in 30 seconds" glance box */
+.glance{background:linear-gradient(135deg,#eef4fb,#f3effa);border:1px solid var(--line);border-radius:12px;padding:10px 14px;margin:0 0 16px}
+:root[data-theme="dark"] .glance{background:linear-gradient(135deg,#1b2230,#221f33)}
+.glance>summary{cursor:pointer;list-style:none;font-weight:700;font-size:13px;letter-spacing:.3px;color:var(--accent2)}
+.glance>summary::-webkit-details-marker{display:none}
+.glance-body{margin-top:8px;display:flex;flex-direction:column;gap:6px}
+.glance-row{display:flex;gap:10px;font-size:13.5px;line-height:1.4}
+.glance-tag{flex:0 0 auto;width:84px;font-weight:700;color:var(--muted);text-transform:uppercase;font-size:10.5px;letter-spacing:.4px;padding-top:2px}
+.glance-items{flex:1;color:var(--ink)}
+/* dark-mode fixes for light-hardcoded components */
+:root[data-theme="dark"] .affirm,
+:root[data-theme="dark"] .msg-card{background:linear-gradient(135deg,#241f33,#1b2230)}
+:root[data-theme="dark"] .eli{background:#2a2519;border-color:#3a3320;color:#d8c79a}
+:root[data-theme="dark"] .eli b{color:#e3cf96}
+:root[data-theme="dark"] .pts{background:#1a1d22}
+:root[data-theme="dark"] .more .exp{background:#1b2128}
+:root[data-theme="dark"] .more .exp.qa{background:#221d30}
+:root[data-theme="dark"] .out,
+:root[data-theme="dark"] .t10-row{background:var(--card)}
+:root[data-theme="dark"] .ts-tag,
+:root[data-theme="dark"] .tw a.tw-time{background:#23303f;color:var(--accent)}
+:root[data-theme="dark"] .verified{background:#15301f;color:var(--good)}
+:root[data-theme="dark"] .ask-box .ask-in,
+:root[data-theme="dark"] .tool textarea,
+:root[data-theme="dark"] .tool input[type=text]{background:#15171a;color:var(--ink)}
+:root[data-theme="dark"] .play{background:rgba(0,0,0,.7)}
+/* hide AI-only controls when not running inside the Claude app */
+body.no-ai .act-ask,body.no-ai .ask-box,body.no-ai .act-more{display:none}
 </style>
 </head>
 <body>
@@ -157,6 +213,7 @@ a.thumb-link .play::after{content:"";border-style:solid;border-width:6px 0 6px 1
       <h1>☀️ Daily Dashboard</h1>
       <div class="title-right">
         <span class="date" id="dateLbl"></span>
+        <button class="theme-btn" id="themeBtn" title="Toggle light/dark" aria-label="Toggle theme">🌙</button>
         <button class="update-all" id="updateAll">↻ Update</button>
       </div>
     </div>
@@ -225,26 +282,36 @@ const DATA = {
   top10: {
     updated: "2026-06-14T13:32:00",
     items: [
-      { t:"World Cup 2026 is under way across North America", tag:"World", published:"2026-06-14T06:30:00", url:"https://www.espn.com/soccer/story/_/id/49058587/world-cup-2026-today-blog-14-06-2026-live-updates-news-fixtures-schedule-results-scotland-win-brazil-morocco-draw",
-        s:"Scotland claimed their first World Cup win since 1990; five-time champions Brazil were held to a draw by Morocco." },
-      { t:"US-Iran peace deal hangs in the balance", tag:"World", published:"2026-06-14T06:00:00", url:"https://www.rferl.org/a/iran-war-us-hormuz-oil-blockade-gulf-israel/33640284.html",
-        s:"Trump says a deal could be signed Sunday and Pakistan's PM calls it 'closer than ever', but Tehran is downplaying it; Iran has set Khamenei's funeral dates." },
-      { t:"US House passes Ukraine Support Act + a bill to choke tech to Iranian drones", tag:"World", published:"2026-06-14T05:00:00", url:"https://www.npr.org/sections/news",
-        s:"After months of gridlock, two major foreign-policy measures cleared the House." },
-      { t:"SpaceX fallout: Musk is the first trillionaire, and SpaceX has a fast-growing AI cloud", tag:"Business", published:"2026-06-14T11:40:00", url:"https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html",
-        s:"After the record IPO, SpaceX's month-old cloud business is already ~4th largest (ahead of Oracle) by some measures." },
-      { t:"US order forces Anthropic to pull Claude Fable 5 and Mythos 5", tag:"Tech & AI", published:"2026-06-13T19:00:00", url:"https://www.youtube.com/watch?v=vM2At8Uqp2Y",
-        s:"An export-control directive barred foreign nationals from the models, so Anthropic disabled them for everyone (falling back to Opus 4.8); Europe reacted June 14." },
-      { t:"Google rolls out Gemini 'M5' in beta", tag:"Tech & AI", published:"2026-06-14T05:30:00", url:"",
-        s:"The 128B-parameter, NPU-accelerated model claims ~40% less thermal throttling via real-time core load-balancing." },
-      { t:"Tesla starts its FSD v14.3.4 rollout", tag:"Tech & AI", published:"2026-06-13T16:00:00", url:"https://www.teslaoracle.com/2026/06/13/tesla-starts-the-rollout-of-fsd-v14-3-4-2026-14-6-10-official-release-notes-rollout-status/",
-        s:"A new vision encoder and MLIR-rewritten compiler claim ~20% faster reactions, plus Smart Summon comes to Cybertruck." },
-      { t:"Chinese EVs are upending the car market", tag:"Business", published:"2026-06-13T20:06:00", url:"https://www.youtube.com/watch?v=X6WF1BJt-3A",
-        s:"Ford's CEO daily-drove a $30k Xiaomi SU7 for six months and called BYD 'the best in the business' — a structural threat to Detroit." },
-      { t:"Scripps unveils an experimental vaccine to block fentanyl overdoses", tag:"Science & Health", published:"2026-06-13T15:00:00", url:"https://www.sciencedaily.com/news/top/science/",
-        s:"It's designed to trap fentanyl in the bloodstream before it reaches the brain; early-stage research, not yet a treatment." },
-      { t:"India's deep-tech push accelerates", tag:"India", published:"2026-06-14T04:30:00", url:"",
-        s:"IIT Madras is showing 15 startups at Bharat Innovates 2026 in Nice, and TCS is rolling Claude out to 50,000 employees as an Anthropic premier partner." }
+      { t:"US-Iran peace deal hangs in the balance", tag:"World", imp:"critical", glance:"US-Iran deal uncertain", readtime:"30 sec", published:"2026-06-14T06:00:00", url:"https://www.rferl.org/a/iran-war-us-hormuz-oil-blockade-gulf-israel/33640284.html",
+        s:"Trump says a deal could be signed Sunday and Pakistan's PM calls it 'closer than ever', but Tehran is downplaying it; Iran has set Khamenei's funeral dates.",
+        why:"It decides whether a hot conflict winds down or escalates — and it directly drives oil prices and market mood worldwide." },
+      { t:"US House passes Ukraine Support Act + a bill to choke tech to Iranian drones", tag:"World", imp:"important", glance:"US House: Ukraine + Iran-drone bills", readtime:"20 sec", published:"2026-06-14T05:00:00", url:"https://www.npr.org/sections/news",
+        s:"After months of gridlock, two major foreign-policy measures cleared the House.",
+        why:"Signals renewed US backing for Ukraine and a tightening tech squeeze on Iran — shaping the war's trajectory and global supply chains." },
+      { t:"SpaceX fallout: Musk is first trillionaire, and SpaceX has a fast-growing AI cloud", tag:"Business", imp:"important", glance:"Musk first trillionaire; SpaceX AI cloud", readtime:"30 sec", published:"2026-06-14T11:40:00", url:"https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html",
+        s:"After the record IPO, SpaceX's month-old cloud business is already ~4th largest (ahead of Oracle) by some measures.",
+        why:"A new trillion-dollar player is muscling into the cloud/AI compute market — a competitive shift that ripples across tech and your investments." },
+      { t:"US order forces Anthropic to pull Claude Fable 5 and Mythos 5", tag:"Tech & AI", imp:"important", glance:"Anthropic pulls Fable 5 & Mythos 5", readtime:"25 sec", published:"2026-06-13T19:00:00", url:"https://www.youtube.com/watch?v=vM2At8Uqp2Y",
+        s:"An export-control directive barred foreign nationals from the models, so Anthropic disabled them for everyone (falling back to Opus 4.8); Europe reacted June 14.",
+        why:"Frontier AI is now subject to export controls — a precedent that affects which models you and developers worldwide can actually use." },
+      { t:"Chinese EVs are upending the car market", tag:"Business", imp:"important", glance:"Chinese EVs threaten Detroit", readtime:"25 sec", published:"2026-06-13T20:06:00", url:"https://www.youtube.com/watch?v=X6WF1BJt-3A",
+        s:"Ford's CEO daily-drove a $30k Xiaomi SU7 for six months and called BYD 'the best in the business' — a structural threat to legacy automakers.",
+        why:"A cheaper, better-EV wave reshapes the global auto industry, jobs and what you'll be able to buy next." },
+      { t:"Scripps unveils an experimental vaccine to block fentanyl overdoses", tag:"Science & Health", imp:"important", glance:"Experimental fentanyl-overdose vaccine", readtime:"20 sec", published:"2026-06-13T15:00:00", url:"https://www.sciencedaily.com/news/top/science/",
+        s:"It's designed to trap fentanyl in the bloodstream before it reaches the brain; early-stage research, not yet a treatment.",
+        why:"If it pans out, it's a genuinely new tool against the overdose crisis that kills tens of thousands a year." },
+      { t:"India's deep-tech push accelerates", tag:"India", imp:"important", glance:"IIT Madras at Nice; TCS rolls out Claude", readtime:"20 sec", published:"2026-06-14T04:30:00", url:"",
+        s:"IIT Madras is showing 15 startups at Bharat Innovates 2026 in Nice, and TCS is rolling Claude out to 50,000 employees as an Anthropic premier partner.",
+        why:"India is moving from IT services toward building and exporting deep tech — a shift that matters for the economy and local opportunity." },
+      { t:"Google rolls out Gemini 'M5' in beta", tag:"Tech & AI", imp:"interesting", glance:"Gemini M5 beta, ~40% cooler", readtime:"15 sec", published:"2026-06-14T05:30:00", url:"",
+        s:"The 128B-parameter, NPU-accelerated model claims ~40% less thermal throttling via real-time core load-balancing.",
+        why:"Faster, cooler on-device AI means better assistants and longer battery life on the phones and laptops you use." },
+      { t:"Tesla starts its FSD v14.3.4 rollout", tag:"Tech & AI", imp:"interesting", glance:"Tesla FSD v14.3.4 rolling out", readtime:"15 sec", published:"2026-06-13T16:00:00", url:"https://www.teslaoracle.com/2026/06/13/tesla-starts-the-rollout-of-fsd-v14-3-4-2026-14-6-10-official-release-notes-rollout-status/",
+        s:"A new vision encoder and MLIR-rewritten compiler claim ~20% faster reactions, plus Smart Summon comes to Cybertruck.",
+        why:"Incremental but real progress on self-driving — the capability Tesla's valuation increasingly rests on." },
+      { t:"World Cup 2026 is under way across North America", tag:"World", imp:"interesting", glance:"World Cup: Scotland win, Brazil draw", readtime:"15 sec", published:"2026-06-14T06:30:00", url:"https://www.espn.com/soccer/story/_/id/49058587/world-cup-2026-today-blog-14-06-2026-live-updates-news-fixtures-schedule-results-scotland-win-brazil-morocco-draw",
+        s:"Scotland claimed their first World Cup win since 1990; five-time champions Brazil were held to a draw by Morocco.",
+        why:"The planet's biggest sporting event is on — useful to know what's happening even if you only half-follow football." }
     ]
   },
   physics: {
@@ -635,6 +702,27 @@ function relAge(v){
 }
 const ord = n => ["","first","second","third","fourth","fifth","sixth","seventh"][n] || (n+"th");
 
+// ---- theme (light/dark/auto) ----
+(function(){
+  const saved = store.get("theme", null); // "light" | "dark" | null(auto)
+  const root = document.documentElement;
+  function sysDark(){ return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; }
+  function apply(){
+    if(saved==="light"||saved==="dark") root.setAttribute("data-theme", saved); else root.removeAttribute("data-theme");
+    const isDark = saved==="dark" || (!saved && sysDark());
+    const btn=document.getElementById("themeBtn"); if(btn) btn.textContent = isDark ? "☀️" : "🌙";
+    const tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute("content", isDark ? "#15171a" : "#faf9f7");
+  }
+  apply();
+  const btn=document.getElementById("themeBtn");
+  if(btn) btn.onclick=()=>{ const isDark = (store.get("theme",null)==="dark") || (!store.get("theme",null) && sysDark()); store.set("theme", isDark?"light":"dark"); applyTheme(); };
+  window.applyTheme=function(){ const s=store.get("theme",null); if(s==="light"||s==="dark") root.setAttribute("data-theme",s); else root.removeAttribute("data-theme"); const d=s==="dark"||(!s&&sysDark()); const b=document.getElementById("themeBtn"); if(b)b.textContent=d?"☀️":"🌙"; const m=document.querySelector('meta[name="theme-color"]'); if(m)m.setAttribute("content",d?"#15171a":"#faf9f7"); };
+})();
+// ---- "new since last visit" + AI availability ----
+const PREV_VISIT = store.get("lastVisit", 0);
+store.set("lastVisit", Date.now());
+if(!(window.cowork && window.cowork.askClaude)) document.body.classList.add("no-ai");
+
 document.getElementById("dateLbl").textContent = DATA.date;
 document.getElementById("foot").textContent = "Auto-updates each morning · last refreshed " + new Date(DATA.updated).toLocaleString();
 
@@ -665,9 +753,16 @@ document.getElementById("updateAll").onclick = async function(){
   setTimeout(()=>{ btn.disabled = false; btn.textContent = orig; }, 6000);
 };
 
+function cardKey(item){ return ((item&&item.url)||"") + "|" + ((item&&item.t)||""); }
+function isReadItem(item){ const r=store.get("read",{}); return !!r[cardKey(item)]; }
+function setRead(item,val){ const r=store.get("read",{}); const k=cardKey(item); if(val) r[k]=1; else delete r[k]; store.set("read",r); }
 function card(item, when){
   const div = document.createElement("div");
-  div.className = "card";
+  const key = cardKey(item);
+  const read0 = isReadItem(item);
+  const pd = pubDate(item); const pdT = pd ? new Date(pd).getTime() : 0;
+  const isNew = PREV_VISIT>0 && pdT>0 && pdT>PREV_VISIT && !read0;
+  div.className = "card" + (read0 ? " read" : "");
   div.dataset.title = item.t;
   div.dataset.summary = item.s || "";
   div.dataset.level = "0";
@@ -675,12 +770,16 @@ function card(item, when){
   const ageStr = relAge(pubDate(item));
   const vid = ytId(item.url);
   const thumbHtml = vid ? `<a class="thumb-link" href="${esc(item.url)}" target="_blank" rel="noopener"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumb-link').style.display='none'"><span class="play"></span></a>` : "";
+  const imp = (item.imp||"").toLowerCase();
+  const impOK = ["critical","important","interesting","noise"].includes(imp);
   div.innerHTML =
     thumbHtml +
+    (isNew ? `<span class="badge-new">NEW</span> ` : "") +
     (item.tag ? `<span class="ts-tag">${esc(item.tag)}</span>` : "") +
-    `<p class="t">${titleHtml}</p>` +
-    (ageStr ? `<p class="card-when" title="published ${esc(pubDate(item))}">🕒 ${esc(ageStr)}</p>` : "") +
+    `<p class="t">${impOK?`<span class="imp imp-${imp} imp-inline" title="${imp}"></span>`:""}${titleHtml}</p>` +
+    (ageStr ? `<p class="card-when" title="published ${esc(pubDate(item))}">🕒 ${esc(ageStr)}${item.readtime?` · ⏱ ${esc(item.readtime)}`:""}</p>` : (item.readtime?`<p class="readtime">⏱ ${esc(item.readtime)}</p>`:"")) +
     (item.s ? `<p class="s">${esc(item.s)}</p>` : "") +
+    (item.why ? `<p class="why"><b>Why it matters:</b> ${esc(item.why)}</p>` : "") +
     ((item.points && item.points.length) ? `<details class="pts"><summary>${esc(item.pointsLabel || (item.points.length+" key takeaways"))}</summary>${item.points.map(pt=>`<div class="pt"><span class="pt-t">${esc(pt.t)}</span>${pt.s?`<span class="pt-s">${esc(pt.s)}</span>`:""}</div>`).join("")}</details>` : "") +
     (item.src ? `<p class="src"><b>Source:</b> ${esc(item.src)}</p>` : "") +
     (item.eli ? `<div class="eli"><b>ELI5:</b> ${esc(item.eli)}</div>` : "") +
@@ -690,11 +789,16 @@ function card(item, when){
        <button class="mini act-more">Tell me more ▸</button>
        <button class="mini act-ask">💬 Ask</button>
        <button class="mini act-save">🔖 Save</button>
+       <button class="mini act-read${read0?" on":""}">${read0?"✓ Read":"Mark read"}</button>
      </div>` +
     `<div class="ask-box" style="display:none">
        <input type="text" class="ask-in" placeholder="Ask anything about this…">
        <button class="mini ask-go">Ask</button>
      </div>`;
+  const readBtn = div.querySelector(".act-read");
+  readBtn.onclick = ()=>{ const now=!div.classList.contains("read"); div.classList.toggle("read",now); setRead(item,now); readBtn.classList.toggle("on",now); readBtn.textContent = now?"✓ Read":"Mark read"; };
+  // opening the story (title or thumbnail) quietly marks it read
+  div.querySelectorAll('a[target="_blank"]').forEach(a=>a.addEventListener("click",()=>{ if(!div.classList.contains("read")){ div.classList.add("read"); setRead(item,true); readBtn.classList.add("on"); readBtn.textContent="✓ Read"; } }));
   div.querySelector(".act-more").onclick = (e)=>tellMore(e.target);
   div.querySelector(".act-ask").onclick = (e)=>toggleAsk(e.target);
   const askGo = div.querySelector(".ask-go");
@@ -795,17 +899,30 @@ function renderTop10(){
   note.textContent="The 10 things worth knowing from around the world, for a quick glance" + (T.updated?" · updated "+new Date(T.updated).toLocaleString():"");
   head.appendChild(note); p.appendChild(head);
   if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="Nothing loaded yet — tap Update."; p.appendChild(e); return; }
+  // ⚡ Today in 30 seconds — ultra-compact, grouped by category, for a 20-second absorb
+  (function(){
+    const order=["World","Business","Tech & AI","India","Science & Health"];
+    const byTag={}; items.forEach(it=>{ const k=it.tag||"Other"; (byTag[k]=byTag[k]||[]).push(it.glance||it.t); });
+    const tags=Object.keys(byTag).sort((a,b)=>{const ia=order.indexOf(a),ib=order.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib);});
+    const box=document.createElement("details"); box.className="glance"; box.open=true;
+    let html='<summary>⚡ Today in 30 seconds</summary><div class="glance-body">';
+    tags.forEach(t=>{ html+=`<div class="glance-row"><span class="glance-tag">${esc(t)}</span><span class="glance-items">${byTag[t].map(esc).join(" · ")}</span></div>`; });
+    html+='</div>'; box.innerHTML=html; p.appendChild(box);
+  })();
   const ol=document.createElement("div"); ol.className="t10";
   items.slice(0,10).forEach((it,i)=>{
     const row=document.createElement("div"); row.className="t10-row";
     const titleHtml = it.url ? `<a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.t)}</a>` : esc(it.t);
     const age = relAge(pubDate(it));
+    const imp=(it.imp||"").toLowerCase();
+    const impOK=["critical","important","interesting","noise"].includes(imp);
     row.innerHTML =
       `<div class="t10-n">${i+1}</div>`+
       `<div class="t10-body">`+
-      (it.tag?`<span class="ts-tag">${esc(it.tag)}</span>`:"")+
+      ((impOK||it.tag)?`<p style="margin:0 0 3px">${impOK?`<span class="imp imp-${imp} imp-inline" title="${imp}"></span>`:""}${it.tag?`<span class="ts-tag" style="margin:0">${esc(it.tag)}</span>`:""}</p>`:"")+
       `<p class="t10-t">${titleHtml}</p>`+
       (it.s?`<p class="t10-s">${esc(it.s)}</p>`:"")+
+      (it.why?`<p class="why"><b>Why it matters:</b> ${esc(it.why)}</p>`:"")+
       (age?`<p class="card-when">🕒 ${esc(age)}</p>`:"")+
       `</div>`;
     ol.appendChild(row);
@@ -974,16 +1091,38 @@ function renderLoa(){
   p.appendChild(g);
 }
 const nav=document.getElementById("tabs");
-TABS.forEach(t=>{
+const PRIMARY = ["top10","briefing","physics","youtube","elon"];   // always-visible on the bar
+const RENDERERS = {top10:renderTop10, briefing:renderBriefing, physics:renderPhysics, youtube:renderYouTube, elon:renderElon, mind:renderMind, loa:renderLoa};
+const rendered = {};
+function ensureRendered(id){
+  if(rendered[id]) return; rendered[id]=true;
+  try{ if(RENDERERS[id]) RENDERERS[id](); }catch(e){ console && console.warn && console.warn("render "+id, e); }
+}
+function mkTab(t){
   const b=document.createElement("button"); b.className="tab"; b.dataset.id=t.id;
-  b.innerHTML=`<span class="ico">${t.icon}</span><span class="lbl">${t.label}</span>`;
-  b.onclick=()=>activate(t.id); nav.appendChild(b);
-});
+  b.innerHTML=`<span class="ico">${t.icon}</span><span class="lbl">${esc(t.label)}</span>`;
+  b.onclick=()=>{ activate(t.id); closeMore(); }; return b;
+}
+const overflow = TABS.filter(t=>!PRIMARY.includes(t.id));
+TABS.filter(t=>PRIMARY.includes(t.id)).forEach(t=>nav.appendChild(mkTab(t)));
+let moreMenu=null;
+if(overflow.length){
+  const moreBtn=document.createElement("button"); moreBtn.className="tab more-btn"; moreBtn.dataset.role="more";
+  moreBtn.innerHTML=`<span class="ico">⋯</span><span class="lbl">More</span>`;
+  moreMenu=document.createElement("div"); moreMenu.className="more-menu";
+  overflow.forEach(t=>moreMenu.appendChild(mkTab(t)));
+  moreBtn.appendChild(moreMenu);
+  moreBtn.onclick=(e)=>{ e.stopPropagation(); moreMenu.classList.toggle("open"); };
+  nav.appendChild(moreBtn);
+  document.addEventListener("click",()=>closeMore());
+}
+function closeMore(){ if(moreMenu) moreMenu.classList.remove("open"); }
 function activate(id){
-  TABS.forEach(t=>{
-    document.getElementById("p-"+t.id).classList.toggle("active", t.id===id);
-  });
-  [...nav.children].forEach(b=>b.classList.toggle("active", b.dataset.id===id));
+  TABS.forEach(t=>{ const el=document.getElementById("p-"+t.id); if(el) el.classList.toggle("active", t.id===id); });
+  ensureRendered(id);
+  [...nav.querySelectorAll(".tab")].forEach(b=>b.classList.toggle("active", b.dataset.id===id));
+  // keep the "More" button highlighted when an overflow tab is active
+  const moreB=nav.querySelector('[data-role="more"]'); if(moreB) moreB.classList.toggle("active", overflow.some(t=>t.id===id));
   store.set("tab", id);
 }
 
@@ -1088,7 +1227,7 @@ document.getElementById("gratIn").addEventListener("keydown",e=>{ if(e.key==="En
   }
 })();
 /*FRESH_GUARD_END*/
-renderTop10(); renderBriefing(); renderPhysics(); renderYouTube(); renderElon(); renderMind(); renderLoa(); renderSave(); renderGrat();
+renderSave(); renderGrat();   // tools lists are cheap; everything else renders lazily on first activation
 const savedTab = store.get("tab","top10");
 activate(TABS.some(t=>t.id===savedTab) ? savedTab : "top10");
 
