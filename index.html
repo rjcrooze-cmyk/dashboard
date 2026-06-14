@@ -80,6 +80,15 @@ a.thumb-link .thumb{display:block;width:120px;height:auto;border-radius:8px;back
 a.thumb-link .play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;pointer-events:none}
 a.thumb-link .play::after{content:"";border-style:solid;border-width:6px 0 6px 10px;border-color:transparent transparent transparent #fff;margin-left:2px}
 .msg-thumb{display:block;width:120px;height:auto;border-radius:8px;margin:0 0 10px;background:#ece9e4}
+.t10{display:flex;flex-direction:column;gap:10px}
+.t10-row{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.t10-n{flex:0 0 auto;width:30px;height:30px;border-radius:50%;background:var(--ink);color:#fff;font-weight:700;font-size:15px;display:flex;align-items:center;justify-content:center;font-variant-numeric:tabular-nums}
+.t10-body{flex:1;min-width:0}
+.t10-t{font-weight:600;font-size:15.5px;margin:2px 0 3px}
+.t10-t a{color:var(--ink);text-decoration:none}
+.t10-t a:hover{text-decoration:underline}
+.t10-s{margin:0;color:#3a3f45;font-size:14px}
+.t10-row .ts-tag{margin:0 0 4px}
 .more{margin-top:6px}
 .more .exp{background:#f6f8fb;border-left:3px solid var(--accent);border-radius:0 8px 8px 0;padding:7px 11px;margin:7px 0 0;font-size:13.5px;color:#2a2f35}
 .more .exp.loading{color:var(--muted);font-style:italic}
@@ -161,6 +170,7 @@ a.thumb-link .play::after{content:"";border-style:solid;border-width:6px 0 6px 1
 
   <nav class="tabs" id="tabs"></nav>
 
+  <section class="panel" id="p-top10"></section>
   <section class="panel" id="p-briefing"></section>
   <section class="panel" id="p-youtube"></section>
   <section class="panel" id="p-elon"></section>
@@ -211,6 +221,31 @@ a.thumb-link .play::after{content:"";border-style:solid;border-width:6px 0 6px 1
 const DATA = {
   date: "Sunday, June 14, 2026",
   updated: "2026-06-14T13:32:00",
+  top10: {
+    updated: "2026-06-14T13:32:00",
+    items: [
+      { t:"World Cup 2026 is under way across North America", tag:"World", published:"2026-06-14T06:30:00", url:"https://www.espn.com/soccer/story/_/id/49058587/world-cup-2026-today-blog-14-06-2026-live-updates-news-fixtures-schedule-results-scotland-win-brazil-morocco-draw",
+        s:"Scotland claimed their first World Cup win since 1990; five-time champions Brazil were held to a draw by Morocco." },
+      { t:"US-Iran peace deal hangs in the balance", tag:"World", published:"2026-06-14T06:00:00", url:"https://www.rferl.org/a/iran-war-us-hormuz-oil-blockade-gulf-israel/33640284.html",
+        s:"Trump says a deal could be signed Sunday and Pakistan's PM calls it 'closer than ever', but Tehran is downplaying it; Iran has set Khamenei's funeral dates." },
+      { t:"US House passes Ukraine Support Act + a bill to choke tech to Iranian drones", tag:"World", published:"2026-06-14T05:00:00", url:"https://www.npr.org/sections/news",
+        s:"After months of gridlock, two major foreign-policy measures cleared the House." },
+      { t:"SpaceX fallout: Musk is the first trillionaire, and SpaceX has a fast-growing AI cloud", tag:"Business", published:"2026-06-14T11:40:00", url:"https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html",
+        s:"After the record IPO, SpaceX's month-old cloud business is already ~4th largest (ahead of Oracle) by some measures." },
+      { t:"US order forces Anthropic to pull Claude Fable 5 and Mythos 5", tag:"Tech & AI", published:"2026-06-13T19:00:00", url:"https://www.youtube.com/watch?v=vM2At8Uqp2Y",
+        s:"An export-control directive barred foreign nationals from the models, so Anthropic disabled them for everyone (falling back to Opus 4.8); Europe reacted June 14." },
+      { t:"Google rolls out Gemini 'M5' in beta", tag:"Tech & AI", published:"2026-06-14T05:30:00", url:"",
+        s:"The 128B-parameter, NPU-accelerated model claims ~40% less thermal throttling via real-time core load-balancing." },
+      { t:"Tesla starts its FSD v14.3.4 rollout", tag:"Tech & AI", published:"2026-06-13T16:00:00", url:"https://www.teslaoracle.com/2026/06/13/tesla-starts-the-rollout-of-fsd-v14-3-4-2026-14-6-10-official-release-notes-rollout-status/",
+        s:"A new vision encoder and MLIR-rewritten compiler claim ~20% faster reactions, plus Smart Summon comes to Cybertruck." },
+      { t:"Chinese EVs are upending the car market", tag:"Business", published:"2026-06-13T20:06:00", url:"https://www.youtube.com/watch?v=X6WF1BJt-3A",
+        s:"Ford's CEO daily-drove a $30k Xiaomi SU7 for six months and called BYD 'the best in the business' — a structural threat to Detroit." },
+      { t:"Scripps unveils an experimental vaccine to block fentanyl overdoses", tag:"Science & Health", published:"2026-06-13T15:00:00", url:"https://www.sciencedaily.com/news/top/science/",
+        s:"It's designed to trap fentanyl in the bloodstream before it reaches the brain; early-stage research, not yet a treatment." },
+      { t:"India's deep-tech push accelerates", tag:"India", published:"2026-06-14T04:30:00", url:"",
+        s:"IIT Madras is showing 15 startups at Bharat Innovates 2026 in Nice, and TCS is rolling Claude out to 50,000 employees as an Anthropic premier partner." }
+    ]
+  },
   topstories: {
     updated: "2026-06-14T07:50:00",
     items: [
@@ -514,6 +549,7 @@ window.__THUMBS=window.__THUMBS||{"1OZZF7w-UPo":"data:image/jpeg;base64,/9j/4AAQ
 /*THUMBS_END*/
 
 const TABS = [
+  {id:"top10",    icon:"🔟", label:"Top 10"},
   {id:"briefing", icon:"📰", label:"Briefing"},
   {id:"youtube",  icon:"▶️", label:"YouTube"},
   {id:"elon",     icon:"𝕏",  label:"Elon"},
@@ -703,11 +739,42 @@ async function askQuestion(c, input){
 
 function group(title){ const g=document.createElement("div"); g.className="grp"; if(title){const h=document.createElement("h2");h.textContent=title;g.appendChild(h);} return g; }
 
+function renderTop10(){
+  const p = document.getElementById("p-top10"); if(!p) return; p.innerHTML="";
+  const T = DATA.top10 || {}; const items = T.items || [];
+  const head=document.createElement("div"); head.className="grp";
+  const h=document.createElement("h2"); h.textContent="🔟 Top 10 today · what to know"; head.appendChild(h);
+  const note=document.createElement("p"); note.className="empty"; note.style.marginTop="-2px";
+  note.textContent="The 10 things worth knowing from around the world, for a quick glance" + (T.updated?" · updated "+new Date(T.updated).toLocaleString():"");
+  head.appendChild(note); p.appendChild(head);
+  if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="Nothing loaded yet — tap Update."; p.appendChild(e); return; }
+  const ol=document.createElement("div"); ol.className="t10";
+  items.slice(0,10).forEach((it,i)=>{
+    const row=document.createElement("div"); row.className="t10-row";
+    const titleHtml = it.url ? `<a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.t)}</a>` : esc(it.t);
+    const age = relAge(pubDate(it));
+    row.innerHTML =
+      `<div class="t10-n">${i+1}</div>`+
+      `<div class="t10-body">`+
+      (it.tag?`<span class="ts-tag">${esc(it.tag)}</span>`:"")+
+      `<p class="t10-t">${titleHtml}</p>`+
+      (it.s?`<p class="t10-s">${esc(it.s)}</p>`:"")+
+      (age?`<p class="card-when">🕒 ${esc(age)}</p>`:"")+
+      `</div>`;
+    ol.appendChild(row);
+  });
+  p.appendChild(ol);
+}
 function renderBriefing(){
   const p = document.getElementById("p-briefing"); p.innerHTML="";
 
+  // de-dupe across the whole Briefing tab: a story shown once shouldn't repeat below
+  const seenK = new Set();
+  const normK = it => ((it&&it.url)||"").replace(/[?#].*$/,"").toLowerCase() || ((it&&it.t)||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim().slice(0,60);
+  const fresh = arr => (arr||[]).filter(it=>{ const k=normK(it); if(seenK.has(k)) return false; seenK.add(k); return true; });
+
   // 1) Top Stories — the at-a-glance 24h digest across all feeds
-  const T = DATA.topstories || {}; const ti = T.items || [];
+  const T = DATA.topstories || {}; const ti = fresh(T.items || []);
   if(ti.length){
     const g = group("⭐ Top Stories · last 24h");
     const note=document.createElement("p"); note.className="empty"; note.style.marginTop="-2px";
@@ -717,13 +784,14 @@ function renderBriefing(){
     p.appendChild(g);
   }
 
-  // 2) Breakthroughs (Consciousness moved to the Mind tab, so skip it here)
+  // 2) Breakthroughs (Consciousness moved to the Mind tab, so skip it here) — skip anything already shown above
   (DATA.briefing||[]).forEach(sec=>{
     if(/conscious/i.test(sec.h||"")) return;
-    const g=group(sec.h); sec.items.forEach(it=>g.appendChild(card(it, DATA.updated))); p.appendChild(g);
+    const items=fresh(sec.items); if(!items.length) return;
+    const g=group(sec.h); items.forEach(it=>g.appendChild(card(it, DATA.updated))); p.appendChild(g);
   });
 
-  // 3) Latest news
+  // 3) Latest news — also de-duped against everything above
   const N = DATA.news || {};
   const head = group("🗞️ Latest News");
   const badge=document.createElement("div"); badge.className="verified"; badge.textContent="✓ reputable sources, cross-checked"; head.appendChild(badge);
@@ -733,7 +801,7 @@ function renderBriefing(){
   p.appendChild(head);
   const newsSecs=[["🌍 World",N.world],["💻 Tech & AI",N.techai],["📈 Business & Markets",N.business],["🇮🇳 India",N.india]];
   let anyNews=false;
-  newsSecs.forEach(([h,arr])=>{ if(arr&&arr.length){ anyNews=true; const g=group(h); arr.forEach(it=>g.appendChild(card(it, DATA.newsUpdated))); p.appendChild(g); } });
+  newsSecs.forEach(([h,arr])=>{ const items=fresh(arr); if(items.length){ anyNews=true; const g=group(h); items.forEach(it=>g.appendChild(card(it, DATA.newsUpdated))); p.appendChild(g); } });
   if(!anyNews){ const e=document.createElement("p"); e.className="empty"; e.textContent="No news loaded yet — tap Refresh."; p.appendChild(e); }
   const when=document.getElementById("newsWhen");
   if(DATA.newsUpdated && when) when.textContent="Updated "+new Date(DATA.newsUpdated).toLocaleString();
@@ -982,9 +1050,9 @@ document.getElementById("gratIn").addEventListener("keydown",e=>{ if(e.key==="En
   }
 })();
 /*FRESH_GUARD_END*/
-renderBriefing(); renderYouTube(); renderElon(); renderMind(); renderLoa(); renderSave(); renderGrat();
-const savedTab = store.get("tab","briefing");
-activate(TABS.some(t=>t.id===savedTab) ? savedTab : "briefing");
+renderTop10(); renderBriefing(); renderYouTube(); renderElon(); renderMind(); renderLoa(); renderSave(); renderGrat();
+const savedTab = store.get("tab","top10");
+activate(TABS.some(t=>t.id===savedTab) ? savedTab : "top10");
 
 (function(){
   try{
