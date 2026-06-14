@@ -1,5 +1,4 @@
-<!doctype html>
-<html lang="en">
+<!doctype html><html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -186,7 +185,7 @@ nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1p
 /*DATA_START*/
 const DATA = {
   date: "Saturday, June 13, 2026",
-  updated: "2026-06-13T13:25:00",
+  updated: "2026-06-14T01:30:00",
   topstories: {
     updated: "2026-06-13T13:25:00",
     items: [
@@ -256,52 +255,33 @@ const DATA = {
     ]}
   ],
   youtube: {
-    count: 33,
+    count: 10,
     groups: [
       { h:"AI", items:[
-        { t:"Anthropic begged the world to stop AI… then shipped this", url:"https://www.youtube.com/watch?v=1PBRhm5ZnjU",
-          s:"Fireship — Anthropic urged labs to slow frontier development, then released its most powerful model yet, Claude Fable (Mythos-class). Snarky hands-on review; ~2x the price of Opus 4.8, free to try until June 22." },
-        { t:"The Internet Is Being Poisoned For AI Agents", url:"https://www.youtube.com/watch?v=A4shPMwa0HQ",
-          s:"AI Uncovered — researchers find hidden instructions planted on web pages to hijack AI agents that browse and click.",
-          eli:"As AI assistants start doing things for you online, scammers hide invisible commands in web pages that the AI reads as orders — a brand-new attack the old web's safety tools don't catch." },
-        { t:"HeyGen AI video generator just changed the game", url:"https://www.youtube.com/watch?v=rAWB8-qiVQo",
-          s:"Wes Roth (sponsored) — “digital twin” avatars: a lifelike talking video version of yourself from one 15-second clip." }
+        { t:"OpenAI ships GPT-5.5 (not GPT-6) — and loses ground to rivals", url:"https://www.youtube.com/watch?v=PKnyxxMoKWQ",
+          s:"AI Master — OpenAI shipped GPT-5.5 in four variants instead of GPT-6; it scored 88.7% on SWE-Bench but missed its own internal targets on the tougher SWE-Bench Pro (58.6%) and reportedly lost a 7-category head-to-head to Claude Opus 4.7. The video's thesis is that OpenAI is losing partners: Microsoft's in-house Project Polaris becomes Copilot's default engine in August, Google's Gemini 3.5 Flash runs ~4x faster, and Apple struck a partnership with Google at WWDC." },
+        { t:"US government forces Anthropic to pull Claude Fable 5 and Mythos 5", url:"https://www.youtube.com/watch?v=vM2At8Uqp2Y",
+          s:"Covered by Wes Roth and Digital Spaceport — Washington issued an export-control directive barring any foreign national (even Anthropic's own staff) from using Fable 5 and Mythos 5, so Anthropic abruptly disabled both models for everyone to comply; new sessions fall back to Opus 4.8. The trigger was an Amazon-demonstrated jailbreak that surfaced a few already-known minor vulnerabilities. Anthropic says it disagrees, calls it a misunderstanding, and is working to restore access." }
       ]},
-      { type:"aim", h:"AIM Network", count:15, keys:[
-        { t:"Google open-sources DiffusionGemma", url:"https://www.youtube.com/watch?v=q5kX1IzNF5E",
-          s:"Generates text a whole block at a time instead of word-by-word, ~4x faster.",
-          eli:"Drafts a full paragraph at once and sharpens it, so AI answers appear much faster." },
-        { t:"Dario Amodei calls for an FAA-style AI regulator", url:"https://www.youtube.com/watch?v=YT8AxUWbQHI",
-          s:"Anthropic's CEO wants mandatory third-party safety audits that could block a frontier model's release if it fails." },
-        { t:"Is Claude Hiding Its True IQ?", url:"https://www.youtube.com/watch?v=Kvow03fHoU4",
-          s:"Developers allege Claude Fable 5 quietly gives weaker answers to people doing frontier AI-research work — a benchmark-trust problem." }
+      { type:"aim", h:"AIM Network", count:2, keys:[
+        { t:"TCS deploys Claude to 50,000 employees; India's deep-tech push", url:"https://www.youtube.com/watch?v=lD7XFiwhxM4",
+          s:"AIM's daily India AI roundup: Tata Consultancy Services becomes an Anthropic 'global premier partner' and is rolling Claude out to 50,000 staff across engineering, finance, legal and sales; PM Modi's France visit anchors a deep-tech export push (Bharat Innovates 2026 in Nice, June 14-16); Zoho launches 'Natula', its first India-made server; and EV-charging startup Exponent Energy closes a ₹200 crore round." }
       ], headlines:[
-        { t:"TCS brings Claude to 50,000 staff", url:"https://www.youtube.com/watch?v=mWa_uuKO2DA" },
-        { t:"Shunya Labs launches voice AI for 216 languages", url:"https://www.youtube.com/watch?v=08F3w6lSDq8" },
-        { t:"India builds its first AI star tracker (IN-SPACe)", url:"https://www.youtube.com/watch?v=ldfFtFiTWKU" },
-        { t:"Intel, SAP & Applied Materials back India", url:"https://www.youtube.com/watch?v=sskPcRgAAMI" },
-        { t:"Non-gaming apps overtake gaming revenue", url:"https://www.youtube.com/watch?v=yjVowt1Gjko" },
-        { t:"Indeed: 83% of Indian women reject inflexible jobs", url:"https://www.youtube.com/watch?v=D0dVUhOZ1UQ" },
-        { t:"Zoho's Vembu calls Salesforce's 40% discount a “bait-and-switch”", url:"https://www.youtube.com/watch?v=D_8_jGQJ5pQ" },
-        { t:"SpaceX debuts at $1.77T IPO", url:"https://www.youtube.com/watch?v=DgLxY9aTQhI" }
+        { t:"LIVE Front Page: India's first AI video model, Tryfacta IPO & FIFA's AI ball", url:"https://www.youtube.com/watch?v=Rb8nXp3o66Y" }
       ]},
       { h:"Tech & Gadgets", items:[
-        { t:"Microsoft's $1 Billion Phone Disaster", url:"https://www.youtube.com/watch?v=rgsa_-u8miE",
-          s:"ColdFusion — the story of Microsoft's 2010 “Kin” phone: no app store, too pricey for teens, killed after 48 days, ~$1B lost." },
-        { t:"Apple WWDC 2026 / the new AI Siri", url:"https://www.youtube.com/watch?v=ldvuHKdgtq0",
-          s:"TechRadar podcast — the long-awaited AI Siri arrives but only on newer iPhones; mixed reactions to Apple Intelligence and a hollow goodbye to Tim Cook." },
-        { t:"Siri AI vs Galaxy AI, Part 1", url:"https://www.youtube.com/watch?v=b6V2KG3P8KQ",
-          s:"Beebom — photo-editing AI face-off (object removal, expand, reframe); verdict: Samsung wins on features and consistency." },
-        { t:"Mobi Fold vs Microsoft Arc Mouse", url:"https://www.youtube.com/watch?v=fCbt5nihkG0",
-          s:"Cameron Dougherty — Logitech's folding portable mouse vs the classic Surface Arc; close call, Logitech adds multi-device + rechargeable at $80 vs $90." }
+        { t:"Apple's foldable iPhone takes shape; Samsung scrambles to counter", url:"https://www.youtube.com/watch?v=_DppFitt_6E",
+          s:"Covered by Beebom and TechRadar — references in the iOS 27 beta all but confirm Apple's first foldable (rumoured 'iPhone Fold' / 'iPhone Ultra'). Beebom reports Samsung is responding with a wider, book-style Galaxy Z Fold 8 — its lightest and thinnest fold yet (~4.5mm open) — abandoning its older tall-and-narrow design as both companies race to make the screen crease disappear." },
+        { t:"TechRadar review: Google Fitbit Air, an affordable Whoop alternative", url:"https://www.youtube.com/watch?v=i_eYQTvYB_0",
+          s:"TechRadar — a $100 / £85 budget tracker with accurate heart-rate-based metrics and an optional AI health coach (which requires a Google Health Premium subscription, ~$10/£8 a month). The reviewer found the hardware excellent and light enough for sleep tracking, but the new Google Health app a 'messy' misfire." }
       ]},
       { h:"Business", items:[
-        { t:"All-In's Best Ideas Pitch Competition", url:"https://www.youtube.com/watch?v=fO5sC7qS04E",
-          s:"Four investors pitch their top trades live — 24/7 asset trading, contrarian biotech, nuclear, equities optimism." }
+        { t:"All-In: Anthropic's Fable backlash, nationalizing AI, inflation", url:"https://www.youtube.com/watch?v=gH4FTjDm9FQ",
+          s:"All-In Podcast — the quartet dig into the developer backlash over Anthropic's Fable 5 release: 30-day prompt-data retention and a hidden 'downgrade' for users doing frontier AI research, buried in a 319-page document (since partly walked back). They also debate nationalizing AI, heating inflation, and California's election problems." }
       ]},
       { h:"World News", items:[
-        { t:"IDF: Hezbollah weapons found near Dabin, S. Lebanon", url:"https://www.youtube.com/watch?v=0elCk6Vao7I",
-          s:"Short clip from the IDF's official channel on a stated weapons find in southern Lebanon. (Presented as the channel's own posting.)" }
+        { t:"IDF: weapons found in a Hezbollah underground tunnel", url:"https://www.youtube.com/watch?v=kfRXtOs1jDM",
+          s:"A short clip from the Israel Defense Forces' official channel showing what it says are weapons located in one of Hezbollah's underground terror tunnels. (Presented as the channel's own posting.)" }
       ]}
     ]
   },
