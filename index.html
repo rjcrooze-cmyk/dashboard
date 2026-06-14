@@ -172,6 +172,7 @@ a.thumb-link .play::after{content:"";border-style:solid;border-width:6px 0 6px 1
 
   <section class="panel" id="p-top10"></section>
   <section class="panel" id="p-briefing"></section>
+  <section class="panel" id="p-physics"></section>
   <section class="panel" id="p-youtube"></section>
   <section class="panel" id="p-elon"></section>
   <section class="panel" id="p-mind"></section>
@@ -244,6 +245,41 @@ const DATA = {
         s:"It's designed to trap fentanyl in the bloodstream before it reaches the brain; early-stage research, not yet a treatment." },
       { t:"India's deep-tech push accelerates", tag:"India", published:"2026-06-14T04:30:00", url:"",
         s:"IIT Madras is showing 15 startups at Bharat Innovates 2026 in Nice, and TCS is rolling Claude out to 50,000 employees as an Anthropic premier partner." }
+    ]
+  },
+  physics: {
+    updated: "2026-06-14T13:32:00",
+    items: [
+      { t:"JUNO delivers its first landmark neutrino measurement", published:"2026-06-12T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/physics/",
+        s:"China's giant underground JUNO detector produced one of the most precise measurements yet of how neutrinos 'oscillate' (change type) as they travel — an early flagship result that helps pin down the ordering of neutrino masses, one of particle physics' open questions.",
+        src:"ScienceDaily / Physics World, Jun 2026",
+        eli:"Neutrinos are near-invisible particles that constantly stream through you and morph between three types as they fly. JUNO watches huge numbers of them to measure that morphing super precisely — which tells us which neutrino is heaviest, something nobody has nailed down yet." },
+      { t:"DESI hints that dark energy is weakening over time", published:"2026-06-01T00:00:00", url:"https://cerncourier.com/desi-hints-at-evolving-dark-energy/",
+        s:"New data from the Dark Energy Spectroscopic Instrument (DESI) keeps pointing to dark energy not being a fixed 'cosmological constant' but something that evolves and may be weakening — which, if it holds up, would rewrite the standard model of cosmology and the universe's likely fate.",
+        src:"CERN Courier / DESI collaboration (2026)",
+        eli:"Dark energy is the mysterious push making the universe expand faster and faster. Everyone assumed it was constant; DESI's maps suggest it might be fading — and if so, our whole story of how the cosmos ends would change." },
+      { t:"JWST maps two completely different twilights on a scorching exoplanet", published:"2026-06-11T00:00:00", url:"https://www.sciencedaily.com/releases/2026/06/260611024559.htm",
+        s:"On the ultra-hot Jupiter WASP-121b, the James Webb Space Telescope found the 'morning' (dawn) and 'evening' (dusk) edges of the planet look strikingly different in temperature and chemistry — the most detailed look yet at weather and circulation on another world.",
+        src:"ScienceDaily / NASA Webb, Jun 11 2026" },
+      { t:"Webb finds a giant early galaxy that doesn't spin", published:"2026-05-06T00:00:00", url:"https://www.sciencedaily.com/releases/2026/05/260506225135.htm",
+        s:"A massive galaxy that formed less than 2 billion years after the Big Bang shows essentially no rotation — a trait usually seen only in much older, 'dead' galaxies. It challenges models of how the earliest big galaxies assembled.",
+        src:"ScienceDaily / NASA Webb, May 2026" },
+      { t:"Physicists create exotic new forms of matter 'that shouldn't exist'", published:"2026-05-04T00:00:00", url:"https://www.sciencedaily.com/releases/2026/05/260504154014.htm",
+        s:"Researchers engineered new quantum phases of matter that conventional theory said shouldn't be stable, opening fresh territory in condensed-matter physics and potential routes to novel materials.",
+        src:"ScienceDaily, May 2026" },
+      { t:"RIKEN demonstrates 'one-way' quantum synchronization", published:"2026-06-05T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/quantum_physics/",
+        s:"Scientists showed quantum systems can be made to synchronize in only one direction — a 'one-way street' for sound particles (phonons) — and it stays remarkably stable despite manufacturing flaws and noise, useful for robust quantum devices.",
+        src:"ScienceDaily / RIKEN, Jun 2026",
+        eli:"Normally if two tiny oscillators sync up, the influence goes both ways. The team built a setup where A can steer B but B can't steer A — and it keeps working even when things are imperfect, which is handy for building reliable quantum tech." },
+      { t:"A surprisingly simple recipe for hard-to-make quantum states", published:"2026-06-08T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/quantum_physics/",
+        s:"A University of Chicago team found an unexpectedly simple way to create powerful entangled quantum states that are normally very difficult to produce — potentially easing a key bottleneck for quantum computing and sensing.",
+        src:"ScienceDaily / University of Chicago, Jun 2026" },
+      { t:"Fusion reactors might double as dark-matter factories", published:"2026-06-03T00:00:00", url:"https://www.sciencedaily.com/releases/2025/12/251228020014.htm",
+        s:"Theorists (UC's Jure Zupan and colleagues) argue that the extreme conditions inside fusion reactors could produce certain dark-matter candidate particles — meaning future reactors might also serve as unexpected dark-matter detectors.",
+        src:"ScienceDaily / University of Cincinnati (2026)" },
+      { t:"AI 'transfer learning' speeds the hunt for new physics", published:"2026-06-09T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/physics/",
+        s:"Researchers showed transfer learning can dramatically cut the need for expensive simulations when searching for physics beyond the Standard Model — accelerating analysis at colliders, though the team flags limits on how far it can be trusted.",
+        src:"ScienceDaily, Jun 2026" }
     ]
   },
   topstories: {
@@ -551,6 +587,7 @@ window.__THUMBS=window.__THUMBS||{"1OZZF7w-UPo":"data:image/jpeg;base64,/9j/4AAQ
 const TABS = [
   {id:"top10",    icon:"🔟", label:"Top 10"},
   {id:"briefing", icon:"📰", label:"Briefing"},
+  {id:"physics",  icon:"🔭", label:"Physics & Space"},
   {id:"youtube",  icon:"▶️", label:"YouTube"},
   {id:"elon",     icon:"𝕏",  label:"Elon"},
   {id:"mind",     icon:"🧠", label:"Mind"},
@@ -739,6 +776,16 @@ async function askQuestion(c, input){
 
 function group(title){ const g=document.createElement("div"); g.className="grp"; if(title){const h=document.createElement("h2");h.textContent=title;g.appendChild(h);} return g; }
 
+function renderPhysics(){
+  const p = document.getElementById("p-physics"); if(!p) return; p.innerHTML="";
+  const P = DATA.physics || {}; const items = P.items || [];
+  const badge=document.createElement("div"); badge.className="verified"; badge.textContent="✓ peer-reviewed / observatory sources"; p.appendChild(badge);
+  const intro=document.createElement("p"); intro.className="empty";
+  intro.textContent="The standout physics, space & cosmology discoveries being discussed right now — dug out and explained" + (P.updated?" · updated "+new Date(P.updated).toLocaleString():"");
+  p.appendChild(intro);
+  if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="No discoveries loaded yet — tap Update."; p.appendChild(e); return; }
+  const g=group(null); items.forEach(it=>g.appendChild(card(it, P.updated))); p.appendChild(g);
+}
 function renderTop10(){
   const p = document.getElementById("p-top10"); if(!p) return; p.innerHTML="";
   const T = DATA.top10 || {}; const items = T.items || [];
@@ -773,18 +820,9 @@ function renderBriefing(){
   const normK = it => ((it&&it.url)||"").replace(/[?#].*$/,"").toLowerCase() || ((it&&it.t)||"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim().slice(0,60);
   const fresh = arr => (arr||[]).filter(it=>{ const k=normK(it); if(seenK.has(k)) return false; seenK.add(k); return true; });
 
-  // 1) Top Stories — the at-a-glance 24h digest across all feeds
-  const T = DATA.topstories || {}; const ti = fresh(T.items || []);
-  if(ti.length){
-    const g = group("⭐ Top Stories · last 24h");
-    const note=document.createElement("p"); note.className="empty"; note.style.marginTop="-2px";
-    note.textContent = "The biggest stories across every feed" + (T.updated ? " · updated "+new Date(T.updated).toLocaleString() : "");
-    g.appendChild(note);
-    ti.forEach(it=>g.appendChild(card(it, T.updated)));
-    p.appendChild(g);
-  }
+  // (Top Stories removed — see the dedicated "Top 10 today" tab.)
 
-  // 2) Breakthroughs (Consciousness moved to the Mind tab, so skip it here) — skip anything already shown above
+  // Breakthroughs (Consciousness moved to the Mind tab; physics/space has its own tab) — de-duped
   (DATA.briefing||[]).forEach(sec=>{
     if(/conscious/i.test(sec.h||"")) return;
     const items=fresh(sec.items); if(!items.length) return;
@@ -1050,7 +1088,7 @@ document.getElementById("gratIn").addEventListener("keydown",e=>{ if(e.key==="En
   }
 })();
 /*FRESH_GUARD_END*/
-renderTop10(); renderBriefing(); renderYouTube(); renderElon(); renderMind(); renderLoa(); renderSave(); renderGrat();
+renderTop10(); renderBriefing(); renderPhysics(); renderYouTube(); renderElon(); renderMind(); renderLoa(); renderSave(); renderGrat();
 const savedTab = store.get("tab","top10");
 activate(TABS.some(t=>t.id===savedTab) ? savedTab : "top10");
 
