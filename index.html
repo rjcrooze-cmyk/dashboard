@@ -185,6 +185,28 @@ a.thumb-link .play::after{content:"";border-style:solid;border-width:6px 0 6px 1
 .glance-row{display:flex;gap:10px;font-size:13.5px;line-height:1.4}
 .glance-tag{flex:0 0 auto;width:84px;font-weight:700;color:var(--muted);text-transform:uppercase;font-size:10.5px;letter-spacing:.4px;padding-top:2px}
 .glance-items{flex:1;color:var(--ink)}
+/* category dropdowns (News) */
+.cat{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:0 0 10px;overflow:hidden}
+.cat>summary{cursor:pointer;list-style:none;padding:12px 14px;font-size:14.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
+.cat>summary::-webkit-details-marker{display:none}
+.cat>summary::after{content:"▾";margin-left:auto;color:var(--muted);font-weight:400}
+.cat[open]>summary::after{content:"▴"}
+.cat[open]>summary{border-bottom:1px solid var(--line)}
+.cat-n{background:var(--chip);color:var(--muted);font-size:11px;font-weight:700;padding:1px 8px;border-radius:999px}
+.cat-body{padding:4px 14px 8px}
+.nb{display:flex;gap:10px;align-items:flex-start;padding:10px 0;border-top:1px solid var(--line)}
+.nb:first-child{border-top:none}
+.nb.read{opacity:.5}
+.nb-dot{flex:0 0 auto;margin-top:4px}
+.nb-body{flex:1;min-width:0}
+.nb-t{font-weight:600;font-size:14.5px;margin:0 0 3px}
+.nb-t a{color:var(--ink);text-decoration:none}
+.nb-t a:hover{text-decoration:underline}
+.nb-s{margin:0;color:#3a3f45;font-size:13.5px}
+:root[data-theme="dark"] .nb-s{color:#c7ccd2}
+.eng{display:inline-block;color:var(--muted);font-size:11.5px;font-variant-numeric:tabular-nums}
+.eng b{color:#5a6473;font-weight:600}
+:root[data-theme="dark"] .eng b{color:#aab2bd}
 /* dark-mode fixes for light-hardcoded components */
 :root[data-theme="dark"] .affirm,
 :root[data-theme="dark"] .msg-card{background:linear-gradient(135deg,#241f33,#1b2230)}
@@ -227,9 +249,8 @@ body.no-ai .act-ask,body.no-ai .ask-box,body.no-ai .act-more{display:none}
 
   <nav class="tabs" id="tabs"></nav>
 
-  <section class="panel" id="p-top10"></section>
-  <section class="panel" id="p-briefing"></section>
-  <section class="panel" id="p-physics"></section>
+  <section class="panel" id="p-news"></section>
+  <section class="panel" id="p-science"></section>
   <section class="panel" id="p-youtube"></section>
   <section class="panel" id="p-elon"></section>
   <section class="panel" id="p-mind"></section>
@@ -278,96 +299,48 @@ body.no-ai .act-ask,body.no-ai .ask-box,body.no-ai .act-more{display:none}
 /*DATA_START*/
 const DATA = {
   date: "Sunday, June 14, 2026",
-  updated: "2026-06-14T13:32:00",
-  top10: {
-    updated: "2026-06-14T13:32:00",
+  updated: "2026-06-14T21:00:00",
+  science: {
+    updated: "2026-06-14T21:00:00",
     items: [
-      { t:"US-Iran peace deal hangs in the balance", tag:"World", imp:"critical", glance:"US-Iran deal uncertain", readtime:"30 sec", published:"2026-06-14T06:00:00", url:"https://www.rferl.org/a/iran-war-us-hormuz-oil-blockade-gulf-israel/33640284.html",
-        s:"Trump says a deal could be signed Sunday and Pakistan's PM calls it 'closer than ever', but Tehran is downplaying it; Iran has set Khamenei's funeral dates.",
-        why:"It decides whether a hot conflict winds down or escalates — and it directly drives oil prices and market mood worldwide." },
-      { t:"US House passes Ukraine Support Act + a bill to choke tech to Iranian drones", tag:"World", imp:"important", glance:"US House: Ukraine + Iran-drone bills", readtime:"20 sec", published:"2026-06-14T05:00:00", url:"https://www.npr.org/sections/news",
-        s:"After months of gridlock, two major foreign-policy measures cleared the House.",
-        why:"Signals renewed US backing for Ukraine and a tightening tech squeeze on Iran — shaping the war's trajectory and global supply chains." },
-      { t:"SpaceX fallout: Musk is first trillionaire, and SpaceX has a fast-growing AI cloud", tag:"Business", imp:"important", glance:"Musk first trillionaire; SpaceX AI cloud", readtime:"30 sec", published:"2026-06-14T11:40:00", url:"https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html",
-        s:"After the record IPO, SpaceX's month-old cloud business is already ~4th largest (ahead of Oracle) by some measures.",
-        why:"A new trillion-dollar player is muscling into the cloud/AI compute market — a competitive shift that ripples across tech and your investments." },
-      { t:"US order forces Anthropic to pull Claude Fable 5 and Mythos 5", tag:"Tech & AI", imp:"important", glance:"Anthropic pulls Fable 5 & Mythos 5", readtime:"25 sec", published:"2026-06-13T19:00:00", url:"https://www.youtube.com/watch?v=vM2At8Uqp2Y",
-        s:"An export-control directive barred foreign nationals from the models, so Anthropic disabled them for everyone (falling back to Opus 4.8); Europe reacted June 14.",
-        why:"Frontier AI is now subject to export controls — a precedent that affects which models you and developers worldwide can actually use." },
-      { t:"Chinese EVs are upending the car market", tag:"Business", imp:"important", glance:"Chinese EVs threaten Detroit", readtime:"25 sec", published:"2026-06-13T20:06:00", url:"https://www.youtube.com/watch?v=X6WF1BJt-3A",
-        s:"Ford's CEO daily-drove a $30k Xiaomi SU7 for six months and called BYD 'the best in the business' — a structural threat to legacy automakers.",
-        why:"A cheaper, better-EV wave reshapes the global auto industry, jobs and what you'll be able to buy next." },
-      { t:"Scripps unveils an experimental vaccine to block fentanyl overdoses", tag:"Science & Health", imp:"important", glance:"Experimental fentanyl-overdose vaccine", readtime:"20 sec", published:"2026-06-13T15:00:00", url:"https://www.sciencedaily.com/news/top/science/",
-        s:"It's designed to trap fentanyl in the bloodstream before it reaches the brain; early-stage research, not yet a treatment.",
-        why:"If it pans out, it's a genuinely new tool against the overdose crisis that kills tens of thousands a year." },
-      { t:"India's deep-tech push accelerates", tag:"India", imp:"important", glance:"IIT Madras at Nice; TCS rolls out Claude", readtime:"20 sec", published:"2026-06-14T04:30:00", url:"",
-        s:"IIT Madras is showing 15 startups at Bharat Innovates 2026 in Nice, and TCS is rolling Claude out to 50,000 employees as an Anthropic premier partner.",
-        why:"India is moving from IT services toward building and exporting deep tech — a shift that matters for the economy and local opportunity." },
-      { t:"Google rolls out Gemini 'M5' in beta", tag:"Tech & AI", imp:"interesting", glance:"Gemini M5 beta, ~40% cooler", readtime:"15 sec", published:"2026-06-14T05:30:00", url:"",
-        s:"The 128B-parameter, NPU-accelerated model claims ~40% less thermal throttling via real-time core load-balancing.",
-        why:"Faster, cooler on-device AI means better assistants and longer battery life on the phones and laptops you use." },
-      { t:"Tesla starts its FSD v14.3.4 rollout", tag:"Tech & AI", imp:"interesting", glance:"Tesla FSD v14.3.4 rolling out", readtime:"15 sec", published:"2026-06-13T16:00:00", url:"https://www.teslaoracle.com/2026/06/13/tesla-starts-the-rollout-of-fsd-v14-3-4-2026-14-6-10-official-release-notes-rollout-status/",
-        s:"A new vision encoder and MLIR-rewritten compiler claim ~20% faster reactions, plus Smart Summon comes to Cybertruck.",
-        why:"Incremental but real progress on self-driving — the capability Tesla's valuation increasingly rests on." },
-      { t:"World Cup 2026 is under way across North America", tag:"World", imp:"interesting", glance:"World Cup: Scotland win, Brazil draw", readtime:"15 sec", published:"2026-06-14T06:30:00", url:"https://www.espn.com/soccer/story/_/id/49058587/world-cup-2026-today-blog-14-06-2026-live-updates-news-fixtures-schedule-results-scotland-win-brazil-morocco-draw",
-        s:"Scotland claimed their first World Cup win since 1990; five-time champions Brazil were held to a draw by Morocco.",
-        why:"The planet's biggest sporting event is on — useful to know what's happening even if you only half-follow football." }
-    ]
-  },
-  physics: {
-    updated: "2026-06-14T13:32:00",
-    items: [
-      { t:"JUNO delivers its first landmark neutrino measurement", published:"2026-06-12T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/physics/",
-        s:"China's giant underground JUNO detector produced one of the most precise measurements yet of how neutrinos 'oscillate' (change type) as they travel — an early flagship result that helps pin down the ordering of neutrino masses, one of particle physics' open questions.",
-        src:"ScienceDaily / Physics World, Jun 2026",
-        eli:"Neutrinos are near-invisible particles that constantly stream through you and morph between three types as they fly. JUNO watches huge numbers of them to measure that morphing super precisely — which tells us which neutrino is heaviest, something nobody has nailed down yet." },
-      { t:"DESI hints that dark energy is weakening over time", published:"2026-06-01T00:00:00", url:"https://cerncourier.com/desi-hints-at-evolving-dark-energy/",
-        s:"New data from the Dark Energy Spectroscopic Instrument (DESI) keeps pointing to dark energy not being a fixed 'cosmological constant' but something that evolves and may be weakening — which, if it holds up, would rewrite the standard model of cosmology and the universe's likely fate.",
-        src:"CERN Courier / DESI collaboration (2026)",
-        eli:"Dark energy is the mysterious push making the universe expand faster and faster. Everyone assumed it was constant; DESI's maps suggest it might be fading — and if so, our whole story of how the cosmos ends would change." },
-      { t:"JWST maps two completely different twilights on a scorching exoplanet", published:"2026-06-11T00:00:00", url:"https://www.sciencedaily.com/releases/2026/06/260611024559.htm",
-        s:"On the ultra-hot Jupiter WASP-121b, the James Webb Space Telescope found the 'morning' (dawn) and 'evening' (dusk) edges of the planet look strikingly different in temperature and chemistry — the most detailed look yet at weather and circulation on another world.",
-        src:"ScienceDaily / NASA Webb, Jun 11 2026" },
-      { t:"Webb finds a giant early galaxy that doesn't spin", published:"2026-05-06T00:00:00", url:"https://www.sciencedaily.com/releases/2026/05/260506225135.htm",
-        s:"A massive galaxy that formed less than 2 billion years after the Big Bang shows essentially no rotation — a trait usually seen only in much older, 'dead' galaxies. It challenges models of how the earliest big galaxies assembled.",
-        src:"ScienceDaily / NASA Webb, May 2026" },
-      { t:"Physicists create exotic new forms of matter 'that shouldn't exist'", published:"2026-05-04T00:00:00", url:"https://www.sciencedaily.com/releases/2026/05/260504154014.htm",
-        s:"Researchers engineered new quantum phases of matter that conventional theory said shouldn't be stable, opening fresh territory in condensed-matter physics and potential routes to novel materials.",
-        src:"ScienceDaily, May 2026" },
-      { t:"RIKEN demonstrates 'one-way' quantum synchronization", published:"2026-06-05T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/quantum_physics/",
-        s:"Scientists showed quantum systems can be made to synchronize in only one direction — a 'one-way street' for sound particles (phonons) — and it stays remarkably stable despite manufacturing flaws and noise, useful for robust quantum devices.",
-        src:"ScienceDaily / RIKEN, Jun 2026",
-        eli:"Normally if two tiny oscillators sync up, the influence goes both ways. The team built a setup where A can steer B but B can't steer A — and it keeps working even when things are imperfect, which is handy for building reliable quantum tech." },
-      { t:"A surprisingly simple recipe for hard-to-make quantum states", published:"2026-06-08T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/quantum_physics/",
-        s:"A University of Chicago team found an unexpectedly simple way to create powerful entangled quantum states that are normally very difficult to produce — potentially easing a key bottleneck for quantum computing and sensing.",
-        src:"ScienceDaily / University of Chicago, Jun 2026" },
-      { t:"Fusion reactors might double as dark-matter factories", published:"2026-06-03T00:00:00", url:"https://www.sciencedaily.com/releases/2025/12/251228020014.htm",
-        s:"Theorists (UC's Jure Zupan and colleagues) argue that the extreme conditions inside fusion reactors could produce certain dark-matter candidate particles — meaning future reactors might also serve as unexpected dark-matter detectors.",
-        src:"ScienceDaily / University of Cincinnati (2026)" },
-      { t:"AI 'transfer learning' speeds the hunt for new physics", published:"2026-06-09T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/physics/",
-        s:"Researchers showed transfer learning can dramatically cut the need for expensive simulations when searching for physics beyond the Standard Model — accelerating analysis at colliders, though the team flags limits on how far it can be trusted.",
-        src:"ScienceDaily, Jun 2026" }
-    ]
-  },
-  topstories: {
-    updated: "2026-06-14T07:50:00",
-    items: [
-      { t:"World Cup 2026: Scotland claim first win since 1990; Brazil held by Morocco", tag:"World", seen:["News"], published:"2026-06-14T06:30:00", url:"https://www.espn.com/soccer/story/_/id/49058587/world-cup-2026-today-blog-14-06-2026-live-updates-news-fixtures-schedule-results-scotland-win-brazil-morocco-draw",
-        s:"A packed June 14 across the three North American hosts saw Scotland record their first World Cup win since 1990, while five-time champions Brazil were held to a draw by Morocco." },
-      { t:"US House passes Ukraine Support Act and a bill to choke tech to Iranian drones", tag:"World", seen:["News"], published:"2026-06-14T05:00:00", url:"https://www.npr.org/sections/news",
-        s:"After months of gridlock the House passed a sweeping Ukraine Support Act and a separate measure aimed at cutting off Western technology flowing into Iranian drones." },
-      { t:"US-Iran peace deal in doubt as Trump signals a Sunday signing", tag:"World", seen:["News"], published:"2026-06-14T06:00:00", url:"https://www.rferl.org/a/iran-war-us-hormuz-oil-blockade-gulf-israel/33640284.html",
-        s:"Trump said a deal to halt the conflict could be signed Sunday and Pakistan's PM called it closer 'than ever before', but Tehran downplayed an imminent agreement; Iran also announced funeral dates for Ali Khamenei." },
-      { t:"Tesla begins rolling out FSD v14.3.4 with a faster driving-AI stack", tag:"Tech & AI", seen:["News","Elon"], published:"2026-06-13T16:00:00", url:"https://www.teslaoracle.com/2026/06/13/tesla-starts-the-rollout-of-fsd-v14-3-4-2026-14-6-10-official-release-notes-rollout-status/",
-        s:"Musk said Tesla started pushing FSD (Supervised) v14.3.4 on June 13, with an upgraded vision encoder, an MLIR-rewritten AI compiler claimed to cut reaction time ~20%, and Smart Summon arriving on Cybertruck." },
-      { t:"US export-control directive prompts Anthropic to pull Fable 5 and Mythos 5", tag:"Tech & AI", seen:["News","YouTube"], published:"2026-06-13T19:00:00", url:"https://www.youtube.com/watch?v=vM2At8Uqp2Y",
-        s:"A US directive barred foreign nationals from using the two models, so Anthropic disabled them for everyone and fell back to Opus 4.8; Europe reacted June 14. Anthropic calls it a misunderstanding it is working to reverse." },
-      { t:"Google rolls out Gemini 'M5' in beta", tag:"Tech & AI", seen:["News","Briefing"], published:"2026-06-14T05:30:00", url:"",
-        s:"Google's new Gemini M5 (128B-parameter, NPU-accelerated) entered beta this week; a real-time load-balancing scheme across 16 cores is claimed to cut thermal throttling about 40% versus its predecessor." },
-      { t:"IIT Madras showcases 15 deep-tech startups at Bharat Innovates 2026 in Nice", tag:"India", seen:["News","India"], published:"2026-06-14T04:30:00", url:"",
-        s:"IIT Madras is presenting 15 incubated deep-tech startups at the Bharat Innovates 2026 exhibition in Nice, France (June 14-16), part of a broader India deep-tech export push." },
-      { t:"Scripps unveils an experimental vaccine to block fentanyl overdoses", tag:"Science & Health", seen:["Briefing"], published:"2026-06-13T15:00:00", url:"https://www.sciencedaily.com/news/top/science/",
-        s:"Researchers described a vaccine designed to trap fentanyl in the bloodstream before it reaches the brain, a potential new way to prevent overdoses; early-stage research, not yet a clinical treatment." }
+      { t:"AI-designed universal coronavirus vaccine passes its first human safety test", tag:"Health", imp:"important", glance:"Universal COVID vaccine: safe in humans", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/news/health_medicine/",
+        s:"An AI-designed vaccine intended to protect against many coronaviruses at once was tested in people for the first time and found safe and well tolerated — an early but real step toward broad pandemic protection.",
+        src:"ScienceDaily (Jun 2026)",
+        why:"A single shot covering many coronaviruses would change how the world prepares for the next pandemic." },
+      { t:"GLP-1 drugs (the Ozempic class) linked to ~30% lower breast-cancer risk", tag:"Health", imp:"important", glance:"GLP-1s linked to lower breast-cancer risk", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/news/health_medicine/",
+        s:"A large study found women taking GLP-1 medications (Ozempic, Wegovy, Mounjaro, Zepbound) were about 30% less likely to develop breast cancer — a hint these blockbuster drugs may have benefits well beyond weight loss.",
+        src:"ScienceDaily (Jun 2026)",
+        why:"These drugs are already taken by millions; a cancer-risk reduction would be a major bonus and reshape prevention." },
+      { t:"Just 90–120 minutes of weekly strength training delivers outsized long-term health gains", tag:"Health", imp:"interesting", glance:"~90 min/wk strength training = big gains", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/news/health_medicine/",
+        s:"A study tracking 147,000+ people over 30 years found a modest weekly dose of strength training produced some of the largest long-term health rewards.",
+        src:"ScienceDaily (Jun 2026)",
+        why:"It's a tiny, achievable dose with a big payoff — directly actionable for your own routine." },
+      { t:"Blocking an aging protein regrew lost cartilage in mice", tag:"Health", imp:"interesting", glance:"Aging-protein block regrew cartilage", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/news/health_medicine/",
+        s:"A treatment that blocks an aging-related protein restored lost cartilage in old mice and helped prevent arthritis after knee injuries — a promising lead for joint disease.",
+        src:"Stanford via ScienceDaily (Jun 2026)",
+        why:"Cartilage normally doesn't grow back; a way to regrow it would be a genuine breakthrough for arthritis." },
+      { t:"Self-regulating artificial photosynthesis runs without batteries", tag:"Chemistry", imp:"important", glance:"Battery-free artificial photosynthesis", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/",
+        s:"Researchers built an artificial-photosynthesis system that regulates itself, removing the batteries many current designs need — a step toward cheaper solar-driven clean fuel.",
+        src:"ScienceDaily (Jun 11 2026)",
+        why:"Simpler, battery-free solar fuel could make clean energy cheaper and easier to deploy." },
+      { t:"A genetic 'master clock' times the bursts of activity that drive development", tag:"Biology", imp:"interesting", glance:"Genetic 'master clock' of development", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/news/plants_animals/",
+        s:"Scientists identified a genetic clock that acts as the master timekeeper for development, orchestrating crucial bursts of gene activity as an organism grows.",
+        src:"ScienceDaily (Jun 2026)",
+        why:"Understanding how development is timed underpins everything from birth defects to regenerative medicine." },
+      { t:"JUNO delivers its first landmark neutrino measurement", tag:"Physics & Space", imp:"important", glance:"JUNO's precise neutrino result", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/physics/",
+        s:"China's giant underground JUNO detector produced one of the most precise measurements yet of how neutrinos 'oscillate' as they travel — helping pin down the ordering of neutrino masses.",
+        src:"ScienceDaily / Physics World (Jun 2026)",
+        eli:"Neutrinos are near-invisible particles that morph between three types as they fly. JUNO measures that morphing precisely, which tells us which neutrino is heaviest — something nobody has nailed down yet." },
+      { t:"DESI keeps hinting that dark energy is weakening over time", tag:"Physics & Space", imp:"important", glance:"DESI: dark energy may be fading", published:"2026-06-13T00:00:00", url:"https://cerncourier.com/desi-hints-at-evolving-dark-energy/",
+        s:"New Dark Energy Spectroscopic Instrument data keeps pointing to dark energy not being a fixed 'cosmological constant' but something that evolves and may be weakening — which would rewrite cosmology.",
+        src:"CERN Courier / DESI (2026)",
+        eli:"Dark energy is the push making the universe expand faster. Everyone assumed it was constant; DESI suggests it might be fading — changing the story of how the cosmos ends." },
+      { t:"JWST maps two completely different twilights on a scorching exoplanet", tag:"Physics & Space", imp:"interesting", glance:"Webb: two skies on WASP-121b", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/releases/2026/06/260611024559.htm",
+        s:"On ultra-hot Jupiter WASP-121b, the James Webb Space Telescope found the dawn and dusk edges look strikingly different in temperature and chemistry — the most detailed look yet at weather on another world.",
+        src:"ScienceDaily / NASA Webb (Jun 2026)" },
+      { t:"Physicists create exotic new forms of matter 'that shouldn't exist'", tag:"Physics & Space", imp:"interesting", glance:"New exotic states of matter", published:"2026-06-12T00:00:00", url:"https://www.sciencedaily.com/releases/2026/05/260504154014.htm",
+        s:"Researchers engineered new quantum phases of matter that conventional theory said shouldn't be stable, opening fresh territory in condensed-matter physics.",
+        src:"ScienceDaily (2026)" }
     ]
   },
   affirmations: [
@@ -381,34 +354,6 @@ const DATA = {
     "Abundance is my natural state; I simply stop resisting it.",
     "Today I notice evidence that things are working out for me.",
     "I am building a life I don't need a vacation from."
-  ],
-  briefing: [
-    { h: "Tech & AI Breakthroughs", items: [
-      { t:"Google's Gemini 'M5' uses real-time load-balancing to cut thermal throttling ~40%", published:"2026-06-14T05:30:00", url:"",
-        s:"Google's new Gemini M5 (128B parameters, NPU-accelerated) entered beta this week; a 'dynamic load balancing' algorithm spreads work across 16 cores in real time, reportedly cutting thermal throttling about 40% versus the prior model.",
-        eli:"AI chips slow down when they overheat. M5 constantly shuffles the work across many small processors so no part gets too hot, letting it stay fast for longer." },
-      { t:"AI plus physics speeds climate simulations about 25x", published:"2026-06-13T14:00:00", url:"https://scitechdaily.com/",
-        s:"Researchers combined generative AI with physics-based data to run climate models roughly 25 times faster, enabling quicker forecasting and scenario testing without a supercomputer-sized bill." }
-    ]},
-    { h: "Science & Health Breakthroughs", items: [
-      { t:"Scripps experimental vaccine aims to block fentanyl before it reaches the brain", published:"2026-06-13T15:00:00", url:"https://www.sciencedaily.com/news/top/science/",
-        s:"A new experimental vaccine from Scripps Research is designed to trap fentanyl in the bloodstream so it cannot reach the brain, offering a possible new way to prevent overdoses. Early research, not yet an approved treatment.",
-        eli:"The shot teaches the immune system to grab fentanyl while it is still in the blood, so the drug can't get into the brain to cause an overdose." },
-      { t:"Claim that cosmic acceleration is an 'illusion' fails a new test", published:"2026-06-13T13:00:00", url:"https://www.sciencedaily.com/news/top/science/",
-        s:"A bold argument that the universe's accelerating expansion was a statistical mirage was re-examined and did not hold up; researchers found the original analysis mishandled the supernova data." }
-    ]},
-    { h: "Consciousness Studies", items: [
-      { t:"Nothing new in the last 24h", url:"", published:"",
-        s:"A slow-moving field; no notable result landed in the last 24 hours. Reference point: the 2025 Cogitate adversarial test (Nature) found conscious perception tracks posterior/sensory cortex more than prefrontal 'broadcasting'." }
-    ]},
-    { h: "ScienceDaily Top Picks", items: [
-      { t:"'Lucy's hunter': a new ancient crocodile species identified in Ethiopia", published:"2026-06-13T12:30:00", url:"https://www.sciencedaily.com/news/top/science/",
-        s:"Researchers named a newly identified crocodile species that prowled Ethiopia's rivers more than three million years ago, when Lucy's early-human species walked the same landscape." },
-      { t:"Keck Observatory measures the spins of dozens of giant planets and brown dwarfs", published:"2026-06-13T12:00:00", url:"https://www.sciencedaily.com/news/top/science/",
-        s:"Using the Keck Observatory, astronomers measured how fast dozens of giant exoplanets and brown dwarfs rotate, offering fresh clues to how such worlds form." },
-      { t:"New genetic cause found for a rare movement disorder", published:"2026-06-13T11:30:00", url:"https://www.sciencedaily.com/news/top/science/",
-        s:"After analyzing nearly 3,000 patients with conditions affecting coordination and muscle control, scientists uncovered a surprising new genetic cause of a rare movement disorder." }
-    ]}
   ],
   youtube: {
     count: 0,
@@ -550,21 +495,22 @@ const DATA = {
     ]
   },
   elon: {
-    day: "June 13, 2026",
-    count: 19,
+    day: "June 14, 2026",
     source: "x.com/elonmusk",
-    note: "Pulled directly from X — times are exact (your local time). Reposts use the original post's time (X doesn't expose the repost moment); pure likes have no public timestamp.",
+    note: "Every post, reply & repost from Elon that day, ranked by engagement (likes & views). Reposts amplify others' views and are described neutrally, not endorsed; contested claims are flagged. Counts and times are pulled live from X.",
     items: [
-      { iso:"2026-06-13T00:01:33Z", kind:"repost", t:"↻ Reposted @PeterDiamandis", s:"“Pessimists sound smart. Optimists build the world.”", href:"https://x.com/PeterDiamandis/status/2065585327087980687" },
-      { iso:"2026-06-13T00:38:44Z", kind:"repost", t:"↻ Reposted @niccruzpatane", s:"The green-shoe joke — “Elon agreed to the ‘greenshoe’ IPO option, but only if the bankers wore green shoes.”", href:"https://x.com/niccruzpatane/status/2065594684899021116" },
-      { iso:"2026-06-13T00:57:30Z", kind:"reply", t:"Reply to Super Micro's congratulations", s:"“Thanks!”", href:"https://x.com/elonmusk/status/2065599528170848589" },
-      { iso:"2026-06-13T02:09:00Z", kind:"reply", t:"On the IPO green-shoe joke", s:"“True”", href:"https://x.com/elonmusk/status/2065617636797325473" },
-      { iso:"2026-06-13T02:11:00Z", kind:"reply", t:"Replying to @PalmerLuckey (“only ~25 satellites launched a year, and that won't change”)", s:"“That is what they told me”", href:"https://x.com/elonmusk/status/2065617932718059544" },
-      { iso:"2026-06-13T07:48:49Z", kind:"post", t:"Quote-posting a Starship photo", s:"“Starship is a very big rocket”", href:"https://x.com/elonmusk/status/2065702920427896916" },
-      { iso:"2026-06-13T07:58:11Z", kind:"post", t:"On SpaceX having launched more satellites than the rest of the world combined", s:"“Within ~5 years, probably ~5 times as many satellites as the rest of the world.”", href:"https://x.com/elonmusk/status/2065705276334833951" },
-      { iso:"2026-06-13T08:04:00Z", kind:"reply", t:"Replying to a graphic crime thread about a repeat-offender Austin man (the one non-SpaceX post)", s:"“!!”", href:"https://x.com/elonmusk/status/2065706985878675838" },
-      { iso:"2026-06-13T12:07:42Z", kind:"repost", t:"↻ Reposted @arjunkhemani", s:"The Starbase-tour story — a worker walks up, hugs Elon and says “We're going to make it.”", href:"https://x.com/arjunkhemani/status/2065768071068057830" },
-      { iso:"2026-06-13T19:14:52Z", kind:"repost", t:"↻ Reposted @niccruzpatane", s:"SpaceX President Gwynne Shotwell on CNBC: “I think he is very misunderstood across the board…”", href:"https://x.com/niccruzpatane/status/2065875567816376744" }
+      { kind:"post", imp:"critical", t:"On SpaceX out-launching the rest of the world on satellites", s:"“Within ~5 years, probably ~5 times as many satellites as rest of world.”", likes:127720, views:18579360, iso:"2026-06-13T07:58:00Z", href:"https://x.com/elonmusk/status/2065705276334833951" },
+      { kind:"reply", imp:"critical", t:"Reply in a UK-politics thread", s:"“They will.”", likes:95879, views:30683515, iso:"2026-06-14T00:00:00Z", href:"https://x.com/elonmusk/status/2066082785668878479" },
+      { kind:"post", imp:"critical", t:"Pinned — SpaceX's reusability cost chart", s:"“SpaceX AI Satellites” — his pinned post on Starship's step-change in launch cost per kg.", likes:75027, views:42588190, iso:"2026-06-11T00:00:00Z", href:"https://x.com/elonmusk/status/2064187087184650253" },
+      { kind:"repost", imp:"important", t:"Reposted @JessicaTetreau — a jibe at a politician criticising the wealthy", s:"“Is she actually lecturing us about rich people from the back of a limousine?”", likes:111102, views:2132096, iso:"2026-06-13T00:00:00Z", href:"https://x.com/JessicaTetreau/status/2065554626158420266" },
+      { kind:"reply", imp:"important", t:"Reply (one-word reaction)", s:"“Wow.”", likes:57807, views:3478845, iso:"2026-06-14T00:00:00Z", href:"https://x.com/elonmusk/status/2066196905151864967" },
+      { kind:"repost", imp:"important", t:"Reposted @TimRunsHisMouth — a politically charged take on US politics (amplified, not endorsed)", s:"A commentary contrasting visions for America's 250th July 4th. Partisan opinion.", likes:73463, views:825835, iso:"2026-06-13T00:00:00Z", href:"https://x.com/TimRunsHisMouth/status/2065847141466083560" },
+      { kind:"reply", imp:"important", t:"On the UK arrest of activist Tommy Robinson", s:"“He used words that the pro-stabbing politicians didn't like.” (Elon's own framing of a contested UK case.)", likes:46496, views:529014, iso:"2026-06-14T00:00:00Z", href:"https://x.com/elonmusk/status/2066082075468263701" },
+      { kind:"repost", imp:"important", t:"Reposted @w_terrence — commentary on race relations in the US (amplified, not endorsed)", s:"A personal opinion piece about racism in America. Sensitive, partisan content.", likes:47864, views:521972, iso:"2026-06-13T00:00:00Z", href:"https://x.com/w_terrence/status/2065667256411967956" },
+      { kind:"repost", imp:"interesting", t:"Reposted @JohnCleese — part of the same UK thread", s:"“Did he stab someone?”", likes:43824, views:1973714, iso:"2026-06-14T00:00:00Z", href:"https://x.com/JohnCleese/status/2066048781766758426" },
+      { kind:"reply", imp:"interesting", t:"One-word reaction", s:"“Terrible.”", likes:35524, views:358500, iso:"2026-06-13T00:00:00Z", href:"https://x.com/elonmusk/status/2065911856523288917" },
+      { kind:"repost", imp:"interesting", t:"Reposted @WarClandestine — a claim about US-funded biolabs in Ukraine (contested / unverified)", s:"A post asserting mainstream media is 'finally admitting' the biolabs story. Treat as an unverified claim.", likes:33277, views:423546, iso:"2026-06-13T00:00:00Z", href:"https://x.com/WarClandestine/status/2065910009205068007" },
+      { kind:"repost", imp:"interesting", t:"Reposted @BasilTheGreat — a report tied to a UK migration/crime story", s:"News-style post about a man attacked in the UK. Single-source; sensitive topic.", likes:30119, views:1993583, iso:"2026-06-13T00:00:00Z", href:"https://x.com/BasilTheGreat/status/2065858457916391803" }
     ]
   },
   elonNewsUpdated: "2026-06-14T07:50:00",
@@ -624,25 +570,66 @@ const DATA = {
       ]}
     ]
   },
-  newsUpdated: "2026-06-14T07:50:00",
+  newsUpdated: "2026-06-15T07:30:00",
   news: {
-    world: [
-      { t:"World Cup 2026: Scotland claim first win since 1990; Brazil drawn by Morocco", published:"2026-06-14T06:30:00", url:"https://www.espn.com/soccer/story/_/id/49058587/world-cup-2026-today-blog-14-06-2026-live-updates-news-fixtures-schedule-results-scotland-win-brazil-morocco-draw", s:"A busy June 14 across the North American hosts saw Scotland record a historic first World Cup win and five-time champions Brazil held to a draw by Morocco.", src:"AP / ESPN" },
-      { t:"US House passes sweeping Ukraine Support Act and a bill to choke tech to Iranian drones", published:"2026-06-14T05:00:00", url:"https://www.npr.org/sections/news", s:"After months of gridlock the House passed a broad Ukraine Support Act and a separate measure aimed at cutting off Western technology flowing into Iranian drones.", src:"NPR (developing)" },
-      { t:"US-Iran deal in doubt as Trump signals a Sunday signing", published:"2026-06-14T06:00:00", url:"https://www.rferl.org/a/iran-war-us-hormuz-oil-blockade-gulf-israel/33640284.html", s:"Trump suggested a deal to end the conflict could be signed Sunday, but Tehran downplayed an imminent agreement; Iran also announced funeral dates for Ali Khamenei.", src:"RFE-RL / Al Jazeera (developing)" },
-      { t:"Pope Leo XIV's charter grounded; Spain's king lends his jet", published:"2026-06-14T04:00:00", url:"", s:"A technical fault grounded the pope's charter in Tenerife after his visit to Spain; King Felipe VI offered his private jet to return him to Rome.", src:"AP" }
-    ],
-    techai: [
-      { t:"Google rolls out Gemini 'M5' in beta", published:"2026-06-14T05:30:00", url:"", s:"Google's Gemini M5 - a 128B-parameter, NPU-accelerated model - entered beta this week, with real-time core load-balancing claimed to cut thermal throttling about 40%.", src:"AI News" },
-      { t:"US export-control directive prompts Anthropic to pull Fable 5 and Mythos 5", published:"2026-06-13T19:00:00", url:"https://www.youtube.com/watch?v=vM2At8Uqp2Y", s:"A US directive barred foreign nationals from using the two models, so Anthropic disabled them for everyone and fell back to Opus 4.8; Europe reacted June 14. Anthropic calls it a misunderstanding it is working to reverse.", src:"Creator coverage; Anthropic statements" }
-    ],
-    business: [
-      { t:"Tesla begins rolling out FSD v14.3.4, pressing its autonomy bet", published:"2026-06-13T16:00:00", url:"https://www.teslaoracle.com/2026/06/13/tesla-starts-the-rollout-of-fsd-v14-3-4-2026-14-6-10-official-release-notes-rollout-status/", s:"Tesla started pushing FSD (Supervised) v14.3.4 on June 13 with a faster, MLIR-rewritten driving-AI stack and Cybertruck Smart Summon, as investors press the company to prove its autonomy and Robotaxi claims.", src:"Tesla Oracle / Not a Tesla App" },
-      { t:"Scrutiny grows over how much of Musk's record wealth rests on government support", published:"2026-06-13T19:00:00", url:"https://www.cnn.com/2026/06/13/business/musk-trillionaire-government-tesla-spacex", s:"A CNN Business analysis argued government contracts and subsidies underpin much of the value behind Musk's SpaceX and Tesla stakes after the SpaceX listing pushed his paper net worth past $1 trillion.", src:"CNN Business" }
-    ],
-    india: [
-      { t:"IIT Madras showcases 15 startups at Bharat Innovates 2026", published:"2026-06-14T04:30:00", url:"", s:"IIT Madras is presenting 15 incubated deep-tech startups at the Bharat Innovates 2026 exhibition in Nice, France (June 14-16).", src:"The Hindu" },
-      { t:"LPG prices rise: Delhi cooking-gas cylinder up Rs 29 to Rs 942", published:"2026-06-14T03:00:00", url:"https://www.india.com/business/lpg-cng-png-petroleum-prices-today-commercial-lpg-14-june-2026-delhi-mumbai-chennai-kolkata-hyderabad-bengaluru-noida-indian-oil-bharat-gas-hardeep-singh-puri-8446025/", s:"The 14.2-kg domestic LPG cylinder rose Rs 29 in Delhi to Rs 942, the second hike in three months, while commercial cylinders rose about Rs 195.50 across metros.", src:"India.com" }
+    updated: "2026-06-14T21:00:00",
+    cats: [
+      { h:"🌍 World", tag:"World", items:[
+        { t:"US-Iran peace deal hangs in the balance", imp:"critical", glance:"US-Iran deal uncertain", published:"2026-06-14T20:00:00", url:"https://www.rferl.org/a/iran-war-us-hormuz-oil-blockade-gulf-israel/33640284.html", src:"RFE-RL / Al Jazeera",
+          s:"Trump says a deal to halt the conflict could be signed soon and Pakistan's PM calls it 'closer than ever', but Tehran is downplaying it; Iran has set Khamenei's funeral dates.",
+          why:"It decides whether a hot conflict winds down or escalates — and it directly drives oil prices and global market mood." },
+        { t:"US House passes the Ukraine Support Act and a bill to choke tech to Iranian drones", imp:"important", glance:"US House: Ukraine + Iran-drone bills", published:"2026-06-14T18:00:00", url:"https://www.npr.org/sections/news", src:"NPR",
+          s:"After months of gridlock the House passed a sweeping Ukraine Support Act and a separate measure targeting Western tech flowing into Iranian drones.",
+          why:"Signals renewed US backing for Ukraine and a tighter squeeze on Iran — shaping the war and global supply chains." },
+        { t:"World Cup 2026 group stage: Scotland's first win since 1990; Brazil held by Morocco", imp:"interesting", glance:"World Cup: Scotland win, Brazil draw", published:"2026-06-14T16:00:00", url:"https://www.espn.com/soccer/story/_/id/49058587/world-cup-2026-today-blog-14-06-2026-live-updates-news-fixtures-schedule-results-scotland-win-brazil-morocco-draw", src:"AP / ESPN",
+          s:"A packed matchday across the three North American hosts; Scotland recorded a historic win and five-time champions Brazil were held to a draw.",
+          why:"The planet's biggest sporting event is on — worth a glance even if you only half-follow football." }
+      ]},
+      { h:"🤖 Tech & AI", tag:"Tech & AI", items:[
+        { t:"US export-control order forces Anthropic to pull Claude Fable 5 and Mythos 5", imp:"important", glance:"Anthropic pulls Fable 5 & Mythos 5", published:"2026-06-14T19:00:00", url:"https://www.youtube.com/watch?v=vM2At8Uqp2Y", src:"Anthropic statements; creator coverage",
+          s:"A directive barred foreign nationals from the two models, so Anthropic disabled them for everyone (falling back to Opus 4.8); Europe reacted the next day.",
+          why:"Frontier AI is now subject to export controls — a precedent affecting which models you and developers worldwide can use." },
+        { t:"Google rolls out Gemini 'M5' in beta", imp:"interesting", glance:"Gemini M5 beta, ~40% cooler", published:"2026-06-14T05:30:00", url:"", src:"AI News",
+          s:"The 128B-parameter, NPU-accelerated model claims ~40% less thermal throttling via real-time core load-balancing.",
+          why:"Faster, cooler on-device AI means better assistants and longer battery life on your phone and laptop." }
+      ]},
+      { h:"📈 Business & Markets", tag:"Business", items:[
+        { t:"SpaceX fallout: Musk becomes first trillionaire; SpaceX's AI cloud is already ~4th largest", imp:"important", glance:"Musk first trillionaire; SpaceX AI cloud", published:"2026-06-14T11:40:00", url:"https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html", src:"CNBC",
+          s:"After the record IPO, SpaceX's month-old cloud business is, by some measures, already the 4th-largest cloud — ahead of Oracle.",
+          why:"A new trillion-dollar player is muscling into cloud/AI compute — a competitive shift that ripples across tech and markets." },
+        { t:"Chinese EVs are upending the global car market", imp:"important", glance:"Chinese EVs threaten Detroit", published:"2026-06-14T09:00:00", url:"https://www.youtube.com/watch?v=X6WF1BJt-3A", src:"Two Bit da Vinci / industry",
+          s:"Ford's CEO daily-drove a $30k Xiaomi SU7 for six months and called BYD 'the best in the business' — a structural threat to legacy automakers.",
+          why:"A cheaper, better-EV wave reshapes the auto industry, jobs and what you'll be able to buy next." }
+      ]},
+      { h:"🇮🇳 India", tag:"India", items:[
+        { t:"IIT Madras showcases 15 deep-tech startups at Bharat Innovates 2026 (Nice)", imp:"important", glance:"IIT Madras at Bharat Innovates, Nice", published:"2026-06-14T04:30:00", url:"", src:"The Hindu",
+          s:"Part of a broader India deep-tech export push, alongside TCS becoming an Anthropic premier partner and rolling Claude out to 50,000 staff.",
+          why:"India is shifting from IT services toward building and exporting deep tech — a real economic and opportunity shift." },
+        { t:"India's 2026 startup funding tops $8 billion year-to-date", imp:"interesting", glance:"India startups: $8B raised in 2026", published:"2026-06-14T03:00:00", url:"https://inc42.com/features/indian-startup-ipo-tracker-2026/", src:"Tracxn / Inc42",
+          s:"About $8.09 billion raised across 806 rounds and 75 IPOs so far this year, with capital tilting toward profitability.",
+          why:"Shows where money and momentum are heading in India's startup ecosystem." }
+      ]},
+      { h:"🏛️ Karnataka", tag:"Karnataka", items:[
+        { t:"Karnataka's ₹4.48 lakh crore budget pours into Bengaluru infrastructure", imp:"important", glance:"₹4.48L cr budget → Bengaluru infra", published:"2026-06-14T08:00:00", url:"https://tradebrains.in/money/from-tunnel-roads-to-metro-expansion-how-4-48-lakh-crore-karnataka-budget-will-transform-bengaluru-real-estate/", src:"Trade Brains / Deccan Herald",
+          s:"The state budget bankrolls tunnel roads, metro expansion and suburban rail — set to reshape Bengaluru mobility and real estate.",
+          why:"Directly affects commute times, property values and daily life across the state's capital region." }
+      ]},
+      { h:"🌴 Kerala", tag:"Kerala", items:[
+        { t:"Opposition slams Kerala govt over Nipah response and wildlife attacks", imp:"important", glance:"Kerala: Nipah response under fire", published:"2026-06-14T10:00:00", url:"https://www.deccanherald.com/india/kerala/lop-pinarayi-vijayan-slams-kerala-govt-over-nipah-response-wildlife-attacks-4038726", src:"Deccan Herald",
+          s:"The Leader of Opposition criticised the government's handling of Nipah-virus containment, wildlife attacks and health-department transfers, alleging weak preparedness amid the run-up to the 2026 Assembly polls.",
+          why:"Public-health preparedness and the political contest both directly affect the state ahead of elections." }
+      ]},
+      { h:"🏯 Mysuru", tag:"Mysore", items:[
+        { t:"No standout Mysuru news in the last 24h", imp:"noise", published:"", url:"", s:"No standout Mysuru-specific news surfaced from reputable sources in the last 24 hours. The Mysuru–Bengaluru expressway and Dasara preparations remain the running local threads." }
+      ]},
+      { h:"🏙️ Bengaluru", tag:"Bengaluru", items:[
+        { t:"Namma Metro & Suburban Rail expansion presses on (with delays)", imp:"important", glance:"Metro Phase 3 + suburban rail progress", published:"2026-06-14T09:00:00", url:"https://www.deccanherald.com/india/karnataka/bengaluru/metro-phase-3-construction-pushed-to-june-2026-3731413", src:"Deccan Herald",
+          s:"Namma Metro is pushing toward ~175 km by 2027 (Phase 3 orange/red lines), while the 149 km Suburban Rail project is ~22% done with the Yelahanka–Devanahalli corridor targeted for Dec 2026; some timelines have slipped.",
+          why:"This is your city's commute future — what opens when directly shapes daily travel." },
+        { t:"Monsoon in full swing — IMD rain alerts for the city", imp:"interesting", glance:"Heavy monsoon, IMD rain alerts", published:"2026-06-14T06:00:00", url:"https://www.deccanherald.com/", src:"IMD / Deccan Herald",
+          s:"Bengaluru is in heavy monsoon with frequent rain and IMD alerts — expect waterlogging and traffic disruption on the worst days.",
+          why:"Practical heads-up for commute, flooding-prone routes and the week's planning." }
+      ]}
     ]
   }
 };
@@ -652,9 +639,8 @@ window.__THUMBS=window.__THUMBS||{"1OZZF7w-UPo":"data:image/jpeg;base64,/9j/4AAQ
 /*THUMBS_END*/
 
 const TABS = [
-  {id:"top10",    icon:"🔟", label:"Top 10"},
-  {id:"briefing", icon:"📰", label:"Briefing"},
-  {id:"physics",  icon:"🔭", label:"Physics & Space"},
+  {id:"news",     icon:"📰", label:"News"},
+  {id:"science",  icon:"🔬", label:"Science"},
   {id:"youtube",  icon:"▶️", label:"YouTube"},
   {id:"elon",     icon:"𝕏",  label:"Elon"},
   {id:"mind",     icon:"🧠", label:"Mind"},
@@ -880,15 +866,66 @@ async function askQuestion(c, input){
 
 function group(title){ const g=document.createElement("div"); g.className="grp"; if(title){const h=document.createElement("h2");h.textContent=title;g.appendChild(h);} return g; }
 
-function renderPhysics(){
-  const p = document.getElementById("p-physics"); if(!p) return; p.innerHTML="";
-  const P = DATA.physics || {}; const items = P.items || [];
-  const badge=document.createElement("div"); badge.className="verified"; badge.textContent="✓ peer-reviewed / observatory sources"; p.appendChild(badge);
+// ---- shared building blocks (importance dot, 30-second glance, news bullet) ----
+function impDotHtml(imp){ imp=(imp||"").toLowerCase(); return ["critical","important","interesting","noise"].includes(imp)?`<span class="imp imp-${imp} imp-inline" title="${imp}"></span>`:""; }
+function glanceBox(items, label){
+  const order=["World","Tech & AI","Business","India","Karnataka","Kerala","Mysore","Bengaluru","Science & Health","Science","Space","Biology","Physics & Space"];
+  const byTag={}; items.forEach(it=>{ const k=(it.tag||"Other"); (byTag[k]=byTag[k]||[]).push(it.glance||it.t); });
+  const tags=Object.keys(byTag).sort((a,b)=>{const ia=order.indexOf(a),ib=order.indexOf(b);return (ia<0?99:ia)-(ib<0?99:ib);});
+  const box=document.createElement("details"); box.className="glance"; box.open=true;
+  let html=`<summary>${esc(label||"⚡ Today in 30 seconds")}</summary><div class="glance-body">`;
+  tags.forEach(t=>{ html+=`<div class="glance-row"><span class="glance-tag">${esc(t)}</span><span class="glance-items">${byTag[t].map(esc).join(" · ")}</span></div>`; });
+  html+="</div>"; box.innerHTML=html; return box;
+}
+function newsBullet(it){
+  const div=document.createElement("div"); div.className="nb"; if(isReadItem(it)) div.classList.add("read");
+  const titleHtml = it.url?`<a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.t)}</a>`:esc(it.t);
+  const age=relAge(pubDate(it)); const dot=impDotHtml(it.imp)||`<span class="imp imp-noise imp-inline"></span>`;
+  div.innerHTML = `<span class="nb-dot">${dot}</span>`+
+    `<div class="nb-body"><p class="nb-t">${titleHtml}</p>`+
+    (it.s?`<p class="nb-s">${esc(it.s)}</p>`:"")+
+    (it.why?`<p class="why"><b>Why it matters:</b> ${esc(it.why)}</p>`:"")+
+    ((age||it.src)?`<p class="card-when">${age?"🕒 "+esc(age):""}${it.src?(age?" · ":"")+esc(it.src):""}</p>`:"")+
+    `</div>`;
+  if(it.url) div.querySelector("a").addEventListener("click",()=>{ if(!div.classList.contains("read")){ div.classList.add("read"); setRead(it,true); } });
+  return div;
+}
+function renderNews(){
+  const p = document.getElementById("p-news"); if(!p) return; p.innerHTML="";
+  const N = DATA.news || {}; const cats = N.cats || [];
+  const head=document.createElement("div"); head.className="grp";
+  const h=document.createElement("h2"); h.textContent="📰 News · what to know"; head.appendChild(h);
+  const note=document.createElement("p"); note.className="empty"; note.style.marginTop="-2px";
+  note.textContent="Only the noteworthy, by subject — importance dot + why it matters" + (N.updated?" · updated "+new Date(N.updated).toLocaleString():"");
+  head.appendChild(note); p.appendChild(head);
+  if(!cats.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="No news loaded yet — tap Update."; p.appendChild(e); return; }
+  // ⚡ Today in 30 seconds — top item(s) per subject
+  const gl=[]; cats.forEach(c=>{ (c.items||[]).filter(x=>!/nothing new|no news/i.test(x.t||"")).slice(0,2).forEach(it=>gl.push({tag:c.tag||c.h, glance:it.glance||it.t})); });
+  if(gl.length) p.appendChild(glanceBox(gl));
+  // collapsible subject sections
+  cats.forEach((c,idx)=>{
+    const items=c.items||[]; if(!items.length) return;
+    const real=items.filter(x=>!/nothing new|no news/i.test(x.t||""));
+    const d=document.createElement("details"); d.className="cat"; if(idx<2) d.open=true;
+    d.innerHTML=`<summary>${esc(c.h)}<span class="cat-n">${real.length||"–"}</span></summary>`;
+    const body=document.createElement("div"); body.className="cat-body";
+    items.forEach(it=>body.appendChild(newsBullet(it)));
+    d.appendChild(body); p.appendChild(d);
+  });
+}
+function renderScience(){
+  const p = document.getElementById("p-science"); if(!p) return; p.innerHTML="";
+  const S = DATA.science || {}; const items = S.items || [];
+  const head=document.createElement("div"); head.className="grp";
+  const h=document.createElement("h2"); h.textContent="🔬 Science · breakthroughs"; head.appendChild(h);
+  const badge=document.createElement("div"); badge.className="verified"; badge.textContent="✓ peer-reviewed / official sources"; head.appendChild(badge);
   const intro=document.createElement("p"); intro.className="empty";
-  intro.textContent="The standout physics, space & cosmology discoveries being discussed right now — dug out and explained" + (P.updated?" · updated "+new Date(P.updated).toLocaleString():"");
-  p.appendChild(intro);
-  if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="No discoveries loaded yet — tap Update."; p.appendChild(e); return; }
-  const g=group(null); items.forEach(it=>g.appendChild(card(it, P.updated))); p.appendChild(g);
+  intro.textContent="Every notable science breakthrough worth knowing — physics, space, biology, health, chemistry" + (S.updated?" · updated "+new Date(S.updated).toLocaleString():"");
+  head.appendChild(intro); p.appendChild(head);
+  if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="No breakthroughs loaded yet — tap Update."; p.appendChild(e); return; }
+  const gl=items.filter(x=>!/nothing new/i.test(x.t||"")).map(it=>({tag:it.tag||"Science", glance:it.glance||it.t}));
+  if(gl.length) p.appendChild(glanceBox(gl));
+  const g=group(null); items.forEach(it=>g.appendChild(card(it, S.updated))); p.appendChild(g);
 }
 function renderTop10(){
   const p = document.getElementById("p-top10"); if(!p) return; p.innerHTML="";
@@ -979,6 +1016,8 @@ function renderMind(){
   const intro=document.createElement("p"); intro.className="empty";
   intro.textContent="Daily breakthroughs in neuroscience, brain–computer interfaces, psychology & cognition, and consciousness.";
   p.appendChild(intro);
+  const glm=[]; (M.groups||[]).forEach(sec=>{ const first=(sec.items||[]).find(x=>!/nothing new|no new/i.test(x.t||"")); if(first) glm.push({tag:(sec.h||"").replace(/^[^\w]+\s*/,"").trim()||"Mind", glance:(first.t||"").slice(0,60)}); });
+  if(glm.length) p.appendChild(glanceBox(glm, "⚡ Mind in 30 seconds"));
   const groups=M.groups||[]; let any=false;
   groups.forEach(sec=>{ if(sec.items&&sec.items.length){ any=true; const g=group(sec.h); sec.items.forEach(it=>g.appendChild(card(it, M.updated))); p.appendChild(g); } });
   if(!any){ const e=document.createElement("p"); e.className="empty"; e.textContent="No items loaded yet — tap Refresh or check back after the next daily update."; p.appendChild(e); }
@@ -997,6 +1036,9 @@ function renderYouTube(){
   const p = document.getElementById("p-youtube"); p.innerHTML="";
   const intro=document.createElement("p"); intro.className="empty"; intro.textContent=DATA.youtube.count+" relevant videos in the last 24h, curated below.";
   p.appendChild(intro);
+  // ⚡ glance — one line per topic group
+  const gl=[]; (DATA.youtube.groups||[]).forEach(sec=>{ const its=sec.items||sec.keys||[]; const first=its.find(x=>!/nothing new/i.test(x.t||"")); if(first) gl.push({tag:(sec.h||"").replace(/^[^\w]+\s*/,"").trim()||"Videos", glance:(first.t||"").split(" — ").slice(-1)[0].slice(0,60)}); });
+  if(gl.length) p.appendChild(glanceBox(gl, "⚡ Today's videos in 30 seconds"));
   DATA.youtube.groups.forEach(sec=>{
     if(sec.type==="aim"){
       const g=group(null);
@@ -1026,22 +1068,39 @@ function renderElon(){
   if(news.length){ news.forEach(it=>ng.appendChild(card(it, DATA.elonNewsUpdated))); }
   else { const e=document.createElement("p"); e.className="empty"; e.textContent="No news loaded yet — tap Refresh."; ng.appendChild(e); }
   p.appendChild(ng);
-  const rg=group("𝕏 Every post · "+DATA.elon.day);
   const E=DATA.elon||{};
+  const rg=group("𝕏 Elon's posts · ranked by engagement · "+E.day);
   const note=document.createElement("p"); note.className="empty";
-  note.textContent="Each of Elon's "+ (E.count||(E.items||[]).length) +" posts, replies & reposts that day, with the exact time it went out (your local time). Tap a time to open the tweet.";
+  note.textContent="Every post, reply & repost from Elon that day, ordered most-talked-about first (by likes & views). Tap a post to open it.";
   rg.appendChild(note);
-  function fmtTime(iso){ const d=new Date(iso); if(isNaN(d.getTime())) return ""; return d.toLocaleTimeString(undefined,{hour:"numeric",minute:"2-digit"}); }
-  (E.items||[]).forEach(it=>{
-    const row=document.createElement("div"); row.className="tw";
+  const items=(E.items||[]).slice().sort((a,b)=>(b.likes||0)-(a.likes||0)||(b.views||0)-(a.views||0));
+  // ⚡ glance — the 3 biggest
+  if(items.length){
+    const box=document.createElement("details"); box.className="glance"; box.open=true;
+    let html='<summary>⚡ Elon in 30 seconds — top 3</summary><div class="glance-body">';
+    items.slice(0,3).forEach((it,i)=>{ html+=`<div class="glance-row"><span class="glance-tag">#${i+1}</span><span class="glance-items">${esc((it.s||it.t||"").slice(0,90))}</span></div>`; });
+    html+='</div>'; box.innerHTML=html; rg.appendChild(box);
+  }
+  function fmtTime(iso){ const d=new Date(iso); if(isNaN(d.getTime())) return ""; return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}); }
+  function nfmt(n){ n=+n||0; return n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(n>=1e4?0:1)+"K":""+n; }
+  items.forEach((it,i)=>{
+    const row=document.createElement("div"); row.className="tw"; if(isReadItem(it)) row.classList.add("read");
     const t=fmtTime(it.iso);
-    const timeHtml = t ? (it.href?`<a class="tw-time" href="${esc(it.href)}" target="_blank" rel="noopener">${esc(t)}</a>`:`<span class="tw-time">${esc(t)}</span>`) : "";
     const kindLbl = it.kind==="repost" ? "Repost" : (it.kind==="reply" ? "Reply" : "Post");
-    row.innerHTML = timeHtml +
+    const dot = impDotHtml(it.imp);
+    const eng = [];
+    if(it.likes!=null) eng.push(`❤️ <b>${nfmt(it.likes)}</b>`);
+    if(it.views!=null) eng.push(`👁 <b>${nfmt(it.views)}</b>`);
+    const engHtml = eng.length?`<span class="eng">${eng.join(" · ")}</span>`:"";
+    const openHref = it.href || "https://x.com/elonmusk";
+    row.innerHTML =
+      `<a class="tw-time" href="${esc(openHref)}" target="_blank" rel="noopener">#${i+1}</a>`+
       `<div class="tw-body">`+
-      `<p class="tw-ctx"><span class="tw-kind">${esc(kindLbl)}</span>${it.t?" · "+esc(it.t):""}</p>`+
+      `<p class="tw-ctx">${dot}<span class="tw-kind">${esc(kindLbl)}</span>${it.t?" · "+esc(it.t):""}</p>`+
       (it.s?`<p class="tw-said">${esc(it.s)}</p>`:"")+
+      `<p class="card-when">${engHtml}${t?` <span class="eng">· ${esc(t)}</span>`:""}</p>`+
       `</div>`;
+    row.querySelector("a").addEventListener("click",()=>{ if(!row.classList.contains("read")){ row.classList.add("read"); setRead(it,true); } });
     rg.appendChild(row);
   });
   const src=document.createElement("p"); src.className="src"; src.style.marginTop="10px";
@@ -1091,8 +1150,8 @@ function renderLoa(){
   p.appendChild(g);
 }
 const nav=document.getElementById("tabs");
-const PRIMARY = ["top10","briefing","physics","youtube","elon"];   // always-visible on the bar
-const RENDERERS = {top10:renderTop10, briefing:renderBriefing, physics:renderPhysics, youtube:renderYouTube, elon:renderElon, mind:renderMind, loa:renderLoa};
+const PRIMARY = ["news","science","youtube","elon","mind"];   // always-visible on the bar
+const RENDERERS = {news:renderNews, science:renderScience, youtube:renderYouTube, elon:renderElon, mind:renderMind, loa:renderLoa};
 const rendered = {};
 function ensureRendered(id){
   if(rendered[id]) return; rendered[id]=true;
@@ -1189,7 +1248,7 @@ document.getElementById("gratIn").addEventListener("keydown",e=>{ if(e.key==="En
 (function enforceFreshness(){
   var DAY_MS = 24*60*60*1000;
   var ref = Date.parse(DATA && DATA.updated); if(isNaN(ref)) ref = Date.now();
-  var PLACE = /nothing new|no news|no relevant|no notable|no major new|no items|not available|no entries/i;
+  var PLACE = /nothing new|nothing major|no news|no relevant|no notable|no major|no standout|no items|not available|no entries|no new video/i;
   function isPlace(it){ return !!it && PLACE.test(String((it&&(it.t||it.author))||"")); }
   function fresh(it){
     if(isPlace(it)) return true;
@@ -1199,11 +1258,11 @@ document.getElementById("gratIn").addEventListener("keydown",e=>{ if(e.key==="En
   }
   function filt(a){ return Array.isArray(a) ? a.filter(fresh) : a; }
 
-  if(DATA.topstories) DATA.topstories.items = filt(DATA.topstories.items);
-  if(DATA.news){ ["world","techai","business","india"].forEach(function(k){ if(DATA.news[k]) DATA.news[k]=filt(DATA.news[k]); }); }
-  if(Array.isArray(DATA.briefing)) DATA.briefing.forEach(function(s){ if(s) s.items=filt(s.items); });
+  // News: strict 24h within each subject category (keep placeholders).
+  if(DATA.news && Array.isArray(DATA.news.cats)) DATA.news.cats.forEach(function(c){ if(c) c.items=filt(c.items); });
   DATA.elonNews = filt(DATA.elonNews);
   if(DATA.mind && Array.isArray(DATA.mind.groups)) DATA.mind.groups.forEach(function(g){ if(g) g.items=filt(g.items); });
+  /* DATA.science is a curated best-of recent breakthroughs and DATA.elon is a daily ranked recap — both intentionally exempt from the 24h filter, like mindset. */
 
   if(DATA.youtube && Array.isArray(DATA.youtube.groups)){
     var groups=[];
@@ -1228,8 +1287,8 @@ document.getElementById("gratIn").addEventListener("keydown",e=>{ if(e.key==="En
 })();
 /*FRESH_GUARD_END*/
 renderSave(); renderGrat();   // tools lists are cheap; everything else renders lazily on first activation
-const savedTab = store.get("tab","top10");
-activate(TABS.some(t=>t.id===savedTab) ? savedTab : "top10");
+const savedTab = store.get("tab","news");
+activate(TABS.some(t=>t.id===savedTab) ? savedTab : "news");
 
 (function(){
   try{
