@@ -124,7 +124,7 @@ nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1p
       <h1>☀️ Daily Dashboard</h1>
       <div class="title-right">
         <span class="date" id="dateLbl"></span>
-        <button class="update-all" id="updateAll">↻ Update all</button>
+        <button class="update-all" id="updateAll">↻ Update</button>
       </div>
     </div>
     <div class="update-status" id="updateStatus"></div>
@@ -185,31 +185,27 @@ nav.tabs{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0 16px;border-bottom:1p
 <script>
 /*DATA_START*/
 const DATA = {
-  date: "Saturday, June 13, 2026",
-  updated: "2026-06-14T04:19:21",
+  date: "Sunday, June 14, 2026",
+  updated: "2026-06-14T11:45:00",
   topstories: {
-    updated: "2026-06-13T13:25:00",
+    updated: "2026-06-14T11:45:00",
     items: [
-      { t:"SpaceX pulls off the largest IPO in history", tag:"Business", seen:["News","Elon","YouTube"], url:"https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html",
-        s:"SpaceX (Nasdaq: SPCX) debuted June 12, opening at $150 versus a $135 price and closing about 19% higher near $161 — raising roughly $75B at a ~$1.77 trillion valuation, the biggest US listing ever." },
-      { t:"Elon Musk becomes the world's first (paper) trillionaire", tag:"Business", seen:["Elon"], url:"https://www.washingtonpost.com/technology/2026/06/11/elon-musk-is-worlds-first-trillionaire-paper-thanks-spacex-ipo/",
-        s:"The SpaceX listing pushed Musk's estimated net worth past $1 trillion — a first for any individual — driven by the new public market value of his SpaceX stake." },
-      { t:"US and Iran reported close to a deal to halt fighting and reopen the Strait of Hormuz", tag:"World", seen:["News","India"], url:"https://www.cnbc.com/2026/06/11/stock-market-today-live-updates.html",
-        s:"Reports say a draft agreement — easing some oil sanctions and reopening the Strait within 30 days — could be signed within days, though nothing is finalised and the situation stays fragile. Brent has climbed toward $95, lifting energy costs worldwide." },
-      { t:"Israeli strike on a Gaza City encampment kills several Palestinians", published:"2026-06-13", tag:"World", seen:["News"], url:"https://www.aljazeera.com/news/",
-        s:"At least seven Palestinians were killed and others injured when Israel's military bombed a tent encampment in Gaza City, according to local reports." },
-      { t:"OpenAI's GPT-5.5, GPT-5.4 and Codex go live on AWS", published:"2026-06-12", tag:"Tech & AI", seen:["News"], url:"https://aws.amazon.com/blogs/aws/get-started-with-openai-gpt-5-5-gpt-5-4-models-and-codex-on-amazon-bedrock/",
-        s:"OpenAI's frontier models and its Codex coding tools became generally available on Amazon Bedrock after OpenAI ended cloud exclusivity with Microsoft — a notable shift in who supplies enterprise AI." },
-      { t:"Anthropic ships its most powerful model yet, “Claude Fable”", published:"2026-06-13", tag:"Tech & AI", seen:["YouTube"], url:"https://www.youtube.com/watch?v=1PBRhm5ZnjU",
-        s:"After publicly urging labs to slow frontier development, Anthropic released a new Mythos-class model — about 2x the price of Opus 4.8 and free to try until June 22, per early hands-on coverage." },
-      { t:"Tesla's driverless Robotaxi fleet is just 59 vehicles", tag:"Tech & AI", seen:["Elon"], url:"https://www.bloomberg.com/news/features/2026-06-10/tesla-robotaxi-fleet-totals-just-59-vehicles-despite-musk-promises",
-        s:"A Bloomberg review of filings found Tesla runs only 59 Robotaxis across three Texas cities — far short of Musk's promise of robo-ride-hailing for roughly half the US, and well behind Waymo." },
-      { t:"Indian markets slide as Middle East tensions and crude weigh", published:"2026-06-12", tag:"India", seen:["News","India"], url:"",
-        s:"The Sensex fell toward 73,600 and the Nifty toward 23,100, with IT and banking the biggest drags, as the US-Iran conflict and Brent near $95 pressure India's heavy oil-import bill, the rupee and inflation." },
-      { t:"Stanford: blocking an aging protein regrew lost cartilage in mice", published:"2026-06-13", tag:"Science & Health", seen:["Briefing"], url:"https://www.sciencedaily.com/news/health_medicine/",
-        s:"Switching off an aging-related protein restored worn cartilage in old mice and helped prevent arthritis after knee injury — an early but promising lead for joint disease." },
-      { t:"A small weekly dose of strength training brings big long-term gains", published:"2026-06-13", tag:"Science & Health", seen:["Briefing"], url:"https://www.sciencedaily.com/news/health_medicine/",
-        s:"A 30-year study of 147,000+ people found just 90–120 minutes of strength training per week delivered some of the largest long-term health rewards." }
+      { t:"FIFA World Cup 2026 kicks off across North America", tag:"World", seen:["News"], published:"2026-06-14", url:"https://www.npr.org/sections/world/",
+        s:"The expanded 48-team tournament co-hosted by the US, Mexico and Canada opened its group stage; a Somali referee set to officiate was denied US entry, drawing criticism." },
+      { t:"South Korea sentences ousted President Yoon to 30 years", tag:"World", seen:["News"], published:"2026-06-14", url:"",
+        s:"Yoon Suk Yeol and his former defense minister were sentenced over a 2024 scheme to fly drones over Pyongyang to justify declaring martial law." },
+      { t:"US–Iran fighting intensifies as a peace deal wobbles", tag:"World", seen:["News"], published:"2026-06-14", url:"",
+        s:"A second day of intensified US–Iran strikes pushed the region closer to full-scale war, casting doubt on the draft deal to halt fighting and reopen the Strait of Hormuz." },
+      { t:"Google rolls out Gemini “M5” in beta", tag:"Tech & AI", seen:["News"], published:"2026-06-14", url:"",
+        s:"Google's new Gemini M5 (128B-parameter, NPU-accelerated) entered beta this week, claiming ~40% less thermal throttling than its predecessor." },
+      { t:"SpaceX completes the largest IPO in history", tag:"Business", seen:["News","Elon"], published:"2026-06-12", url:"https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-june-12-2026",
+        s:"SpaceX (Nasdaq: SPCX) debuted June 12 at $135, jumped ~20% and was valued near $1.77 trillion — the biggest IPO ever." },
+      { t:"IIT Madras showcases 15 startups at Bharat Innovates 2026", tag:"India", seen:["News","India"], published:"2026-06-14", url:"",
+        s:"IIT Madras is presenting 15 incubated deep-tech startups at Bharat Innovates 2026 in Nice, France (June 14–16)." },
+      { t:"Belfast: second night of unrest after a stabbing", tag:"World", seen:["News"], published:"2026-06-14", url:"",
+        s:"Protesters in Northern Ireland set fires and threw objects at police for a second night amid anti-immigrant violence following a stabbing." },
+      { t:"Zepto files updated DRHP for a ₹8,010 crore IPO", tag:"India", seen:["News","India"], published:"2026-06-13", url:"",
+        s:"Quick-commerce unicorn Zepto filed its updated draft prospectus to raise about ₹8,010 crore via a fresh issue and offer for sale." }
     ]
   },
   affirmations: [
@@ -384,30 +380,29 @@ const DATA = {
       ]}
     ]
   },
-  newsUpdated: "2026-06-13T18:35:00",
+  newsUpdated: "2026-06-14T11:45:00",
   news: {
     world: [
-      { t:"US and Iran reach a draft peace deal text, but no signing yet", published:"2026-06-12", url:"https://www.npr.org/sections/world/", s:"Negotiators, with Pakistani mediation, were reported to have agreed the text of a draft agreement on June 12 to halt the recent conflict, ease some oil sanctions and restore passage through the Strait of Hormuz. President Trump signalled an imminent signing, but Iranian officials called the reports preliminary and said nuclear issues need separate talks.", src:"AP / NPR / Bloomberg (reported; not finalised)" },
-      { t:"2026 FIFA World Cup kicks off across North America", published:"2026-06-12", s:"The expanded 48-team tournament, co-hosted by the US, Mexico and Canada, opened its group stage, with the US men's team playing its first match on June 12.", src:"AP / NPR" },
-      { t:"China detains Myanmar-focused think-tank head on espionage suspicion", published:"2026-06-13", url:"https://www.npr.org/sections/world/", s:"Beijing said it had detained Min Zin, who leads a think tank focused on Myanmar, on suspicion of espionage and endangering national security.", src:"AP / NPR" },
-      { t:"UK marks Trooping the Colour in London", published:"2026-06-13", s:"Crowds gathered in central London for Trooping the Colour, the annual military parade celebrating the King's official birthday.", src:"BBC / Euronews" }
+      { t:"FIFA World Cup 2026 kicks off across North America", published:"2026-06-14", url:"https://www.npr.org/sections/world/", s:"The 48-team tournament co-hosted by the US, Mexico and Canada began its group stage; a Somali referee was denied US entry.", src:"AP / NPR" },
+      { t:"South Korea sentences ousted President Yoon Suk Yeol to 30 years", published:"2026-06-14", url:"", s:"Yoon and his former defense minister were sentenced over a 2024 plot to fly drones over Pyongyang to justify martial law.", src:"AP / NPR" },
+      { t:"US–Iran strikes intensify, clouding peace hopes", published:"2026-06-14", url:"", s:"A second day of intensified strikes between the US and Iran pushed the Middle East closer to a full-scale war, even as a draft deal was reported.", src:"AP / NPR (developing)" },
+      { t:"Northern Ireland: second night of unrest in Belfast", published:"2026-06-14", url:"", s:"Protesters set small fires and threw bricks at police during a second night of anti-immigrant violence sparked by a stabbing.", src:"BBC / NPR" },
+      { t:"Pope Leo XIV's charter grounded; Spain's king lends his jet", published:"2026-06-14", url:"", s:"A technical fault grounded the pope's charter after his week-long visit to Spain; Spain's king offered his private jet to return him to Rome.", src:"AP" }
     ],
     techai: [
-      { t:"Apple unveils next-gen Apple Intelligence and a smarter Siri at WWDC 2026", published:"2026-06-09", url:"https://www.apple.com/newsroom/2026/06/apple-unveils-next-generation-of-apple-intelligence-siri-ai-and-more/", s:"At WWDC 2026 Apple showed a more capable, more personal Siri and new Apple Intelligence features alongside iOS 27 and updates across its platforms. It was Tim Cook's final keynote as CEO before becoming Executive Chairman; John Ternus is due to take over as CEO on Sept 1.", src:"Apple Newsroom / Bloomberg / TechCrunch" },
-      { t:"Google's Gemini 3.5 models keep rolling out across its AI products", url:"https://www.cnbc.com/2026/05/19/google-ai-ultra-gemini-spark-omni.html", s:"Google's newer Gemini 3.5 line — unveiled in May alongside the 'Gemini Spark' agent — continues expanding across AI Studio, Vertex AI and the Gemini app, with the lighter 3.5 Flash tier reported to beat last year's Pro models on several benchmarks.", src:"CNBC" },
-      { t:"AI labs line up for the public markets after SpaceX's debut", published:"2026-06-13", s:"OpenAI and Anthropic have both reportedly filed confidentially to go public, as investors weigh a first-mover advantage among frontier AI companies following SpaceX's blockbuster listing. Filings are confidential and terms could still change.", src:"CNBC / Bloomberg (reported)" }
+      { t:"Google rolls out Gemini “M5” in beta", published:"2026-06-14", url:"", s:"Google's Gemini M5 — a 128B-parameter, NPU-accelerated model — entered beta this week, claiming ~40% less thermal throttling.", src:"AI News" },
+      { t:"Frontier models keep leapfrogging on benchmarks", published:"2026-06-13", url:"", s:"OpenAI's GPT-5.5, Google's Gemini 3.5 Flash and Anthropic's Claude Opus 4.8 are trading new performance records.", src:"LLM-Stats" },
+      { t:"Cheaper AI compute: NVIDIA Cosmos 3 and Intel Xeon 6+", published:"2026-06-13", url:"", s:"New hardware and low-cost training runs (a 100B model trained at ~$1.25/hour) are pushing AI costs down sharply.", src:"AI News" }
     ],
     business: [
-      { t:"SpaceX completes the largest IPO in history", url:"https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html", s:"SpaceX (Nasdaq: SPCX) debuted June 12, priced at $135, opened at $150 and closed about 19% higher near $161 — lifting its market value above $2 trillion and making it one of the largest US public companies.", src:"CNBC / CNN" },
-      { t:"US stocks end the week higher on Middle East peace hopes", published:"2026-06-12", url:"https://www.cnbc.com/2026/06/02/stock-market-today-live-updates.html", s:"The Dow gained about 354 points (0.7%) to ~51,202 and the S&P 500 rose 0.5% to ~7,431 on Friday, helped by SpaceX's debut and optimism over a possible US-Iran deal; bank stocks led the gains.", src:"CNBC / Trading Economics" },
-      { t:"US inflation stays elevated as the Fed holds rates", published:"2026-06-11", url:"https://www.bls.gov/news.release/cpi.nr0.htm", s:"May CPI rose 0.5% on the month and 4.2% over the year, keeping pressure on the Federal Reserve, which has held its policy rate steady (reserve-balance rate 3.65%); markets still expect possible cuts later in 2026.", src:"US BLS / Federal Reserve" },
-      { t:"Oil climbs on Gulf tensions", published:"2026-06-12", s:"Crude prices rose on Middle East tensions and worries over the Strait of Hormuz, raising energy costs worldwide; a US-Iran deal could ease sanctions and reopen the strait.", src:"CNBC / Reuters" }
+      { t:"SpaceX completes the largest IPO in history", published:"2026-06-12", url:"https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-june-12-2026", s:"SpaceX (SPCX) debuted June 12 at $135, jumped ~20% and was valued near $1.77 trillion — the biggest IPO ever.", src:"TheStreet / CNBC" },
+      { t:"DoJ said to clear the Paramount–Warner Bros. Discovery merger", published:"2026-06-12", url:"", s:"The Justice Department was reported to have cleared the Paramount–WBD merger, removing a major antitrust hurdle.", src:"TheStreet" },
+      { t:"Markets steady as oil swings on Middle East risk", published:"2026-06-12", url:"", s:"US stocks were mixed to higher and oil prices gyrated as investors weighed US–Iran developments and the SpaceX debut.", src:"CNBC / Schwab" }
     ],
     india: [
-      { t:"Indian startup funding fell 26% in Q1 2026", published:"2026-06-10", url:"https://inc42.com/buzz/indian-startups-raise-2-3-bn-in-q1-2026-down-26-yoy/", s:"Startups raised about $2.3B in Q1 2026, down 26% year-on-year, with no $100M+ rounds for the first time since 2022; ecommerce was the most-funded sector at $536M.", src:"Inc42" },
-      { t:"India's startup IPO pipeline stays busy", published:"2026-06-10", url:"https://inc42.com/features/indian-startup-ipo-tracker-2026/", s:"About 75 IPOs have listed in India so far in 2026, with 24 startups having filed draft papers (DRHPs) with SEBI and more than 26 others preparing to list.", src:"Inc42" },
-      { t:"Sensex and Nifty under pressure from Middle East tensions and crude", published:"2026-06-12", s:"Indian equities opened weak on June 12 as the US-Iran conflict and a surge in crude weighed on sentiment, with the Nifty near 23,100 and persistent foreign-investor selling.", src:"Business Standard / Trading Economics" },
-      { t:"IIT Madras to showcase 15 deep-tech startups at Bharat Innovates 2026", published:"2026-06-13", s:"IIT Madras will lead two of 13 themes and present 15 incubated startups at Bharat Innovates 2026, a government-organised technology exhibition in Nice, France, on June 14-16.", src:"The Hindu" }
+      { t:"IIT Madras showcases 15 startups at Bharat Innovates 2026", published:"2026-06-14", url:"", s:"IIT Madras is presenting 15 incubated deep-tech startups at the Bharat Innovates 2026 exhibition in Nice, France (June 14–16).", src:"The Hindu" },
+      { t:"Zepto files updated DRHP for a ₹8,010 crore IPO", published:"2026-06-13", url:"", s:"The quick-commerce unicorn filed to raise about ₹8,010 crore via a fresh issue and an offer for sale.", src:"Business Standard" },
+      { t:"India startups: $8.09B raised across 806 rounds in 2026 so far", published:"2026-06-13", url:"", s:"India has seen about $8.09 billion raised across 806 equity rounds and 75 IPOs year-to-date in 2026.", src:"Tracxn / Inc42" }
     ]
   }
 };
@@ -467,22 +462,20 @@ function showAffirm(rand){
 document.getElementById("shuffleAff").onclick = ()=>showAffirm(true);
 showAffirm(false);
 
-const FEED_TASKS = ["daily-news-briefing","news-update","elon-news-update","youtube-subscriptions-catchup","mind-breakthroughs","top-stories-digest"];
+const REFRESH_TASK = "refresh-dashboard";
 document.getElementById("updateAll").onclick = async function(){
   const btn = this, status = document.getElementById("updateStatus");
   if(!(window.cowork && window.cowork.runScheduledTask)){
-    status.textContent = "Live refresh isn't available here — feeds still update automatically each morning and evening.";
+    status.textContent = "Live update works inside the Claude app — open the dashboard there and press Update.";
     return;
   }
   btn.disabled = true; const orig = btn.textContent; btn.textContent = "Updating…";
-  status.textContent = "Refreshing all feeds…";
-  const results = await Promise.allSettled(FEED_TASKS.map(t => window.cowork.runScheduledTask(t)));
-  const ok = results.filter(r => r.status === "fulfilled").length;
-  try{ await window.cowork.runScheduledTask("deploy-dashboard"); }catch(e){}
-  if(ok === 0){
-    status.textContent = "Couldn't start a refresh here — feeds still update automatically each morning and evening.";
-  } else {
-    status.textContent = "Refreshing "+ok+" feed"+(ok>1?"s":"")+" in the background — reload this view in a minute or two.";
+  status.textContent = "Updating in the background — this can take a minute or two. Reload this view when it's done.";
+  try{
+    await window.cowork.runScheduledTask(REFRESH_TASK);
+    status.textContent = "Update started — reload this view in a minute or two to see the latest.";
+  }catch(e){
+    status.textContent = "Couldn't start the update here — please try again in a moment.";
   }
   setTimeout(()=>{ btn.disabled = false; btn.textContent = orig; }, 6000);
 };
@@ -619,7 +612,7 @@ function renderBriefing(){
   const head = group("🗞️ Latest News");
   const badge=document.createElement("div"); badge.className="verified"; badge.textContent="✓ reputable sources, cross-checked"; head.appendChild(badge);
   const bar=document.createElement("div"); bar.className="refresh-bar";
-  bar.innerHTML='<span class="when" id="newsWhen"></span><button class="mini" id="newsRefresh">↻ Refresh news</button>';
+  bar.innerHTML='<span class="when" id="newsWhen"></span>';
   head.appendChild(bar);
   p.appendChild(head);
   const newsSecs=[["🌍 World",N.world],["💻 Tech & AI",N.techai],["📈 Business & Markets",N.business],["🇮🇳 India",N.india]];
@@ -642,7 +635,7 @@ function renderMind(){
   const M = DATA.mind || {};
   const badge=document.createElement("div"); badge.className="verified"; badge.textContent="✓ official sources, cross-verified"; p.appendChild(badge);
   const bar=document.createElement("div"); bar.className="refresh-bar";
-  bar.innerHTML='<span class="when" id="mindWhen"></span><button class="mini" id="mindRefresh">↻ Refresh</button>';
+  bar.innerHTML='<span class="when" id="mindWhen"></span>';
   p.appendChild(bar);
   const intro=document.createElement("p"); intro.className="empty";
   intro.textContent="Daily breakthroughs in neuroscience, brain–computer interfaces, psychology & cognition, and consciousness.";
@@ -688,7 +681,7 @@ function renderElon(){
   const badge=document.createElement("div"); badge.className="verified"; badge.textContent="✓ reputable sources, cross-checked";
   ng.appendChild(badge);
   const bar=document.createElement("div"); bar.className="refresh-bar";
-  bar.innerHTML='<span class="when" id="elonNewsWhen"></span><button class="mini" id="elonRefresh">↻ Refresh news</button>';
+  bar.innerHTML='<span class="when" id="elonNewsWhen"></span>';
   ng.appendChild(bar);
   const news = DATA.elonNews || [];
   if(news.length){ news.forEach(it=>ng.appendChild(card(it, DATA.elonNewsUpdated))); }
@@ -702,7 +695,7 @@ function renderElon(){
   const when=document.getElementById("elonNewsWhen");
   if(DATA.elonNewsUpdated){ when.textContent="Updated "+new Date(DATA.elonNewsUpdated).toLocaleString(); }
   const rb=document.getElementById("elonRefresh");
-  rb.onclick=async ()=>{
+  if(rb) rb.onclick=async ()=>{
     if(!(window.cowork && window.cowork.runScheduledTask)){ location.reload(); return; }
     rb.disabled=true; const o=rb.textContent; rb.textContent="Refreshing…";
     try{
