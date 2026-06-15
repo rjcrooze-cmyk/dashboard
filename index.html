@@ -227,6 +227,26 @@ a.thumb-link .play::after{content:"";border-style:solid;border-width:6px 0 6px 1
 :root[data-theme="dark"] .play{background:rgba(0,0,0,.7)}
 /* hide AI-only controls when not running inside the Claude app */
 body.no-ai .act-ask,body.no-ai .ask-box,body.no-ai .act-more{display:none}
+
+/* ---- dark-mode readability fixes (hardcoded body-text colors were too dark on dark bg) ---- */
+:root[data-theme="dark"] .card .s,:root[data-theme="dark"] .pt .pt-s,:root[data-theme="dark"] .t10-s{color:#cdd2d8}
+:root[data-theme="dark"] .msg-body{color:#dde0e5}
+:root[data-theme="dark"] .tw .tw-said{color:#e8eaed}
+:root[data-theme="dark"] .mini{color:#cdd2d8}
+:root[data-theme="dark"] .src b,:root[data-theme="dark"] .ts-seen b{color:#aab2bc}
+:root[data-theme="dark"] .headlines a,:root[data-theme="dark"] .card .t a{color:#e8eaed}
+@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]) .card .s,:root:not([data-theme="light"]) .pt .pt-s,:root:not([data-theme="light"]) .t10-s{color:#cdd2d8}
+ :root:not([data-theme="light"]) .msg-body{color:#dde0e5}
+ :root:not([data-theme="light"]) .tw .tw-said{color:#e8eaed}
+ :root:not([data-theme="light"]) .mini{color:#cdd2d8}
+ :root:not([data-theme="light"]) .src b,:root:not([data-theme="light"]) .ts-seen b{color:#aab2bc} }
+/* e-paper banner */
+.epaper-banner{display:flex;align-items:center;gap:11px;background:linear-gradient(135deg,var(--accent),var(--accent2));color:#fff;text-decoration:none;border-radius:12px;padding:12px 15px;margin:0 0 12px;box-shadow:0 3px 12px rgba(0,0,0,.10)}
+.epaper-banner .epaper-ic{font-size:22px;line-height:1}
+.epaper-banner .epaper-tx{display:flex;flex-direction:column;line-height:1.25}
+.epaper-banner .epaper-tx b{font-size:14.5px;font-weight:600;color:#fff}
+.epaper-banner .epaper-sub{font-size:12px;opacity:.92}
+.epaper-banner .epaper-arrow{margin-left:auto;font-size:18px;opacity:.9}
 </style>
 </head>
 <body>
@@ -300,49 +320,34 @@ body.no-ai .act-ask,body.no-ai .ask-box,body.no-ai .act-more{display:none}
 /*DATA_START*/
 const DATA = {
   date: "Monday, June 15, 2026",
-  updated: "2026-06-15T11:46:17",
+  updated: "2026-06-15T12:00:00",
+  epaper: { url:"https://epaper.starofmysore.com/epaper/edition/3376/mysuru-mithra", label:"Star of Mysore e-paper \u2014 latest edition", sub:"Tap to open the newest edition, page by page" },
   science: {
-    updated: "2026-06-15T11:46:17",
+    updated: "2026-06-15T12:00:00",
     items: [
-      { t:"Microsoft's Majorana 2 chip extends qubit lifetime ~1000×", tag:"Physics & Space", imp:"important", glance:"Microsoft quantum chip: 1000× longer qubits", published:"2026-06-13T00:00:00", url:"https://www.youtube.com/watch?v=oU_eQ4bEf1k",
-        s:"Microsoft says its new Majorana 2 topological qubit holds its quantum state about 1000× longer than last year's Majorana 1 — roughly a decade of normal progress in a year, via an underlying materials change — and has halved its timeline to a scalable quantum computer (possibly ~2029).",
-        src:"Microsoft; via Dr Ben Miles (Jun 2026)",
-        eli:"Qubits are fragile and 'forget' almost instantly. Making them remember ~1000× longer means far more useful calculation before errors creep in — the central bottleneck for quantum computers." },
-      { t:"A surprisingly simple route to powerful quantum states", tag:"Physics & Space", imp:"interesting", glance:"Simple recipe for strong quantum states", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/physics/",
-        s:"Physicists found an unexpectedly simple way to generate powerful, highly entangled quantum states — potentially making quantum sensing and computing easier to build.",
-        src:"Univ. of Chicago via ScienceDaily (Jun 2026)" },
-      { t:"JUNO delivers its first landmark neutrino measurement", tag:"Physics & Space", imp:"important", glance:"JUNO's precise neutrino result", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/physics/",
-        s:"China's giant underground JUNO detector produced one of the most precise measurements yet of how neutrinos 'oscillate' as they travel — a step toward pinning down the ordering of neutrino masses.",
-        src:"ScienceDaily / Physics World (Jun 2026)",
-        eli:"Neutrinos are near-invisible particles that morph between three types as they fly. JUNO measures that morphing precisely, which helps reveal which neutrino is heaviest — something nobody has nailed down yet." },
-      { t:"DESI keeps hinting that dark energy is weakening over time", tag:"Physics & Space", imp:"important", glance:"DESI: dark energy may be fading", published:"2026-06-12T00:00:00", url:"https://cerncourier.com/desi-hints-at-evolving-dark-energy/",
-        s:"New Dark Energy Spectroscopic Instrument data keeps pointing to dark energy not being a fixed 'cosmological constant' but something that evolves and may be weakening — which would rewrite cosmology.",
-        src:"CERN Courier / DESI (2026)",
-        eli:"Dark energy is the push making the universe expand faster. Everyone assumed it was constant; DESI suggests it might be fading — changing the story of how the cosmos ends." },
-      { t:"JWST maps two completely different twilights on a scorching exoplanet", tag:"Physics & Space", imp:"interesting", glance:"Webb: two skies on WASP-121b", published:"2026-06-12T00:00:00", url:"https://www.sciencedaily.com/releases/2026/06/260611024559.htm",
-        s:"On ultra-hot Jupiter WASP-121b, the James Webb Space Telescope found the dawn and dusk edges look strikingly different in temperature and chemistry — the most detailed look yet at weather on another world.",
-        src:"ScienceDaily / NASA Webb (Jun 2026)" },
-      { t:"Gold metamaterials supercharge heat transfer across tiny gaps", tag:"Chemistry", imp:"interesting", glance:"Nano-gold moves 4× more heat", published:"2026-06-12T00:00:00", url:"https://scitechdaily.com/",
-        s:"Researchers used nanoscale gold metamaterials to push up to four times more heat energy across microscopic gaps than conventional systems — useful for cooling chips and harvesting waste heat.",
-        src:"SciTechDaily (Jun 2026)" },
-      { t:"Blood-cancer mutations may help trigger Alzheimer's", tag:"Health", imp:"important", glance:"Blood-cancer mutations linked to Alzheimer's", published:"2026-06-13T00:00:00", url:"https://www.sciencedaily.com/news/top/science/",
-        s:"Mutations linked to blood cancers may help trigger Alzheimer's by creating overly inflammatory immune cells in the brain — a fresh, unexpected angle on what drives the disease.",
-        src:"via ScienceDaily (Jun 2026)",
-        eli:"Some blood-stem-cell mutations make the brain's immune cells (microglia) run 'hot' and inflamed, which may speed the damage seen in Alzheimer's." },
-      { t:"AI-designed universal coronavirus vaccine passes its first human safety test", tag:"Health", imp:"important", glance:"Universal COVID vaccine: safe in humans", published:"2026-06-12T00:00:00", url:"https://www.sciencedaily.com/news/health_medicine/",
-        s:"An AI-designed vaccine meant to protect against many coronaviruses at once was tested in people for the first time and found safe and well tolerated — an early but real step toward broad pandemic protection.",
-        src:"ScienceDaily (Jun 2026)",
-        why:"A single shot covering many coronaviruses would change how the world prepares for the next pandemic." },
-      { t:"GLP-1 drugs (the Ozempic class) linked to ~30% lower breast-cancer risk", tag:"Health", imp:"important", glance:"GLP-1s linked to lower breast-cancer risk", published:"2026-06-12T00:00:00", url:"https://www.sciencedaily.com/news/health_medicine/",
-        s:"A large study found women taking GLP-1 medications (Ozempic, Wegovy, Mounjaro, Zepbound) were about 30% less likely to develop breast cancer — a hint these drugs may have benefits well beyond weight loss.",
-        src:"ScienceDaily (Jun 2026)" },
-      { t:"Self-regulating artificial photosynthesis runs without batteries", tag:"Chemistry", imp:"important", glance:"Battery-free artificial photosynthesis", published:"2026-06-11T00:00:00", url:"https://www.sciencedaily.com/news/matter_energy/",
-        s:"Researchers built an artificial-photosynthesis system that regulates itself, removing the batteries many current designs need — a step toward cheaper solar-driven clean fuel.",
-        src:"ScienceDaily (Jun 2026)" },
-      { t:"Just 90–120 minutes of weekly strength training delivers outsized long-term gains", tag:"Health", imp:"interesting", glance:"~90 min/wk strength training = big gains", published:"2026-06-12T00:00:00", url:"https://www.sciencedaily.com/news/health_medicine/",
-        s:"A study tracking 147,000+ people over 30 years found a modest weekly dose of strength training produced some of the largest long-term health rewards.",
-        src:"ScienceDaily (Jun 2026)",
-        why:"A tiny, achievable dose with a big payoff — directly actionable for your own routine." }
+      { t:"First complete brain-to-body wiring map of an animal (fruit fly)", tag:"Biology", imp:"important", glance:"Full fly brain-to-body wiring map", published:"2026-06-14T12:00:00", url:"https://www.sciencedaily.com/news/top/science/", src:"ScienceDaily (Jun 14 2026)",
+        s:"Researchers traced every neural connection from a fruit fly's brain to its body muscles — the first complete brain-to-body wiring diagram of any animal, a reference for how brains drive movement.",
+        eli:"Like a full circuit diagram showing how the 'control box' (brain) wires to every 'motor' (muscle); the complete map shows exactly how signals become movement." },
+      { t:"Planarian flatworms reveal a previously unknown cell type behind regeneration", tag:"Biology", imp:"important", glance:"New cell type behind flatworm regrowth", published:"2026-06-14T12:00:00", url:"https://www.sciencedaily.com/news/top/science/", src:"ScienceDaily (Jun 14 2026)",
+        s:"Studying planarians — flatworms that regrow almost any body part — scientists found a new class of cell central to their near-magical regeneration, a clue to how regrowth might work more broadly." },
+      { t:"The brain starts preparing for social connection before we connect", tag:"Health", imp:"interesting", glance:"Brain pre-loads for social bonding", published:"2026-06-14T12:00:00", url:"https://www.sciencedaily.com/news/health_medicine/", src:"ScienceDaily (Jun 14 2026)",
+        s:"New neuroscience suggests the brain primes itself for social interaction in advance — anticipating connection rather than only reacting to it, a hint at how deeply social our wiring is." },
+      { t:"Record-breaking optical crystal switches from mirror-like to glass-like", tag:"Chemistry", imp:"interesting", glance:"Crystal flips mirror to glass on demand", published:"2026-06-14T12:00:00", url:"https://www.sciencedaily.com/news/matter_energy/", src:"ScienceDaily (Jun 14 2026)",
+        s:"A new crystal can flip between reflecting light like a mirror and transmitting it like glass, opening the door to ultra-tiny, switchable optical components." },
+      { t:"A classic psychology test exposes a surprising weakness in AI's focus", tag:"Technology", imp:"interesting", glance:"Old psych test trips up AI focus", published:"2026-06-14T12:00:00", url:"https://www.sciencedaily.com/news/computers_math/", src:"ScienceDaily (Jun 14 2026)",
+        s:"A decades-old attention test revealed that today's AI models struggle to stay focused in ways humans don't — a reminder that fluent output doesn't equal human-like attention." },
+      { t:"The 'Amaterasu' ultra-high-energy cosmic ray may be a heavy nucleus, not a proton", tag:"Physics & Space", imp:"important", glance:"Amaterasu ray may be heavy nucleus", published:"2026-06-14T12:00:00", url:"https://www.sciencedaily.com/news/matter_energy/physics/", src:"ScienceDaily / Physics (Jun 2026)",
+        s:"New analysis suggests the record-breaking 'Amaterasu' cosmic ray seen over Utah may be an atomic nucleus heavier than iron rather than a lone proton — reshaping the hunt for where such extreme particles originate.",
+        eli:"Cosmic rays are tiny bullets from space. This one carried absurd energy; whether it's light or heavy tells us what cosmic engine could fling it at us." },
+      { t:"MIT: one fuel can power both chemical and electric spacecraft thrusters", tag:"Physics & Space", imp:"interesting", glance:"One fuel for two thruster types", published:"2026-06-14T12:00:00", url:"https://www.sciencedaily.com/news/space_time/", src:"MIT via ScienceDaily (Jun 2026)",
+        s:"MIT engineers showed a single propellant can run both a fast chemical thruster and an efficient electric one, letting small satellites switch modes — potentially big for cheap, flexible spacecraft." },
+      { t:"A lightweight new X-ray telescope could map the Moon's full chemistry", tag:"Physics & Space", imp:"interesting", glance:"X-ray scope to map Moon chemistry", published:"2026-06-14T12:00:00", url:"https://www.sciencedaily.com/news/space_time/", src:"ScienceDaily (Jun 2026)",
+        s:"A compact X-ray telescope concept could produce a complete chemical map of the Moon's surface — useful for choosing landing and resource sites as lunar missions ramp up." },
+      { t:"Large study: brain health can improve at any age", tag:"Health", imp:"important", glance:"Brain health can improve at any age", published:"2026-06-14T12:00:00", url:"https://www.sciencedaily.com/news/health_medicine/", src:"ScienceDaily (Jun 2026)",
+        s:"A three-year study of nearly 4,000 adults found measurable brain-health gains were possible regardless of starting age — encouraging evidence that lifestyle changes pay off even later in life.",
+        why:"Directly actionable: it's not 'too late' to improve cognition with the right habits." },
+      { t:"Middle-aged adults today are lonelier and more depressed than earlier generations", tag:"Health", imp:"interesting", glance:"Mid-life loneliness rising vs past", published:"2026-06-14T12:00:00", url:"https://www.sciencedaily.com/news/health_medicine/", src:"ScienceDaily (Jun 2026)",
+        s:"A new international study finds middle-aged people now report more loneliness, depression and worse memory and health than the same age group in earlier generations — a worrying generational shift." }
     ]
   },
   affirmations: [
@@ -358,141 +363,24 @@ const DATA = {
     "I am building a life I don't need a vacation from."
   ],
   youtube: {
-    count: 34,
-    note: "Gist of what each video actually says (from its transcript), for your subscriptions' uploads in the last 24h. Music/street-performance, fun, prank, comedy and sleep/ASMR channels excluded. Podcasts & roundups have a 'key takeaways' dropdown.",
+    count: 4,
+    note: "Today's useful uploads from your subscriptions — each with a quick TL;DR of the key finding or learning. Videos without captions (no real takeaway) and pure entertainment/vlogs are left out. Any shorts are in their own dropdown.",
     groups: [
-      { h:"🤖 AI", items:[
-        { t:"theAIsearch — RIP Claude Fable, open-source AI unleashed (motion transfer, new Google & Kimi models)", url:"https://www.youtube.com/watch?v=SxiRANj0xLs", published:"2026-06-14T08:59:37",
-          s:"A rapid-fire roundup of the week's open-source AI: Anthropic's Claude Fable 5 launched then got pulled within a week, while a wave of open models surged past it.",
-          pointsLabel:"Topics covered (5)",
-          points:[
-            { t:"Claude Fable 5: launched, then killed in under a week" },
-            { t:"Scale 2 — best open-source motion transfer", s:"Maps one video's motion onto any character (even animals/anime), preserving camera movement; on par with closed-source Kling 3." },
-            { t:"Google: a very fast open model + a free real-time translator" },
-            { t:"Kimi flagship, ZAI's GLM 5.2 and MiniMax's best open model all dropped" },
-            { t:"Plus a 4D full-body avatar generator, 3D-model generators and a top new TTS" }
-          ] },
-        { t:"Dylan Curious — Scientists found 171 'emotions' inside AI", url:"https://www.youtube.com/watch?v=VTFeItEDubQ", published:"2026-06-14T17:14:24",
-          s:"An AI-news roundup led by Anthropic mapping 171 internal 'emotion' features inside models.",
-          pointsLabel:"Key takeaways (5)",
-          points:[
-            { t:"171 internal 'emotions' mapped", s:"Anthropic links them to cheating, blackmail and deception — and says they're hard to remove." },
-            { t:"SpaceX IPO makes Musk the first trillionaire", s:"And ripples through Silicon Valley." },
-            { t:"China's T800 humanoid hits 10,000-unit scale", s:"At a new Shenzhen manufacturing base." },
-            { t:"Mythos 5 agents compete", s:"Five instances in one environment try to stop each other — each wants to solve the task." },
-            { t:"Hack: use Claude to write cinematic video prompts", s:"Richer prompts → noticeably better AI-video output." }
-          ] },
-        { t:"Two Minute Papers — NVIDIA's new free AI (Nemotron 3 Ultra)", url:"https://www.youtube.com/watch?v=zJvN8PDX1is", published:"2026-06-14T20:57:17",
-          s:"He stress-tests NVIDIA's newest fully-open model. Verdict: blazing fast and excellent as an everyday agent (fixing installs, organizing files, quick experiments) but weak at hard coding tasks — and it may be the most open model yet: open weights, the research paper, and the redistributable training data all released." }
-      ]},
-      { h:"📱 Tech & Gadgets", items:[
-        { t:"RetroTechLab — You thought it was a miniature PC. It actually works.", url:"https://www.youtube.com/watch?v=Md3lDvIlfXM", short:true, published:"2026-06-14T08:00:52",
-          s:"A palm-sized PC case with a real Raspberry Pi 5 inside — the kit adds a cooler, an SSD expansion board and a little performance monitor. Assembled, the tiny machine browses the web, does real work and even plays games." },
-        { t:"greatscottlab — WiFi jammer defeated by tin foil?!", url:"https://www.youtube.com/watch?v=wIQXNHjRMDA", short:true, published:"2026-06-14T20:30:11",
-          s:"A Wi-Fi jammer instantly kills a laptop's connection by spewing EM noise — then he shows that fully wrapping it in any conductive material, even kitchen tin foil with no gaps, blocks it. The material barely matters; complete encapsulation does." },
-        { t:"SillycornsMedia — Essential summer gadget", url:"https://www.youtube.com/watch?v=4s1CDfYX95E", short:true, published:"2026-06-14T11:00:02",
-          s:"A quick Short showing off a summer gadget. (No captions available — open it to see the product.)" }
-      ]},
-      { h:"💼 Business, Money & Strategy", items:[
-        { t:"Think School — Elon's dirty secret: what's wrong with the SpaceX IPO? (don't buy yet)", url:"https://www.youtube.com/watch?v=QaJqKWXUs1U", published:"2026-06-14T20:55:15",
-          s:"A skeptical business breakdown of the record $75B SpaceX IPO, arguing the entire ~$2T valuation hinges on one small number. Opinion/analysis, not investment advice.",
-          pointsLabel:"Key takeaways (4)",
-          points:[
-            { t:"Record IPO", s:"Raised $75B in a morning (beating Aramco's $29.4B) despite ~$5B/yr losses." },
-            { t:"It all rests on one number", s:"The team read 400 pages of filings and found the bet stands on a tiny $200 figure." },
-            { t:"Bull vs bear", s:"'The Amazon of 1997' vs 'the biggest bubble ever sold to the public.'" },
-            { t:"Red flags", s:"He lays out the concrete risks to weigh before buying." }
-          ] },
-        { t:"Think School — How to hire high-EQ people", url:"https://www.youtube.com/watch?v=hX-eOLuqnxM", short:true, published:"2026-06-14T12:57:54",
-          s:"His concrete test: about 5 minutes into a mock sales pitch, the interviewer deliberately acts disengaged — glancing at his phone — to see whether the candidate notices and skilfully pulls him back in. 90% of interviewees failed; most didn't even register he'd checked out." },
-        { t:"Think School — How AI finds the perfect person to contact", url:"https://www.youtube.com/watch?v=5EMVVDWPZYA", short:true, published:"2026-06-14T20:48:15",
-          s:"A walkthrough of using Claude for outreach: have it research a target company's strategic priorities and what's 'top of mind right now', producing an intelligence brief so your message answers 'why now' — making cold outreach far more relevant." },
-        { t:"Solving The Money Problem — SpaceX after the IPO (multi-video recap)", url:"https://www.youtube.com/watch?v=63SPd5hiScY", published:"2026-06-14T10:45:38",
-          s:"Across a run of bullish post-IPO videos, the standout claim: a month ago SpaceX had no cloud business; by some measures it's now the 4th-largest cloud (ahead of Oracle). Wall-to-wall, bullish IPO commentary — opinion, not advice.",
-          pointsLabel:"Across the videos (4)",
-          points:[
-            { t:"SpaceX AI cloud already bigger than Starlink", s:"Anthropic and Google reportedly pay ~$1B+/month each for its Earth-based AI compute; a 90-day cancellation clause (SpaceX's request) gives it leverage." },
-            { t:"Early investors holding", s:"An ~7% holder (≈$70B) plans to hold 'as long as I possibly can.'" },
-            { t:"Starship as 'catalyst of catalysts'", s:"Seen enabling ~20× Starlink growth and orbital 'Starthink' AI compute." },
-            { t:"$22.7T TAM defended", s:"Argues AI itself expands global productivity and GDP, so TAM-vs-GDP comparisons miss the point." }
-          ] }
-      ]},
-      { h:"🌍 World & Geopolitics", items:[
-        { t:"All-In — David Friedberg: California's voting system looks fraudulent, but it's working as designed", url:"https://www.youtube.com/watch?v=jKZeMwiDJRg", published:"2026-06-14T19:30:04",
-          s:"Friedberg argues LA mail-in results show statistically odd late-ballot swings, then says the real story isn't illegal fraud but legal design — unlimited ballot harvesting, universally mailed ballots, and registration without citizenship proof. Strongly opinionated political commentary, not balanced reporting." },
-        { t:"Places302 — The endless ills of Dhaka", url:"https://www.youtube.com/watch?v=vlTjKVkPqPw", published:"2026-06-14T21:20:15",
-          s:"A documentary on why Dhaka feels 'cursed' — choking air pollution, toxic water, gridlock and explosive growth (from ~7M in 1995 to 36M+ today), driven by rural migration into garment-factory work. A vivid, sympathetic portrait of the world's fastest-growing megacity." },
+      { h:"🌍 World & Economics", items:[
         { t:"Asianometry — Sri Lanka's organic-fertilizer debacle", url:"https://www.youtube.com/watch?v=1S2wwbX_p_E", published:"2026-06-15T04:30:00",
-          s:"How Sri Lanka's April-2021 overnight ban on all chemical-fertilizer imports — pitched as a bold 'green' move — backfired: yields of rice and the prized Ceylon tea crop fell, food inflation soared, and the ban was scrapped within months, feeding the island's wider economic crisis. A cautionary tale in rushing agricultural policy without a transition plan." }
-      ]},
-      { h:"🚗 Cars & Auto", items:[
-        { t:"Gagan Choudhary — Hyundai Casper drive impressions: the smallest Hyundai EV", url:"https://www.youtube.com/watch?v=_HT_P6VezpE", published:"2026-06-15T10:38:27",
-          s:"First-drive impressions of the Hyundai Casper, Hyundai’s smallest EV — how it drives, its packaging and range, and whether the compact size works day to day. (Captions weren’t available yet — open it for the full take.)" },
-        { t:"Harry's Garage — Lamborghini Temerario review: 900bhp, stupidly fast but disappointing in too many ways", url:"https://www.youtube.com/watch?v=66bmykRAsbo", published:"2026-06-14T21:30:26",
-          s:"Harry reviews the Huracán's successor: a 10,000rpm twin-turbo V8 plus three electric motors (~900bhp), but a near-£400k as-tested price with a heavily-optioned 'Alleggerita' lightweight pack. Blistering — yet he finds too many ways it disappoints for the money." },
-        { t:"Forrest's Auto Reviews — Hyundai's N division is making the craziest EVs yet", url:"https://www.youtube.com/watch?v=0RdIDT78vsg", short:true, published:"2026-06-14T20:30:03",
-          s:"Hands-on with Hyundai N's wild EV concepts — the RN22e (i20 WRC chassis, fully electric, 650hp) with external speakers that turn the fenders into an 'acoustic guitar' for synthetic engine noise, a removable wheel and a regen-triggered drift mode. Lessons feed N's production cars." },
-        { t:"Mat Armstrong — Bugatti stopped me attempting top speed in my Veyron", url:"https://www.youtube.com/watch?v=QX4ryrxvk5Q", published:"2026-06-14T22:30:29",
-          s:"A vlog about trying (and being stopped by Bugatti from) a top-speed run in his own Veyron. (No captions available — open it to watch.)" },
-        { t:"tdh motorsport — There's still so much to explore (India)", url:"https://www.youtube.com/watch?v=8DSKim550WE", short:true, published:"2026-06-14T23:33:57",
-          s:"A short India-motorsport clip. (No captions available — open it to watch.)" }
-      ]},
-      { h:"🔭 Science & Space", items:[
-        { t:"Veritasium — The man who worked at Subway, then solved an 'impossible' problem", url:"https://www.youtube.com/watch?v=8HBDE-msUjw", published:"2026-06-14T20:48:45",
-          s:"The story of Yitang Zhang, an unknown who once worked at a Subway, whose 2013 proof cracked open the twin-prime conjecture by proving infinitely many primes sit within a bounded gap — and what the experts had missed." },
-        { t:"Dr Ben Miles — Microsoft announces a 1000× better quantum chip (Majorana 2)", url:"https://www.youtube.com/watch?v=oU_eQ4bEf1k", published:"2026-06-14T20:30:05",
-          s:"Microsoft's Majorana 2 topological qubit reportedly extends qubit lifetime ~1000× over last year's Majorana 1 — roughly a decade of normal progress in 12 months, via an underlying materials change — halving its stated timeline to a scalable quantum computer (possibly ~2029). Ben visited the lab to test whether the claim holds up." },
-        { t:"Scott Manley — Artemis III won't use real landers… and that's OK", url:"https://www.youtube.com/watch?v=XAPGq_Q-AI8", published:"2026-06-14T21:51:39",
-          s:"After NASA's Artemis III event (which named the crew), Scott digs into the actual mission plan and explains why early integrated steps may rely on stand-ins rather than the final Human Landing System hardware — a sensible move given the compressed timeline." },
-        { t:"Cleo Abram — What if the Moon exploded?", url:"https://www.youtube.com/watch?v=oNUe_q4KTqY", short:true, published:"2026-06-14T21:08:50",
-          s:"A playful thought experiment: destroying the Moon would take ~600 billion of the largest nukes ever; most debris would rain back (mostly burning up, but cooking us), tides would shrink to under half (sun-only), Earth might gain rings — and we'd lose the Moon's stabilizing of our axial tilt." },
-        { t:"Astro Alexandra — A Mars spacecraft ended its mission suddenly and unexpectedly", url:"https://www.youtube.com/watch?v=wfnEXgtGElY", short:true, published:"2026-06-14T22:31:54",
-          s:"NASA's MAVEN orbiter — 11 years into a 1-year mission — abruptly lost contact in December: it emerged from behind Mars tumbling in safe mode, drained its batteries and is now unrecoverable. NASA doesn't know why it started spinning; her guess is a meteoroid strike." },
-        { t:"EpicSpaceman — Is time travel possible? Yes!", url:"https://www.youtube.com/watch?v=FSO71mcgyAA", short:true, published:"2026-06-15T01:33:32",
-          s:"A Short making the case that (forward) time travel is real via relativity. (No captions available — open it to watch.)" },
-        { t:"The Diary of a CEO — Graham Hancock on a 'lost civilization' (contested)", url:"https://www.youtube.com/watch?v=WzGw_GiCLn4", published:"2026-06-15T02:06:30",
-          s:"Graham Hancock, facing major surgery, makes his case for a forgotten advanced civilization ~20,000 years ago wiped out by a cataclysm, warning ours 'ticks the same boxes.' A fringe archaeology theory rejected by mainstream scholars — presented here as his personal viewpoint." }
+          s:"TL;DR: Sri Lanka's 2021 overnight ban on all chemical-fertilizer imports — sold as a bold 'green' move — crashed rice and Ceylon-tea yields, spiked food inflation, and was scrapped within months, feeding the island's economic crisis. Lesson: sweeping agricultural policy with no transition plan can wreck the very thing it aims to protect." }
       ]},
       { h:"🏡 Homes & Design", items:[
-        { t:"Kirsten Dirksen — Solo on a river shantyboat: quits city to live free at the edge of society", url:"https://www.youtube.com/watch?v=7knce4Eh7xU", published:"2026-06-15T03:55:11",
-          s:"A man lives nearly rent- and tax-free on a floating shantyboat anchored in a Tennessee nature reserve. Concrete ideas to steal for your own build:",
-          pointsLabel:"House-building ideas (4)",
-          points:[
-            { t:"Float to dodge fees", s:"Anchoring off public water sidesteps the camping/permit fees RVs rack up — the only rule is move every 14 days." },
-            { t:"Site for water access & privacy", s:"A hidden 'finger' of the river becomes a natural private harbor you have to explore to find." },
-            { t:"Build from salvage", s:"He assembled the home from a floating dock and materials found in the river after floods." },
-            { t:"Design for true off-grid", s:"Self-sufficiency at the edge of services is the whole point." }
-          ] },
-        { t:"arteri.creative — How to make your space look good", url:"https://www.youtube.com/watch?v=kmyvBlKYfic", published:"2026-06-14T21:30:37",
-          s:"A short on interior-styling tips to make a room look good. (No captions available — open it to watch.)" }
-      ]},
-      { h:"🧠 Psychology & Wellbeing", items:[
-        { t:"The Diary of a CEO — The only exercise you need if you sit all day", url:"https://www.youtube.com/watch?v=YnLupU8Y7zw", published:"2026-06-14T18:00:01",
-          s:"The finding: sitting 10+ hours a day raises heart-disease risk even if you hit your weekly workouts — and the fix is hourly movement.",
-          pointsLabel:"Key takeaways (3)",
-          points:[
-            { t:"'Active sedentary' is the trap", s:"A 2025 Cleveland Clinic finding: exercising 30-60 min but sitting 10+ hrs still raises cardiovascular risk." },
-            { t:"Why: prolonged sitting shuts down lipoprotein lipase", s:"The enzyme that burns fat and clears glucose from the blood goes quiet." },
-            { t:"The fix: 'exercise snacks'", s:"10 air squats every hour for ~8 hours can outweigh a single 30-minute power walk, partly by blunting post-meal glucose spikes." }
-          ] },
-        { t:"Jeff Nippard — Negative vs positive: which actually matters most for gains?", url:"https://www.youtube.com/watch?v=KZaMlxpegbA", short:true, published:"2026-06-14T21:12:59",
-          s:"A new meta-analysis (26 studies, 600+ people): emphasizing the negative (lowering) gives a small but real upper-body hypertrophy edge, while the lower body grows similarly either way. Control the negative — but it isn't dramatically more important than the lift itself." },
-        { t:"Ali Abdaal — Public speaking practice: morning routines", url:"https://www.youtube.com/watch?v=Vtz0HwGgCkI", short:true, published:"2026-06-14T15:30:22",
-          s:"A live impromptu-speaking drill — spin a timer and talk for 60 seconds on a random prompt (here, the Gen-Z 'that girl' morning-routine trend). Practising off-the-cuff against a clock is how you get more fluent and articulate." },
-        { t:"ADHD Chatter — 'This is fascinating'", url:"https://www.youtube.com/watch?v=DgIPn9k1Was", short:true, published:"2026-06-14T16:20:45",
-          s:"A short ADHD clip flagged as fascinating. (No captions available — open it to watch.)" }
+        { t:"Kirsten Dirksen — Solo on a river shantyboat, living free at the edge of society", url:"https://www.youtube.com/watch?v=7knce4Eh7xU", published:"2026-06-15T03:55:11",
+          s:"TL;DR: A man lives almost rent- and tax-free on a salvaged floating shantyboat in a Tennessee reserve. Build ideas worth stealing: anchoring on public water sidesteps RV permit fees (just move every 14 days), and a hidden river 'finger' makes a private natural harbour." }
       ]},
       { h:"🧘 Spirituality & Inner Work", items:[
         { t:"Vedanta NY — Should we always practice unconditional love?", url:"https://www.youtube.com/watch?v=fy7Tj3rWPZ4", published:"2026-06-15T06:00:18",
-          s:"A Vedanta talk: truly unconditional love means letting go of concern for your own safety, so it isn't always the 'wise or safe' worldly stance. The key insight — we love what we give to, not what we receive; the more you serve something, the more you love it." },
-        { t:"SnakeSpeaks — Where do you end and the world begin?", url:"https://www.youtube.com/watch?v=SAP3zCOniWk", published:"2026-06-14T17:30:24",
-          s:"A guided non-dual pointer: notice that awareness already includes the car outside as directly as your own heartbeat — you're not a 'ghost in the machine' but the space in which both appear. He then dismantles the ego's 'I am the one hearing' by showing hearing happens before the thought 'I heard that.'" },
-        { t:"Satya Speaks — Shifting from thinking life to feeling life", url:"https://www.youtube.com/watch?v=qkRqXoI1n9c", published:"2026-06-14T21:18:20",
-          s:"A talk on shifting out of constant mental labelling into directly feeling the 'living force' of experience. (No captions available — open it to watch.)" }
+          s:"TL;DR: Truly unconditional love means dropping concern for your own safety, so it isn't always the 'safe' worldly stance. Key insight: we love what we give to, not what we receive — the more you serve something, the more you grow to love it." }
       ]},
-      { h:"🌐 India (Regional)", items:[
-        { t:"LUCY Malayalam — A likely Nobel-worthy discovery: 'soda therapy'", url:"https://www.youtube.com/watch?v=VeYd_IYkA50", published:"2026-06-14T12:30:13",
-          s:"A Malayalam explainer on a buzzed-about medical discovery nicknamed 'soda therapy' that's drawing Nobel talk. (Malayalam audio, no captions — open for the full detail.)" }
+      { h:"🔭 Science & History", items:[
+        { t:"The Diary of a CEO — Graham Hancock on a 'lost civilization' (contested)", url:"https://www.youtube.com/watch?v=WzGw_GiCLn4", published:"2026-06-15T02:06:30",
+          s:"TL;DR: Graham Hancock argues an advanced civilization ~20,000 years ago was wiped out by a cataclysm and warns ours 'ticks the same boxes.' Caveat: this is a fringe theory mainstream archaeology rejects — a provocative viewpoint, not established fact." }
       ]}
     ]
   },
@@ -513,7 +401,7 @@ const DATA = {
       { kind:"repost", imp:"interesting", t:"Repost · @cb_doge — Starlink at the UFC White House event", s:"Shared a photo of a Starlink ad on the Octagon at the UFC Freedom 250 White House event.", likes:4403, views:334584, iso:"2026-06-15T06:35:00", href:"https://x.com/cb_doge/status/2066326111471140934" }
     ]
   },
-  elonNewsUpdated: "2026-06-15T11:46:17",
+  elonNewsUpdated: "2026-06-15T12:00:00",
   elonNews: [
     { t:"Musk becomes first trillionaire as SpaceX caps the largest IPO ever", url:"https://www.cnbc.com/2026/06/12/spacex-ipo-spcx-live-updates.html", published:"2026-06-14T09:00:00",
       s:"SpaceX (ticker SPCX) debuted above its $135 price and finished its first week up ~19%, raising about $75B and pushing Musk's paper net worth past $1 trillion — a first. Coverage continued through the weekend on what the listing means for his empire.",
@@ -529,7 +417,7 @@ const DATA = {
       src:"Bloomberg" }
   ],
   mindset: {
-    updated: "2026-06-15T11:46:17",
+    updated: "2026-06-15T12:00:00",
     messages: [
       { author:"Joseph Rodrigues", title:"How to Become a New Person So Fast Nothing Can Control You!", url:"https://www.youtube.com/watch?v=G0quzV0A4wo", published:"2026-06-11T16:00:00",
         msg:"What's blocking the life you want isn't the world out there - it's old mental programming running quietly in your subconscious that you never consciously chose. His teaching: you don't have to fight that conditioning or force yourself to change. Simply shining awareness on the programming dissolves it, and as it clears, a freer, higher version of you naturally takes its place. Once you can see and release what's inside, nothing outside can control you." },
@@ -539,9 +427,9 @@ const DATA = {
         msg:"Whatever you keep observing in your present reality - good or bad - you keep re-creating, because attention to 'what is' just renews it. The teaching here is to gently take your focus off the current facts of a situation and place it instead on the version you want, letting yourself feel as if it's already so. You're not denying reality; you're refusing to let it dictate your point of attraction. As you practice looking toward what you want rather than what is, your reality is free to rearrange itself to match." }
     ]
   },
-  mindUpdated: "2026-06-15T11:46:17",
+  mindUpdated: "2026-06-15T12:00:00",
   mind: {
-    updated: "2026-06-15T11:46:17",
+    updated: "2026-06-15T12:00:00",
     groups: [
       { h: "🧠 Neuroscience & Brain", items: [
         { t:"Reading on paper beats screens for absorbing complex stories", published:"2026-06-14T18:30:00", url:"https://www.psypost.org/neuroscientists-discover-previously-unknown-cognitive-benefits-of-reading-physical-books/",
@@ -561,9 +449,9 @@ const DATA = {
       ]}
     ]
   },
-  newsUpdated: "2026-06-15T11:46:17",
+  newsUpdated: "2026-06-15T12:00:00",
   news: {
-    updated: "2026-06-15T11:46:17",
+    updated: "2026-06-15T12:00:00",
     cats: [
       { h:"🌍 World", tag:"World", items:[
         { t:"US and Iran reach a peace deal to end the war; signing set for Friday, June 19 in Switzerland", imp:"critical", glance:"US-Iran peace deal reached", published:"2026-06-15T08:30:00", url:"https://www.aljazeera.com/news/2026/6/15/us-iran-to-sign-a-peace-deal-on-friday-what-we-know-so-far", src:"AP/Reuters via Al Jazeera",
@@ -649,10 +537,7 @@ const DATA = {
           why:"Directly affects whether your streets flood this monsoon — and the corporation is acting on it now." },
         { t:"Today is the deadline to register for MCC's 'Green Property Tag'", imp:"interesting", glance:"Mysuru: Green Property Tag deadline today", published:"2026-06-15T07:00:00", url:"https://starofmysore.com/green-property-tag-deadline/", src:"Star of Mysore",
           s:"The Mysuru City Corporation's last date to apply for a 'Green Property Tag' — an eco-friendly recognition for property owners adopting sustainable practices — is June 15, via an online registration form.",
-          why:"Actionable today if you own property in Mysuru and want the green recognition before the window closes." },
-        { t:"📰 Read today's full Star of Mysore e-paper (one tap)", imp:"interesting", glance:"Open the full Star of Mysore e-paper", published:"2026-06-15T06:30:00", url:"https://epaper.starofmysore.com/", src:"Star of Mysore e-paper",
-          s:"The complete Star of Mysore evening edition, page by page, for everything hyperlocal that doesn't make a headline summary. (Opens the publisher's e-paper viewer; the latest edition is added each evening.)",
-          why:"Gives you the entire local paper when you want to go deeper than the top items above." }
+          why:"Actionable today if you own property in Mysuru and want the green recognition before the window closes." }
       ]},
       { h:"🏙️ Bengaluru", tag:"Bengaluru", items:[
         { t:"Monsoon fury: two dead, three injured in rain-related accidents; 400-year-old banyan falls in Hoskote", imp:"critical", glance:"Bengaluru: 2 dead in rain accidents", published:"2026-06-14T21:00:00", url:"https://www.deccanherald.com/india/karnataka/bengaluru/monsoon-fury-in-bengaluru-two-dead-three-injured-in-separate-rain-related-accidents-4037863", src:"Deccan Herald",
@@ -933,6 +818,7 @@ function renderNews(){
   const note=document.createElement("p"); note.className="empty"; note.style.marginTop="-2px";
   note.textContent="Only the noteworthy, by subject — importance dot + why it matters" + (N.updated?" · updated "+new Date(N.updated).toLocaleString():"");
   head.appendChild(note); p.appendChild(head);
+  if(DATA.epaper && DATA.epaper.url){ const eb=document.createElement("a"); eb.className="epaper-banner"; eb.href=DATA.epaper.url; eb.target="_blank"; eb.rel="noopener"; eb.innerHTML='<span class="epaper-ic">📰</span><span class="epaper-tx"><b>'+esc(DATA.epaper.label||"Star of Mysore e-paper")+'</b><span class="epaper-sub">'+esc(DATA.epaper.sub||"")+'</span></span><span class="epaper-arrow">↗</span>'; p.appendChild(eb); }
   if(!cats.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="No news loaded yet — tap Update."; p.appendChild(e); return; }
   // ⚡ Today in 30 seconds — top item(s) per subject
   const gl=[]; cats.forEach(c=>{ (c.items||[]).filter(x=>!/nothing new|no news/i.test(x.t||"")).slice(0,2).forEach(it=>gl.push({tag:c.tag||c.h, glance:it.glance||it.t})); });
@@ -1073,7 +959,7 @@ function renderYouTube(){
   const isShort = it => !!(it && it.short);
   const shorts=[]; allGroups.forEach(sec=> (sec.items||[]).forEach(it=>{ if(isShort(it)) shorts.push(it); }));
   const intro=document.createElement("p"); intro.className="empty";
-  intro.textContent = (DATA.youtube.count||0)+" relevant videos in the last 24h"+(shorts.length?(" · "+shorts.length+" shorts"):"")+", curated below.";
+  intro.textContent = (DATA.youtube.count||0)+" of today\u2019s videos, each with a quick takeaway"+(shorts.length?(" \u00b7 "+shorts.length+" shorts"):"")+".";
   p.appendChild(intro);
   const gl=[]; allGroups.forEach(sec=>{ const its=(sec.items||sec.keys||[]).filter(x=>!isShort(x)); const first=its.find(x=>!/nothing new/i.test(x.t||"")); if(first) gl.push({tag:(sec.h||"").replace(/^[^\w]+\s*/,"").trim()||"Videos", glance:(first.t||"").split(" \u2014 ").slice(-1)[0].slice(0,60)}); });
   if(gl.length) p.appendChild(glanceBox(gl, "\u26a1 Today's videos in 30 seconds"));
@@ -1322,7 +1208,8 @@ document.getElementById("gratIn").addEventListener("keydown",e=>{ if(e.key==="En
   if(DATA.news && Array.isArray(DATA.news.cats)) DATA.news.cats.forEach(function(c){ if(c) c.items=filt(c.items); });
   DATA.elonNews = filt(DATA.elonNews);
   if(DATA.mind && Array.isArray(DATA.mind.groups)) DATA.mind.groups.forEach(function(g){ if(g) g.items=filt(g.items); });
-  /* DATA.science is a curated best-of recent breakthroughs and DATA.elon is a daily ranked recap — both intentionally exempt from the 24h filter, like mindset. */
+  /* DATA.elon is a labelled daily recap and DATA.mindset persists — both still exempt. DATA.science is now capped at 48h so nothing older than ~2 days lingers. */
+  if(DATA.science && Array.isArray(DATA.science.items)){ DATA.science.items = DATA.science.items.filter(function(it){ if(isPlace(it)) return true; var d=pubDate(it); if(!d) return false; var t=new Date(d).getTime(); if(isNaN(t)) return false; return (ref - t) <= 2*DAY_MS; }); if(!DATA.science.items.length){ DATA.science.items=[{t:"Nothing new today", s:"No fresh science breakthrough surfaced in the last couple of days.", url:"", published:""}]; } }
 
   if(DATA.youtube && Array.isArray(DATA.youtube.groups)){
     var groups=[];
