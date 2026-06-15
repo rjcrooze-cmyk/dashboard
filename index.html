@@ -186,6 +186,11 @@ a.thumb-link .play::after{content:"";border-style:solid;border-width:6px 0 6px 1
 .glance-row{display:flex;gap:10px;font-size:13.5px;line-height:1.4}
 .glance-tag{flex:0 0 auto;width:84px;font-weight:700;color:var(--muted);text-transform:uppercase;font-size:10.5px;letter-spacing:.4px;padding-top:2px}
 .glance-items{flex:1;color:var(--ink)}
+.glance-list{gap:0}
+.glance-line{display:flex;gap:9px;align-items:flex-start;font-size:13.5px;line-height:1.5;padding:7px 0;border-top:1px solid var(--line)}
+.glance-line:first-child{border-top:none;padding-top:2px}
+.glance-dot{flex:0 0 auto;color:var(--accent);font-weight:700;line-height:1.5}
+.glance-tx{flex:1;color:var(--ink)}
 /* category dropdowns (News) */
 .cat{background:var(--card);border:1px solid var(--line);border-radius:12px;margin:0 0 10px;overflow:hidden}
 .cat>summary{cursor:pointer;list-style:none;padding:12px 14px;font-size:14.5px;font-weight:700;color:var(--ink);display:flex;align-items:center;gap:8px}
@@ -975,8 +980,8 @@ function renderYouTube(){
   const intro=document.createElement("p"); intro.className="empty";
   intro.textContent = (DATA.youtube.count||0)+" of today\u2019s videos, each with a quick takeaway"+(shorts.length?(" \u00b7 "+shorts.length+" shorts"):"")+".";
   p.appendChild(intro);
-  const gl=[]; allGroups.forEach(sec=>{ (sec.items||sec.keys||[]).filter(x=>!isShort(x) && !/nothing new/i.test(x.t||"")).forEach(it=>{ const tk = it.glance || (it.s||"").replace(/^TL;DR:?\s*/i,"").split(". ")[0].slice(0,160); if(tk) gl.push({tag:(sec.h||"").replace(/^[^\w]+\s*/,"").trim()||"Video", glance:tk}); }); });
-  if(gl.length) p.appendChild(glanceBox(gl, "\u26a1 Today's videos \u2014 key takeaways"));
+  const tks=[]; allGroups.forEach(sec=>{ (sec.items||sec.keys||[]).filter(x=>!isShort(x) && !/nothing new/i.test(x.t||"")).forEach(it=>{ const g = it.glance || (it.s||"").replace(/^TL;DR:?\s*/i,"").split(". ")[0].slice(0,180); if(g) tks.push(g); }); });
+  if(tks.length){ const box=document.createElement("details"); box.className="glance"; box.open=true; let html='<summary>\u26a1 Today\u2019s videos \u2014 key takeaways</summary><div class="glance-body glance-list">'; tks.forEach(g=>{ html+='<div class="glance-line"><span class="glance-dot">\u2022</span><span class="glance-tx">'+esc(g)+'</span></div>'; }); html+='</div>'; box.innerHTML=html; p.appendChild(box); }
   allGroups.forEach(sec=>{
     if(sec.type==="aim"){
       const g=group(null);
