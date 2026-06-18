@@ -274,6 +274,15 @@ body.no-ai .act-ask,body.no-ai .ask-box,body.no-ai .act-more{display:none}
     </div>
   </header>
 
+  <div class="audio-brief" style="margin:12px 0 4px;padding:13px 15px;border-radius:14px;background:linear-gradient(135deg,#4f46e5,#7c3aed);color:#fff;box-shadow:0 4px 14px rgba(79,70,229,.28)">
+    <div style="display:flex;align-items:center;gap:9px;flex-wrap:wrap">
+      <span style="font-weight:700;font-size:15px">🎧 Listen to today’s briefing</span>
+      <span style="font-size:12px;opacity:.85">Full dashboard, read aloud</span>
+    </div>
+    <audio id="briefAudio" controls preload="none" style="width:100%;margin-top:9px;border-radius:8px" src="https://rjcrooze-cmyk.github.io/dashboard/briefing.mp3"></audio>
+    <div style="font-size:11.5px;opacity:.82;margin-top:5px">Plays with your screen locked &amp; earphone controls. <a href="https://rjcrooze-cmyk.github.io/dashboard/briefing.mp3" download style="color:#fff;text-decoration:underline">Download</a></div>
+  </div>
+
   <nav class="tabs" id="tabs"></nav>
 
   <section class="panel" id="p-news"></section>
@@ -1769,6 +1778,17 @@ activate(TABS.some(t=>t.id===savedTab) ? savedTab : "news");
     var link=document.createElement("link"); link.rel="manifest"; link.href=URL.createObjectURL(blob); document.head.appendChild(link);
   }catch(e){}
 })();
+</script>
+<script>
+(function(){var a=document.getElementById('briefAudio');if(!a)return;
+try{if('mediaSession' in navigator){
+var dl=document.getElementById('dateLbl');var when=(dl&&dl.textContent)||'Today';
+navigator.mediaSession.metadata=new MediaMetadata({title:"Daily Dashboard Briefing",artist:when,album:"Daily Dashboard"});
+navigator.mediaSession.setActionHandler('play',function(){a.play();});
+navigator.mediaSession.setActionHandler('pause',function(){a.pause();});
+navigator.mediaSession.setActionHandler('seekbackward',function(){a.currentTime=Math.max(0,a.currentTime-15);});
+navigator.mediaSession.setActionHandler('seekforward',function(){a.currentTime=Math.min(a.duration||1e9,a.currentTime+30);});
+}}catch(e){}})();
 </script>
 </body>
 </html>
