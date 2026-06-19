@@ -622,6 +622,8 @@ const DATA = {
   ]
  },
  "elon": {
+  "highlight": {"t": "Tesla owners will soon talk to Grok in-car, Musk says", "s": "Musk said Full Self-Driving will let drivers converse with xAI's Grok 'like a chauffeur,' rolling out in about three months - capping a 24h stretch where he amplified Grok's spread into Microsoft Office and Amazon Bedrock. Backdrop: SpaceX's record $75B IPO this week pushed its valuation past $2 trillion.", "href": "https://www.benzinga.com/markets/tech/26/06/53268873/elon-musk-tesla-owners-will-soon-be-able-to-talk-to-grok-like-a-chauffeur"},
+
   "day": "June 17, 2026",
   "source": "@jcub2x daily recap",
   "note": "A context-rich recap of what Elon posted on X on June 17, 2026, drawn from the @jcub2x daily recap (transcript). Each item explains what he was replying to or amplifying. Engagement counts aren't pulled from the recap, so items are ordered most-notable-first. Politically charged or sensitive posts are described neutrally and flagged; the Cursor acquisition (covered yesterday) is omitted.",
@@ -1821,11 +1823,11 @@ function renderElon(){
   note.textContent="Every post, reply & repost from Elon that day, ordered most-talked-about first (by likes & views). Tap a post to open it.";
   rg.appendChild(note);
   const items=(E.items||[]).slice().sort((a,b)=>(b.likes||0)-(a.likes||0)||(b.views||0)-(a.views||0));
-  // ⚡ glance — the 3 biggest
-  if(items.length){
+  // ⚡ single most-noteworthy highlight (no repeat of the post list)
+  if(E.highlight){
     const box=document.createElement("details"); box.className="glance"; box.open=true;
-    let html='<summary>⚡ Elon in 30 seconds — top 3</summary><div class="glance-body">';
-    items.slice(0,3).forEach((it,i)=>{ html+=`<div class="glance-row"><span class="glance-tag">#${i+1}</span><span class="glance-items">${esc((it.s||it.t||"").slice(0,90))}</span></div>`; });
+    let html='<summary>⚡ Most noteworthy in the last 24h</summary><div class="glance-body">';
+    { var H=E.highlight||{}; var ht=esc(H.t||""); var hs=H.s?(" — "+esc(H.s)):""; var inner=H.href?('<a href="'+esc(H.href)+'" target="_blank" rel="noopener">'+ht+'</a>'):('<b>'+ht+'</b>'); html+='<div class="glance-row"><span class="glance-items">'+inner+hs+'</span></div>'; }
     html+='</div>'; box.innerHTML=html; rg.appendChild(box);
   }
   function fmtTime(iso){ const d=new Date(iso); if(isNaN(d.getTime())) return ""; return d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"}); }
