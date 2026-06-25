@@ -1614,7 +1614,7 @@ function card(item, when){
 function flash(btn,txt){ const o=btn.textContent; btn.textContent=txt; setTimeout(()=>btn.textContent=o,1200); }
 
 async function tellMore(btn){
-  const c = btn.closest(".card");
+  const c = btn.closest(".card,.nb");
   if(!(window.cowork && window.cowork.askClaude)){
     window.open("https://www.google.com/search?q="+encodeURIComponent(c.dataset.title), "_blank", "noopener");
     return;
@@ -1644,7 +1644,7 @@ async function tellMore(btn){
 }
 
 function toggleAsk(btn){
-  const c = btn.closest(".card");
+  const c = btn.closest(".card,.nb");
   const box = c.querySelector(".ask-box");
   const open = box.style.display === "none";
   box.style.display = open ? "flex" : "none";
@@ -1696,6 +1696,8 @@ function glanceBox(items, label){
 }
 function newsBullet(it){
   const div=document.createElement("div"); div.className="nb"; if(isReadItem(it)) div.classList.add("read");
+  const isPlaceholder = /nothing new|no news|no standout/i.test(it.t||"");
+  div.dataset.title = it.t||""; div.dataset.summary = it.s||""; div.dataset.level = "0";
   const titleHtml = it.url?`<a href="${esc(it.url)}" target="_blank" rel="noopener">${esc(it.t)}</a>`:esc(it.t);
   const age=relAge(pubDate(it)); const dot=impDotHtml(it.imp)||`<span class="imp imp-noise imp-inline"></span>`;
   div.innerHTML = `<span class="nb-dot">${dot}</span>`+
@@ -1703,8 +1705,26 @@ function newsBullet(it){
     (it.s?`<p class="nb-s">${esc(it.s)}</p>`:"")+
     (it.why?`<p class="why"><b>Why it matters:</b> ${esc(it.why)}</p>`:"")+
     ((age||it.src)?`<p class="card-when">${age?"🕒 "+esc(age):""}${it.src?(age?" · ":"")+esc(it.src):""}</p>`:"")+
+    (isPlaceholder?"":`<div class="more"></div>`+
+      `<div class="card-actions nb-actions">`+
+        `<button class="mini act-more">Tell me more ▸</button>`+
+        `<button class="mini act-ask">💬 Ask</button>`+
+        `<button class="mini act-save">🔖 Save</button>`+
+      `</div>`+
+      `<div class="ask-box" style="display:none">`+
+        `<input type="text" class="ask-in" placeholder="Ask anything about this story…">`+
+        `<button class="mini ask-go">Ask</button>`+
+      `</div>`)+
     `</div>`;
   if(it.url) div.querySelector("a").addEventListener("click",()=>{ if(!div.classList.contains("read")){ div.classList.add("read"); setRead(it,true); } });
+  if(!isPlaceholder){
+    div.querySelector(".act-more").onclick = (e)=>tellMore(e.target);
+    div.querySelector(".act-ask").onclick = (e)=>toggleAsk(e.target);
+    const askGo = div.querySelector(".ask-go"), askIn = div.querySelector(".ask-in");
+    askGo.onclick = ()=>askQuestion(div, askIn);
+    askIn.addEventListener("keydown", e=>{ if(e.key==="Enter") askQuestion(div, askIn); });
+    div.querySelector(".act-save").onclick = ()=>{ addSave((it.url?it.t+" — "+it.url:it.t)); flash(div.querySelector(".act-save"),"Saved ✓"); };
+  }
   return div;
 }
 function renderNews(){
@@ -2034,7 +2054,7 @@ function renderSom(){
   if(!pages.length){ el.innerHTML='<div class="card" style="padding:14px">The Star of Mysore e-paper has not loaded yet. <a href="https://epaper.starofmysore.com/" target="_blank" rel="noopener">Open the e-paper ↗</a></div>'; return; }
   let h=`<div class="som-head"><div><div class="som-title">${esc(S.label||'Star of Mysore')}</div><div class="som-sub">${esc(S.date||'')} &middot; edition ${esc(String(S.edition||''))} &middot; ${pages.length} pages</div></div><a class="som-open" href="${esc(S.editionUrl||'https://epaper.starofmysore.com/')}" target="_blank" rel="noopener">Open e-paper &#8599;</a></div>`;
   h+=`<div class="som-note">Full pages of the Star of Mysore e-paper, for personal reading. &copy; Star of Mysore. Tap any page to open it full-size.</div>`;
-  pages.forEach((u,i)=>{ h+=`<a class="som-page" href="${esc(u)}" target="_blank" rel="noopener"><span class="som-pno">Page ${i+1}</span><img loading="lazy" src="${esc(u)}" alt="Star of Mysore page ${i+1}"></a>`; });
+  pages.forEach((u,i)=>{ const full=(S.full&&S.full[i])||u; const link=full?`href="${esc(full)}" target="_blank" rel="noopener"`:''; h+=`<a class="som-page" ${link}><span class="som-pno">Page ${i+1}</span><img loading="lazy" src="${esc(u)}" alt="Star of Mysore page ${i+1}"></a>`; });
   el.innerHTML=h;
   if(!document.getElementById("som-style")){ const st=document.createElement("style"); st.id="som-style"; st.textContent=".som-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin:4px 0 8px;flex-wrap:wrap}.som-title{font-weight:700;font-size:18px}.som-sub{opacity:.7;font-size:12px}.som-open{font-size:13px;white-space:nowrap;text-decoration:none;border:1px solid var(--line,#3334);padding:6px 10px;border-radius:8px;color:inherit}.som-note{font-size:12px;opacity:.65;margin-bottom:10px}.som-page{display:block;position:relative;margin:0 auto 12px;max-width:780px}.som-page img{width:100%;height:auto;border:1px solid var(--line,#3334);border-radius:6px;display:block;background:#fff}.som-pno{position:absolute;top:6px;left:6px;background:rgba(0,0,0,.6);color:#fff;font-size:11px;padding:2px 7px;border-radius:6px}"; document.head.appendChild(st); }
 }
