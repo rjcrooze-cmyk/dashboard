@@ -670,6 +670,7 @@ body.reader-lock{overflow:hidden}
         <button class="theme-opt" data-th="dark" title="Glass — dark"><span class="em">🌙</span>Dark</button>
       </div>
       <button class="fab-item" id="filterBtn">⌕ Filter stories</button>
+      <button class="fab-item" id="askSetupBtn">🤖 Ask AI setup</button>
       <div class="fab-row"><span class="fab-lbl">Text size</span><button class="tool" id="fsMinus" aria-label="Smaller">A−</button><button class="tool" id="fsPlus" aria-label="Larger">A+</button></div>
     </div>
 
@@ -810,7 +811,8 @@ const isRealItem = it => !!it && !PLACE_RE.test(String((it&&(it.t||it.author))||
   const mi=document.getElementById("fsMinus"),pl=document.getElementById("fsPlus");
   if(mi)mi.onclick=()=>{if(i>0){i--;ap();}}; if(pl)pl.onclick=()=>{if(i<S.length-1){i++;ap();}}; })();
 const PREV_VISIT=store.get("lastVisit",0); store.set("lastVisit",Date.now());
-if(!(window.cowork&&window.cowork.askClaude)) document.body.classList.add("no-ai");
+function askEndpoint(){ try{ return window.__ASK_ENDPOINT||store.get("askEndpoint","")||""; }catch(e){ return window.__ASK_ENDPOINT||""; } }
+if(!(window.cowork&&window.cowork.askClaude) && !askEndpoint()) document.body.classList.add("no-ai");
 document.getElementById("dateLbl").textContent=DATA.date;
 const REFRESH_TASK="refresh-dashboard";
 document.getElementById("updateAll").onclick=async function(){
@@ -822,6 +824,16 @@ document.getElementById("updateAll").onclick=async function(){
   catch(e){ status.textContent="Couldn't start the update here — please try again in a moment."; }
   setTimeout(()=>{btn.disabled=false;btn.textContent=o;},6000);
 };
+(function(){ const b=document.getElementById("askSetupBtn"); if(!b) return;
+  b.onclick=function(){ let cur=""; try{ cur=store.get("askEndpoint","")||""; }catch(e){}
+    const v=prompt("Paste your Cloudflare Worker URL to turn on inline Ask AI on this device (leave blank to turn it off):",cur);
+    if(v===null) return; const u=v.trim();
+    try{ store.set("askEndpoint",u); }catch(e){}
+    document.body.classList.toggle("no-ai", !(u || (window.cowork&&window.cowork.askClaude)));
+    if(typeof showToast==="function") showToast(u?"Ask AI connected \u2713":"Ask AI turned off");
+    const fs=document.getElementById("fabSheet"); if(fs) fs.classList.remove("open");
+  };
+})();
 let toastT=null;
 function showToast(m){const t=document.getElementById("toast");if(!t)return;t.textContent=m;t.classList.add("show");if(toastT)clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("show"),1500);}
 // ---- read state (silent; no buttons by design) ----
@@ -930,10 +942,11 @@ function toggleAsk(btn){ const c=btn.closest(".srow"); const b=c.querySelector("
 async function askQuestion(c,input){
   const q=(input.value||"").trim(); if(!q) return;
   const it=(typeof STORY!=="undefined"&&STORY.get)?STORY.get(c):null;
-  if(!(window.cowork&&window.cowork.askClaude)){
+  const __ep=(typeof askEndpoint==="function")?askEndpoint():"";
+  if(!(window.cowork&&window.cowork.askClaude) && !__ep){
     input.value="";
     const box0=c.querySelector(".more");
-    if(box0){ const n=document.createElement("p"); n.className="exp qa"; n.innerHTML=`<span class="q">${esc(q)}</span>Opening web results for this in a new tab. <span style="opacity:.65">Live inline answers work inside the Claude app.</span>`; box0.appendChild(n); }
+    if(box0){ const n=document.createElement("p"); n.className="exp qa"; n.innerHTML=`<span class="q">${esc(q)}</span>Opening web results in a new tab. <span style="opacity:.65">Enable inline AI in \u22ef \u2192 \u201cAsk AI setup\u201d.</span>`; box0.appendChild(n); }
     const ctx=(c.dataset.title||(it&&it.t)||"");
     window.open("https://www.google.com/search?q="+encodeURIComponent(ctx+" \u2014 "+q),"_blank","noopener");
     return;
@@ -965,10 +978,15 @@ ${parts.join("\n")}${priorTxt}
 READER'S QUESTION: "${q}"
 
 Answer directly and helpfully in 2-4 sentences. Lead with the answer. Use the item context first, then add specific, relevant background from your knowledge (names, numbers, dates) so the reply is genuinely useful — do not just restate the summary. If the answer depends on very recent events you cannot verify, give the best-known context and note in one short clause that the linked source has the latest. Neutral and factual; no preamble, no bullet lists.`;
-  try{ const res=await window.cowork.askClaude(prompt,it?[it]:[]);
-    const text=typeof res==="string"?res:(res&&(res.text||res.content||res.output))||JSON.stringify(res);
+  try{ let text;
+    if(window.cowork&&window.cowork.askClaude){ const res=await window.cowork.askClaude(prompt,it?[it]:[]);
+      text=typeof res==="string"?res:(res&&(res.text||res.content||res.output))||JSON.stringify(res);
+    } else { const rr=await fetch(__ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
+      let jj={}; try{ jj=await rr.json(); }catch(e){}
+      if(!rr.ok) throw new Error((jj&&jj.error)||("HTTP "+rr.status));
+      text=jj.text||jj.answer||(jj.content&&jj.content[0]&&jj.content[0].text)||JSON.stringify(jj); }
     p.classList.remove("loading"); p.innerHTML=`<span class="q">${esc(q)}</span>${fmt(String(text).trim())}`;
-  }catch(e){ p.classList.remove("loading"); p.innerHTML=`<span class="q">${esc(q)}</span>Couldn't answer right now — try opening the source link.`; }
+  }catch(e){ p.classList.remove("loading"); p.innerHTML=`<span class="q">${esc(q)}</span>Couldn't answer right now — ${esc(String((e&&e.message)||e))}. Try the source link.`; }
 }
 function sec(t){const d=document.createElement("div");d.className="sec";d.textContent=t;return d;}
 function secE(emoji,t){const d=document.createElement("div");d.className="sec";d.innerHTML=`<span class="sec-emo">${emoji}</span>${esc(t)}`;return d;}
