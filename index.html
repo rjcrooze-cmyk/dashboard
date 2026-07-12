@@ -48,7 +48,7 @@
 *{box-sizing:border-box}
 html{font-size:16px}
 html,body{margin:0}
-body{font:400 .95rem/1.55 -apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",Roboto,"Hind Mysuru",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;position:relative;overflow-x:hidden}
+body{font:400 .95rem/1.55 -apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",Roboto,"Hind Mysuru",sans-serif;background:var(--bg);color:var(--ink);min-height:100vh;position:relative;overflow-x:clip}
 :root{color-scheme:light;--shadowc:rgba(30,40,90,.14);
   --bg:#eef1f8;--ink:#12151f;--ink2:#3c4155;--mut:#868da2;
   --glassA:rgba(255,255,255,.66);--glassB:rgba(255,255,255,.45);
@@ -226,8 +226,8 @@ nav.tabs{position:sticky;top:10px;z-index:30;display:flex;gap:4px;padding:5px;ma
 .pts>summary{cursor:pointer;list-style:none;padding:7px 12px;font-size:.7rem;font-weight:800;color:var(--ac)}
 .pts>summary::-webkit-details-marker{display:none}
 .pts .pt{padding:7px 12px;border-top:1px solid var(--edge2);font-size:.8rem}
-.pt-t{font-weight:750}
-.pt-s{display:block;color:var(--ink2);font-size:.78rem}
+.pt-t{font-weight:800;color:var(--ink)}
+.pt-s{display:block;color:var(--ink);font-size:.79rem;line-height:1.5}
 .src{margin-top:7px;font-size:.68rem;color:var(--mut)}
 .src b{color:var(--ink2)}
 .src a{color:var(--ac)}
@@ -376,7 +376,7 @@ body.no-ai .act-ask::after{content:" \2197"}
 @media (max-width:560px){
   .wrap{padding:14px 14px 30px}
   body{padding-bottom:86px}
-  nav.tabs{position:fixed;left:10px;right:10px;bottom:12px;top:auto;z-index:45;margin:0;padding:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom))}
+  nav.tabs{position:fixed;left:10px;right:10px;bottom:12px;top:auto;z-index:45;margin:0;padding:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom));backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--glassA);border:1px solid var(--edge2);box-shadow:0 -6px 22px rgba(0,0,0,.16)}
   .tab{flex-direction:column;gap:2px;padding:6px 2px;font-size:.54rem;letter-spacing:.03em}
   .tab .ico{display:inline}
   nav.tabs .tab.ovf{display:none}
@@ -561,8 +561,10 @@ body.no-ai .act-ask::after{content:" \2197"}
 .fitbar{display:flex;align-items:center;gap:12px;margin:2px 2px 14px;padding:11px 16px;column-span:all;-webkit-column-span:all}
 .fb-ic{font-size:1.15rem}
 .fb-lbl{font-weight:850;font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;color:var(--mut)}
-.fit-range{flex:1;max-width:240px;accent-color:var(--ac);height:5px;cursor:pointer}
-.fb-val{font-weight:800;font-size:.72rem;color:var(--ink2);min-width:92px;text-align:right}
+.fit-seg{display:flex;gap:5px;flex:1;flex-wrap:wrap}
+.fit-seg button{flex:1;min-width:62px;border:1px solid var(--edge2);background:color-mix(in srgb,var(--mut) 9%,transparent);color:var(--ink2);font:800 .62rem/1 inherit;letter-spacing:.03em;padding:8px 6px;border-radius:11px;cursor:pointer;white-space:nowrap;transition:transform .08s ease}
+.fit-seg button.on{background:linear-gradient(120deg,var(--ac),var(--ac2));color:#fff;border-color:transparent;box-shadow:0 3px 10px color-mix(in srgb,var(--ac) 38%,transparent),inset 0 1px 0 rgba(255,255,255,.35)}
+.fit-seg button:active{transform:scale(.95)}
 /* column layout by fit level (mobile → desktop scales up) */
 .panel[data-fit="2"]{column-count:1;column-gap:14px}
 .panel[data-fit="3"]{column-count:2;column-gap:14px}
@@ -585,7 +587,7 @@ body.no-ai .act-ask::after{content:" \2197"}
 .panel.dense .story.xopen .st-s,.panel.dense .story.xopen .cs,.panel.dense .trend.xopen .st-s{font-size:.92rem!important;line-height:1.6}
 .panel.dense .story.xopen .tile{display:inline-flex}
 /* hide the density word-label on phones so it never runs off-screen */
-@media(max-width:560px){ .fb-val{display:none} .fitbar{gap:9px;padding:9px 13px} .fit-range{max-width:none} }
+@media(max-width:560px){ .fitbar{gap:8px;padding:9px 11px} .fb-lbl{display:none} .fit-seg button{min-width:0;font-size:.57rem;padding:8px 3px;letter-spacing:.02em} }
 .panel.dense .legend,.panel.dense .phead,.panel.dense .brk,.panel.dense .glance,.panel.dense .news-toolbar,.panel.dense .since{display:none!important}
 .panel.dense .sec{margin:9px 4px 4px;column-span:all;-webkit-column-span:all}
 .panel.dense .story,.panel.dense .gcard,.panel.dense .trend,.panel.dense .crow{padding:8px 11px!important;margin:0 0 8px!important}
@@ -593,6 +595,30 @@ body.no-ai .act-ask::after{content:" \2197"}
 .panel.dense .hero .st-t{font-size:.92rem!important}
 .panel.dense .cat>summary{font-size:.82rem}
 .panel.dense .trank{transform:scale(.82)}
+
+/* ===== full-screen article READER (opens from densified/fit-to-screen cards so a story fills the screen instead of a narrow column) ===== */
+.reader{position:fixed;inset:0;z-index:85;display:none;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.reader.open{display:block}
+body.reader-lock{overflow:hidden}
+.reader-inner{max-width:720px;margin:0 auto;padding:calc(60px + env(safe-area-inset-top)) 22px calc(56px + env(safe-area-inset-bottom))}
+.reader-x{position:fixed;top:calc(14px + env(safe-area-inset-top));right:16px;z-index:86;width:42px;height:42px;border:none;border-radius:50%;cursor:pointer;font-size:1.1rem;color:#fff;background:linear-gradient(120deg,var(--ac),var(--ac2));box-shadow:0 5px 16px color-mix(in srgb,var(--ac) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.35)}
+.reader-x:active{transform:scale(.94)}
+.reader-chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.reader-chip{display:inline-flex;align-items:center;padding:4px 11px;border-radius:999px;font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:color-mix(in srgb,var(--pc,var(--ac)) 16%,transparent);color:var(--pc,var(--ac));border:1px solid color-mix(in srgb,var(--pc,var(--ac)) 34%,transparent)}
+.reader-h1{font-size:1.6rem;line-height:1.28;font-weight:900;letter-spacing:-.01em;margin:2px 0 10px;color:var(--ink)}
+.reader-meta{font-size:.76rem;font-weight:700;color:var(--mut);margin-bottom:16px}
+.reader-glance{font-size:1.02rem;line-height:1.6;font-weight:700;color:var(--ink);margin:0 0 14px}
+.reader-s{font-size:1.08rem;line-height:1.75;color:var(--ink);margin:0 0 18px}
+.reader-why{font-size:.95rem;line-height:1.6;color:var(--ink);background:color-mix(in srgb,var(--ac) 9%,transparent);border-left:3px solid var(--ac);border-radius:10px;padding:11px 14px;margin:0 0 16px}
+.reader-why b{display:block;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);margin-bottom:4px}
+.reader-fy{font-size:.94rem;line-height:1.55;color:var(--ink);background:color-mix(in srgb,var(--gold,#e7c353) 16%,transparent);border-radius:10px;padding:10px 13px;margin:0 0 16px;font-weight:600}
+.reader-pts{margin:4px 0 18px;border:1px solid var(--edge2);border-radius:16px;overflow:hidden}
+.reader-pts-h{padding:10px 14px;font-size:.64rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);background:color-mix(in srgb,var(--ac) 8%,transparent)}
+.reader-pt{padding:11px 14px;border-top:1px solid var(--edge2);font-size:.95rem;line-height:1.55;color:var(--ink)}
+.reader-pt b{display:block;font-weight:800;margin-bottom:2px;color:var(--ink)}
+.reader-pt span{color:var(--ink)}
+.reader-open{display:inline-block;margin-top:6px;padding:11px 20px;border-radius:14px;font-weight:800;font-size:.85rem;color:#fff;text-decoration:none;background:linear-gradient(120deg,var(--ac),var(--ac2));box-shadow:0 5px 16px color-mix(in srgb,var(--ac) 40%,transparent)}
+@media(max-width:560px){ .reader-inner{padding:calc(58px + env(safe-area-inset-top)) 17px calc(84px + env(safe-area-inset-bottom))} .reader-h1{font-size:1.4rem} }
 </style>
 </head>
 <body data-tt="news">
@@ -652,6 +678,7 @@ body.no-ai .act-ask::after{content:" \2197"}
   <div class="sh-h"><span class="pill" id="gradeTitle">●</span><button class="sh-x" id="gradeX" aria-label="Close">✕</button></div>
   <div id="gradeList"></div>
 </div></div>
+<div class="reader" id="reader" role="dialog" aria-modal="true" aria-label="Article reader"><button class="reader-x" id="readerX" aria-label="Close reader">✕</button><div class="reader-inner" id="readerBody"></div></div>
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 <div class="kbd-help" id="kbdHelp"><div class="kbd-card glass">
   <div class="sh-h"><span class="pill" style="--pc:var(--ac)">shortcuts</span><button class="sh-x" id="kbdX" aria-label="Close">✕</button></div>
@@ -1261,19 +1288,47 @@ function mountFit(id){ const panel=document.getElementById("p-"+id); if(!panel) 
   const old=panel.querySelector(":scope > .fitbar"); if(old) old.remove();
   const lvl=Math.max(1,Math.min(4,+store.get("fit_"+id,1)||1));
   const bar=document.createElement("div"); bar.className="fitbar glass";
-  bar.innerHTML=`<span class="fb-ic">🖥️</span><span class="fb-lbl">Fit to screen</span><input type="range" class="fit-range" min="1" max="4" step="1" value="${lvl}" aria-label="Fit to screen"><span class="fb-val"></span>`;
-  const range=bar.querySelector(".fit-range"), val=bar.querySelector(".fb-val");
-  function apply(v){ v=Math.max(1,Math.min(4,+v||1)); panel.dataset.fit=v; panel.classList.toggle("dense",v>1); val.textContent=FIT_NAMES[v]; store.set("fit_"+id,v); }
-  range.addEventListener("input",()=>apply(range.value));
+  bar.innerHTML=`<span class="fb-ic">🖥️</span><span class="fb-lbl">Fit to screen</span><div class="fit-seg" role="group" aria-label="Fit to screen">`+[1,2,3,4].map(v=>`<button type="button" data-v="${v}" aria-pressed="false">${FIT_NAMES[v]}</button>`).join("")+`</div>`;
+  const seg=bar.querySelector(".fit-seg");
+  function apply(v){ v=Math.max(1,Math.min(4,+v||1)); panel.dataset.fit=v; panel.classList.toggle("dense",v>1);
+    [...seg.querySelectorAll("button")].forEach(b=>{ const on=(+b.dataset.v===v); b.classList.toggle("on",on); b.setAttribute("aria-pressed",on?"true":"false"); });
+    store.set("fit_"+id,v); }
+  seg.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>apply(b.dataset.v)));
   panel.insertBefore(bar,panel.firstChild); apply(lvl);
 }
 try{ scanFollows(); }catch(e){}
-// In a densified tab, tap a card to expand it fully (reveals summary, Ask, Follow, ratings)
+// Full-screen article reader — opening a card in a densified/fit-to-screen tab fills the screen so it's easy to read.
+function openReader(it){
+  if(!it) return; const r=document.getElementById("reader"), b=document.getElementById("readerBody"); if(!r||!b) return;
+  const impc=({critical:"#ef4444",important:"#f59e0b",interesting:"#3b82f6",noise:"#94a3b8"})[(it.imp||"").toLowerCase()]||"var(--ac)";
+  let pd=""; try{ pd=(typeof pubDate==="function"?pubDate(it):"")||""; }catch(e){}
+  let pdTxt=""; if(pd){ const d=new Date(pd); if(!isNaN(d.getTime())) pdTxt=d.toLocaleDateString(undefined,{month:"short",day:"numeric",year:"numeric"}); }
+  const meta=[it.src||it.subject||"",pdTxt].filter(Boolean).join("  ·  ");
+  const chips=(it.imp?`<span class="reader-chip" style="--pc:${impc}">${esc(it.imp)}</span>`:"")+(it.tag?`<span class="reader-chip">${esc(it.tag)}</span>`:"");
+  const gl=(it.glance&&it.glance!==it.t)?`<p class="reader-glance">${esc(it.glance)}</p>`:"";
+  const body=it.s?`<p class="reader-s">${esc(it.s)}</p>`:"";
+  const why=it.why?`<div class="reader-why"><b>Why it matters</b>${esc(it.why)}</div>`:"";
+  const fy=it.forYou?`<div class="reader-fy">★ ${esc(it.forYou)}</div>`:"";
+  const pts=(it.points&&it.points.length)?`<div class="reader-pts"><div class="reader-pts-h">${esc(it.pointsLabel||"Key takeaways")}</div>`+it.points.map(p=>`<div class="reader-pt"><b>${esc(p.t)}</b>${p.s?`<span>${esc(p.s)}</span>`:""}</div>`).join("")+`</div>`:"";
+  const link=it.url?`<a class="reader-open" href="${esc(it.url)}" target="_blank" rel="noopener">Open full source ↗</a>`:"";
+  b.innerHTML=`<div class="reader-chips">${chips}</div><h1 class="reader-h1">${esc(it.t||it.glance||"")}</h1>${meta?`<div class="reader-meta">${esc(meta)}</div>`:""}${gl}${body}${why}${fy}${pts}${link}`;
+  r.scrollTop=0; r.classList.add("open"); document.body.classList.add("reader-lock");
+  try{ if(typeof setRead==="function") setRead(it,true); }catch(e){}
+}
+function closeReader(){ const r=document.getElementById("reader"); if(r) r.classList.remove("open"); document.body.classList.remove("reader-lock"); }
+(function(){ const rx=document.getElementById("readerX"); if(rx) rx.onclick=closeReader;
+  const r=document.getElementById("reader"); if(r) r.addEventListener("click",e=>{ if(e.target===r) closeReader(); });
+  document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ const rr=document.getElementById("reader"); if(rr&&rr.classList.contains("open")){ e.stopPropagation(); closeReader(); } } },true);
+})();
+// In a densified tab, tapping a card opens it full-screen in the reader instead of a narrow inline column.
 document.addEventListener("click",function(e){
   const panel=e.target.closest(".panel"); if(!panel||!panel.classList.contains("dense")) return;
-  if(e.target.closest("a,button,input,textarea,select,summary,.ask-box,.fitbar")) return;
-  const card=e.target.closest(".story,.trend,.hero"); if(card) card.classList.toggle("xopen");
-});
+  if(e.target.closest("a,button,input,textarea,select,summary,.ask-box,.fitbar,.acts,.pts,.fol-hist")) return;
+  const card=e.target.closest(".story,.trend,.hero,.crow"); if(!card) return;
+  const it=(typeof STORY!=="undefined")?STORY.get(card):null;
+  if(it){ e.preventDefault(); e.stopPropagation(); openReader(it); }
+  else { card.classList.toggle("xopen"); }
+},true);
 
 // ---- tabs / activation / theme switch ----
 const nav=document.getElementById("tabs");
