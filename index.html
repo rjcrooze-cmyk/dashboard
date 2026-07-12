@@ -375,7 +375,7 @@ body.no-ai .act-ask::after{content:" \2197"}
 @media (max-width:560px){
   .wrap{padding:14px 14px 30px}
   body{padding-bottom:86px}
-  nav.tabs{position:fixed;left:10px;right:10px;bottom:12px;top:auto;z-index:45;margin:0;padding:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom));backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--glassA);border:1px solid var(--edge2);box-shadow:0 -6px 22px rgba(0,0,0,.16)}
+  nav.tabs{position:fixed;left:10px;right:10px;bottom:12px;top:auto;z-index:45;margin:0;padding:6px;padding-bottom:calc(6px + env(safe-area-inset-bottom));backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:var(--dock,#fff);border:1px solid var(--edge2);box-shadow:0 -8px 26px rgba(0,0,0,.22)}
   .tab{flex-direction:column;gap:2px;padding:6px 2px;font-size:.54rem;letter-spacing:.03em}
   .tab .ico{display:inline}
   nav.tabs .tab.ovf{display:none}
@@ -718,6 +718,12 @@ body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
 @media(max-width:560px){ .slim-head{padding:15px 16px;gap:11px} .slim-emoji{font-size:1.9rem} #slimName{font-size:1.7rem} }
 /* the in-panel duplicate heading (phead) is replaced by the fancy slim-head */
 .phead{display:none!important}
+
+/* solid mobile tab-dock background per theme (Rohit 2026-07-12) */
+:root{--dock:#ffffff}
+:root[data-theme="dark"]{--dock:#161c2c}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="studio"]){--dock:#161c2c}}
+:root[data-theme="studio"]{--dock:#ffffff}
 </style>
 </head>
 <body data-tt="news">
