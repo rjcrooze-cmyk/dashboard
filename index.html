@@ -627,14 +627,20 @@ body.reader-lock{overflow:hidden}
 .reader-askrow button:active{transform:scale(.96)}
 .reader .more{margin-top:14px}
 
-/* ===== FIXES 2026-07-12 (fit-to-screen glitch + read-fade contrast) — PERMANENT, do not regress ===== */
-/* 1. News is an accordion: keep ONE column at every fit level so categories never jump between columns */
-#p-news[data-fit="2"],#p-news[data-fit="3"],#p-news[data-fit="4"]{column-count:1!important}
-@media(min-width:760px){#p-news[data-fit="2"],#p-news[data-fit="3"],#p-news[data-fit="4"]{column-count:1!important}}
-/* 2. Collapsed dense hero: hide decorative cloud/waveform overlays that garbled the title */
+/* ===== FIXES v2 2026-07-12 (fit levels, hover flicker, read contrast) — PERMANENT, do not regress ===== */
+/* NEWS fit levels — distinct AND stable (no CSS multicol on news; grid keeps categories in place):
+   Condensed(2)=single dense column · Dense(3)=2-col category grid (wide) · Max(4)=3-col wide / 2-col phone */
+#p-news[data-fit="2"],#p-news[data-fit="3"],#p-news[data-fit="4"]{column-count:auto!important}
+#p-news[data-fit="2"] #newsList{display:block}
+#p-news[data-fit="3"] #newsList,#p-news[data-fit="4"] #newsList{display:grid;gap:0 12px;align-items:start;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(max-width:759px){#p-news[data-fit="3"] #newsList{display:block}}
+@media(min-width:1100px){#p-news[data-fit="4"] #newsList{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* Dense hero: hide decorative overlays that garbled the collapsed title */
 .panel.dense .hero:not(.xopen)::before,.panel.dense .hero:not(.xopen)::after{display:none!important;content:none!important}
-:root[data-theme="studio"] .panel.dense .hero:not(.xopen)::after{display:none!important}
-/* 3. Read cards stay readable in EVERY theme (was opacity:.5 — too light). Full opacity when open/hovered */
+/* Hover in dense panels: transform lift flickers inside CSS columns — use shadow/outline highlight instead */
+.panel.dense .gcard:hover,.panel.dense .story:hover,.panel.dense .trend:hover,.panel.dense .hero:hover{transform:none!important}
+@media(hover:hover){.panel.dense .story.gcard:hover,.panel.dense .trend.gcard:hover,.panel.dense .cat.gcard:hover{box-shadow:0 1px 2px rgba(20,20,18,.05),0 12px 24px -14px rgba(20,20,18,.25);outline:1px solid color-mix(in srgb,var(--ac) 30%,transparent)}}
+/* Read cards stay readable in EVERY theme (was opacity:.5 — too light) */
 .story.read,.nbrow.read{opacity:.85}
 .crow.read .ct{opacity:.72}
 .story.read.xopen,.story.read:hover,.story.read:focus-within,.nbrow.read:hover{opacity:1}
@@ -1354,9 +1360,11 @@ function openReader(it){
   const body=it.s?`<p class="reader-s">${esc(it.s)}</p>`:"";
   const why=it.why?`<div class="reader-why"><b>Why it matters</b>${esc(it.why)}</div>`:"";
   const fy=it.forYou?`<div class="reader-fy">★ ${esc(it.forYou)}</div>`:"";
+  const asx=(typeof assessHtml==="function"&&it.assess)?assessHtml(it.assess):"";
+  const eli2=it.eli?`<div class="reader-why"><b>In plain terms</b>${esc(it.eli)}</div>`:"";
   const pts=(it.points&&it.points.length)?`<div class="reader-pts"><div class="reader-pts-h">${esc(it.pointsLabel||"Key takeaways")}</div>`+it.points.map(p=>`<div class="reader-pt"><b>${esc(p.t)}</b>${p.s?`<span>${esc(p.s)}</span>`:""}</div>`).join("")+`</div>`:"";
   const link=it.url?`<a class="reader-open" href="${esc(it.url)}" target="_blank" rel="noopener">Open full source ↗</a>`:"";
-  b.innerHTML=`<div class="srow" id="readerRow"><div class="reader-chips">${chips}</div><h1 class="reader-h1">${esc(it.t||it.glance||"")}</h1>${meta?`<div class="reader-meta">${esc(meta)}</div>`:""}${gl}${body}${why}${fy}${pts}${link}<div class="more"></div><div class="reader-ask"><div class="reader-askrow"><input class="ask-in" type="text" placeholder="Ask anything about this\u2026"><button class="ask-go" type="button">Ask</button></div></div></div>`;
+  b.innerHTML=`<div class="srow" id="readerRow"><div class="reader-chips">${chips}</div><h1 class="reader-h1">${esc(it.t||it.glance||"")}</h1>${meta?`<div class="reader-meta">${esc(meta)}</div>`:""}${gl}${body}${why}${asx}${eli2}${fy}${pts}${link}<div class="more"></div><div class="reader-ask"><div class="reader-askrow"><input class="ask-in" type="text" placeholder="Ask anything about this\u2026"><button class="ask-go" type="button">Ask</button></div></div></div>`;
   const row=b.querySelector("#readerRow");
   if(row){ try{ if(typeof STORY!=="undefined") STORY.set(row,it); }catch(e){} row.dataset.title=it.t||""; row.dataset.summary=it.s||"";
     const ain=row.querySelector(".ask-in"), ago=row.querySelector(".ask-go");
