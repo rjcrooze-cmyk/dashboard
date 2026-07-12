@@ -469,7 +469,7 @@ body.no-ai .act-ask::after{content:" \2197"}
 :root[data-theme="studio"] .ring .rn{font-family:"Archivo",inherit;font-weight:900;letter-spacing:-.03em;background:linear-gradient(100deg,var(--rgbA),var(--rgbB) 48%,var(--rgbD));-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
 :root[data-theme="studio"] .ring .rl{color:#8a8a86}
 /* headlines: bold black Archivo, NuPhy-style */
-:root[data-theme="studio"] #slimName{font-family:"Archivo",inherit;font-weight:900;letter-spacing:-.02em;background:none;-webkit-text-fill-color:#141412;color:#141412}
+:root[data-theme="studio"] #slimName{font-family:"Archivo",inherit;font-weight:900;letter-spacing:-.02em}
 :root[data-theme="studio"] .slim-count{color:#8a8a86}
 :root[data-theme="studio"] .sec{font-family:"Archivo",inherit;font-size:.76rem;font-weight:800;letter-spacing:.14em;color:#141412}
 :root[data-theme="studio"] .sec::before{content:"";flex:0 0 16px;width:16px;height:4px;border-radius:2px;background:linear-gradient(90deg,var(--rgbA),var(--rgbC),var(--rgbD))}
@@ -692,6 +692,32 @@ body.reader-lock{overflow:hidden}
   .mast{top:20px}
 }
 @media(min-width:1500px){ .wrap{max-width:1280px} }
+
+/* ===== remove the number badges next to tab names (Rohit 2026-07-12) ===== */
+.tab .ub{display:none!important}
+/* ===== Follow (and Ask) available in Dense/Max reading modes ===== */
+.panel.dense .story:not(.xopen) .sbody>.acts,
+.panel.dense .trend:not(.xopen) .sbody>.acts,
+.panel.dense .hero:not(.xopen)>.acts{display:flex!important;margin-top:6px;border-top:none;padding-top:2px;gap:6px}
+.panel.dense .acts .mini{font-size:.6rem;padding:3px 9px}
+.panel.dense .story:not(.xopen) .sbody>.ask-box,
+.panel.dense .trend:not(.xopen) .sbody>.ask-box{display:none!important}
+/* ===== fancy animated section heading (all non-news tabs) ===== */
+.slim-head{display:none;position:relative;overflow:hidden;isolation:isolate;padding:20px 22px;margin:2px 0 18px;border-radius:22px;border:1px solid var(--edge2)}
+body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
+.slim-head::before{content:"";position:absolute;inset:-70% -25%;z-index:-1;background:conic-gradient(from 0deg,var(--ac),var(--ac2),#8b5cf6,var(--ac2),var(--ac));filter:blur(48px);opacity:.22;animation:slimspin 14s linear infinite}
+.slim-head::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,color-mix(in srgb,var(--ac) 8%,transparent),transparent 60%)}
+.slim-emoji{font-size:2.5rem;line-height:1;flex:0 0 auto;display:inline-block;filter:drop-shadow(0 5px 11px rgba(0,0,0,.2));animation:bob 3s ease-in-out infinite}
+.slim-emoji:empty{display:none}
+.slim-title{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+#slimName{font-size:2.35rem;font-weight:900;letter-spacing:-.025em;line-height:1.04;font-family:"Archivo",inherit;background:linear-gradient(100deg,var(--ac),var(--ac2),#8b5cf6,var(--ac));background-size:260% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;animation:slimshimmer 7s linear infinite}
+.slim-count{font-size:.66rem;font-weight:900;letter-spacing:.09em;text-transform:uppercase;color:#fff;background:linear-gradient(120deg,var(--ac),var(--ac2));padding:5px 12px;border-radius:999px;box-shadow:0 4px 12px color-mix(in srgb,var(--ac) 38%,transparent)}
+.slim-count:empty{display:none}
+@keyframes slimspin{to{transform:rotate(1turn)}}
+@keyframes slimshimmer{to{background-position:260% 0}}
+@media(max-width:560px){ .slim-head{padding:15px 16px;gap:11px} .slim-emoji{font-size:1.9rem} #slimName{font-size:1.7rem} }
+/* the in-panel duplicate heading (phead) is replaced by the fancy slim-head */
+.phead{display:none!important}
 </style>
 </head>
 <body data-tt="news">
@@ -709,6 +735,7 @@ body.reader-lock{overflow:hidden}
       </div>
     </div>
     <div class="slim-head" id="slimHead">
+      <span class="slim-emoji" id="slimEmoji" aria-hidden="true"></span>
       <div class="slim-title"><span id="slimName"></span><span class="slim-count" id="slimCount"></span></div>
     </div>
     <div class="update-status" id="updateStatus"></div>
@@ -1381,18 +1408,21 @@ function renderFollowing(){
 }
 // Per-tab "Fit to screen" slider — mounts a control at the top of each panel
 const FIT_NAMES={1:"Comfortable",2:"Condensed",3:"Dense",4:"Max"};
+function applyFitAll(v){ v=Math.max(1,Math.min(4,+v||1)); store.set("fit_all",v);
+  document.querySelectorAll(".panel").forEach(pn=>{ pn.dataset.fit=v; pn.classList.toggle("dense",v>1); });
+  document.querySelectorAll(".fit-seg button").forEach(b=>{ const on=(+b.dataset.v===v); b.classList.toggle("on",on); b.setAttribute("aria-pressed",on?"true":"false"); });
+  const act=document.querySelector(".panel.active"); if(act){ try{ const _d=act.style.display; act.style.display="none"; void act.offsetHeight; act.style.display=_d; }catch(e){} }
+}
 function mountFit(id){ const panel=document.getElementById("p-"+id); if(!panel) return;
   const old=panel.querySelector(":scope > .fitbar"); if(old) old.remove();
-  const lvl=Math.max(1,Math.min(4,+store.get("fit_"+id,1)||1));
+  const lvl=Math.max(1,Math.min(4,+store.get("fit_all",1)||1));
   const bar=document.createElement("div"); bar.className="fitbar glass";
   bar.innerHTML=`<span class="fb-ic">🖥️</span><span class="fb-lbl">Fit to screen</span><div class="fit-seg" role="group" aria-label="Fit to screen">`+[1,2,3,4].map(v=>`<button type="button" data-v="${v}" aria-pressed="false">${FIT_NAMES[v]}</button>`).join("")+`</div>`;
   const seg=bar.querySelector(".fit-seg");
-  function apply(v){ v=Math.max(1,Math.min(4,+v||1)); panel.dataset.fit=v; panel.classList.toggle("dense",v>1);
-    [...seg.querySelectorAll("button")].forEach(b=>{ const on=(+b.dataset.v===v); b.classList.toggle("on",on); b.setAttribute("aria-pressed",on?"true":"false"); });
-    store.set("fit_"+id,v);
-    try{ const _d=panel.style.display; panel.style.display="none"; void panel.offsetHeight; panel.style.display=_d; }catch(e){} }
-  seg.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>apply(b.dataset.v)));
-  panel.insertBefore(bar,panel.firstChild); apply(lvl);
+  seg.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>applyFitAll(b.dataset.v)));
+  panel.insertBefore(bar,panel.firstChild);
+  panel.dataset.fit=lvl; panel.classList.toggle("dense",lvl>1);
+  [...seg.querySelectorAll("button")].forEach(b=>{ const on=(+b.dataset.v===lvl); b.classList.toggle("on",on); b.setAttribute("aria-pressed",on?"true":"false"); });
 }
 try{ scanFollows(); }catch(e){}
 // Full-screen article reader — opening a card in a densified/fit-to-screen tab fills the screen so it's easy to read.
@@ -1440,7 +1470,8 @@ const RENDERERS={news:renderNews,aitrends:renderAitrends,science:renderScience,s
 const rendered={};
 function ensureRendered(id){ if(rendered[id]) return; rendered[id]=true;
   try{ if(RENDERERS[id]) RENDERERS[id](); }catch(e){ console&&console.warn&&console.warn("render "+id,e); }
-  try{ mountFit(id); }catch(e){} }
+  try{ mountFit(id); }catch(e){}
+  try{ const _pnl=document.getElementById("p-"+id); const _lg=_pnl&&_pnl.querySelector(":scope > .legend"); if(_lg) _pnl.appendChild(_lg); }catch(e){} }
 function mkTab(t,inMenu){ const b=document.createElement("button");
   b.className="tab"+(!PRIMARY.includes(t.id)&&!inMenu?" ovf":""); b.dataset.id=t.id;
   b.innerHTML=`<span class="ico">${t.icon}</span><span class="lbl">${esc(t.label)}</span><span class="ub"></span>`;
@@ -1482,6 +1513,7 @@ function slimCountFor(id){
 }
 function setSlimHeader(id){
   const meta=TAB_META[id]||[id,""]; const nm=document.getElementById("slimName"), ct=document.getElementById("slimCount");
+  try{ const em=document.getElementById("slimEmoji"); if(em){ const tb=TABS.find(t=>t.id===id); em.textContent=tb?tb.icon:""; } }catch(e){}
   if(nm) nm.textContent=meta[0];
   if(ct){ const n=slimCountFor(id); ct.textContent=(n&&meta[1])?(n+" "+meta[1]):""; }
 }
@@ -1644,7 +1676,8 @@ document.addEventListener("keydown",e=>{
   if(window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
   const mast=document.getElementById("mastFull"); let lastY=window.scrollY||0, ticking=false;
   function onScroll(){ const y=window.scrollY||0;
-    if(mast){ if(y>70 && y>=lastY) mast.classList.add("mast-hide");
+    const _doc=document.documentElement; const nearBottom=(window.innerHeight+y)>=(_doc.scrollHeight-160);
+    if(mast && !nearBottom){ if(y>70 && y>=lastY) mast.classList.add("mast-hide");
       else if(y<lastY-3 || y<48) mast.classList.remove("mast-hide"); }
     lastY=y; ticking=false; }
   window.addEventListener("scroll",()=>{ if(!ticking){ requestAnimationFrame(onScroll); ticking=true; } },{passive:true});
