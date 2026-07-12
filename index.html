@@ -370,7 +370,6 @@ kbd{font-size:.7rem;font-weight:800;background:color-mix(in srgb,var(--mut) 15%,
 .toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,12px);color:#fff;font-size:.78rem;font-weight:700;padding:9px 16px;border-radius:14px;z-index:90;opacity:0;pointer-events:none;transition:.18s ease;background:linear-gradient(120deg,var(--ac),var(--ac2));box-shadow:0 8px 24px color-mix(in srgb,var(--ac) 45%,transparent)}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 .foot{display:none}
-body.no-ai .ask-box{display:none!important}
 body.no-ai .act-ask::after{content:" \2197"}
 /* ===== responsive ===== */
 @media (max-width:560px){
@@ -619,6 +618,14 @@ body.reader-lock{overflow:hidden}
 .reader-pt span{color:var(--ink)}
 .reader-open{display:inline-block;margin-top:6px;padding:11px 20px;border-radius:14px;font-weight:800;font-size:.85rem;color:#fff;text-decoration:none;background:linear-gradient(120deg,var(--ac),var(--ac2));box-shadow:0 5px 16px color-mix(in srgb,var(--ac) 40%,transparent)}
 @media(max-width:560px){ .reader-inner{padding:calc(58px + env(safe-area-inset-top)) 17px calc(84px + env(safe-area-inset-bottom))} .reader-h1{font-size:1.4rem} }
+
+.reader-ask{margin-top:22px;border-top:1px solid var(--edge2);padding-top:16px}
+.reader-askrow{display:flex;gap:8px}
+.reader-askrow input{flex:1;border:1px solid var(--edge2);background:color-mix(in srgb,var(--mut) 8%,transparent);border-radius:12px;padding:11px 13px;font:600 .92rem/1.4 inherit;color:var(--ink);outline:none}
+.reader-askrow input:focus{border-color:var(--ac)}
+.reader-askrow button{border:none;border-radius:12px;padding:0 20px;font-weight:800;font-size:.85rem;color:#fff;cursor:pointer;background:linear-gradient(120deg,var(--ac),var(--ac2))}
+.reader-askrow button:active{transform:scale(.96)}
+.reader .more{margin-top:14px}
 </style>
 </head>
 <body data-tt="news">
@@ -910,7 +917,14 @@ function toggleAsk(btn){ const c=btn.closest(".srow"); const b=c.querySelector("
 async function askQuestion(c,input){
   const q=(input.value||"").trim(); if(!q) return;
   const it=(typeof STORY!=="undefined"&&STORY.get)?STORY.get(c):null;
-  if(!(window.cowork&&window.cowork.askClaude)){ window.open("https://www.google.com/search?q="+encodeURIComponent((c.dataset.title||(it&&it.t)||"")+" "+q),"_blank","noopener"); return; }
+  if(!(window.cowork&&window.cowork.askClaude)){
+    input.value="";
+    const box0=c.querySelector(".more");
+    if(box0){ const n=document.createElement("p"); n.className="exp qa"; n.innerHTML=`<span class="q">${esc(q)}</span>Opening web results for this in a new tab. <span style="opacity:.65">Live inline answers work inside the Claude app.</span>`; box0.appendChild(n); }
+    const ctx=(c.dataset.title||(it&&it.t)||"");
+    window.open("https://www.google.com/search?q="+encodeURIComponent(ctx+" \u2014 "+q),"_blank","noopener");
+    return;
+  }
   input.value="";
   const box=c.querySelector(".more"); const p=document.createElement("p");
   p.className="exp qa loading"; p.innerHTML=`<span class="q">${esc(q)}</span>thinking…`; box.appendChild(p);
@@ -1311,7 +1325,11 @@ function openReader(it){
   const fy=it.forYou?`<div class="reader-fy">★ ${esc(it.forYou)}</div>`:"";
   const pts=(it.points&&it.points.length)?`<div class="reader-pts"><div class="reader-pts-h">${esc(it.pointsLabel||"Key takeaways")}</div>`+it.points.map(p=>`<div class="reader-pt"><b>${esc(p.t)}</b>${p.s?`<span>${esc(p.s)}</span>`:""}</div>`).join("")+`</div>`:"";
   const link=it.url?`<a class="reader-open" href="${esc(it.url)}" target="_blank" rel="noopener">Open full source ↗</a>`:"";
-  b.innerHTML=`<div class="reader-chips">${chips}</div><h1 class="reader-h1">${esc(it.t||it.glance||"")}</h1>${meta?`<div class="reader-meta">${esc(meta)}</div>`:""}${gl}${body}${why}${fy}${pts}${link}`;
+  b.innerHTML=`<div class="srow" id="readerRow"><div class="reader-chips">${chips}</div><h1 class="reader-h1">${esc(it.t||it.glance||"")}</h1>${meta?`<div class="reader-meta">${esc(meta)}</div>`:""}${gl}${body}${why}${fy}${pts}${link}<div class="more"></div><div class="reader-ask"><div class="reader-askrow"><input class="ask-in" type="text" placeholder="Ask anything about this\u2026"><button class="ask-go" type="button">Ask</button></div></div></div>`;
+  const row=b.querySelector("#readerRow");
+  if(row){ try{ if(typeof STORY!=="undefined") STORY.set(row,it); }catch(e){} row.dataset.title=it.t||""; row.dataset.summary=it.s||"";
+    const ain=row.querySelector(".ask-in"), ago=row.querySelector(".ask-go");
+    if(ago&&ain){ ago.onclick=()=>askQuestion(row,ain); ain.addEventListener("keydown",e=>{ if(e.key==="Enter") askQuestion(row,ain); }); } }
   r.scrollTop=0; r.classList.add("open"); document.body.classList.add("reader-lock");
   try{ if(typeof setRead==="function") setRead(it,true); }catch(e){}
 }
