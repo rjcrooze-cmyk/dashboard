@@ -626,6 +626,19 @@ body.reader-lock{overflow:hidden}
 .reader-askrow button{border:none;border-radius:12px;padding:0 20px;font-weight:800;font-size:.85rem;color:#fff;cursor:pointer;background:linear-gradient(120deg,var(--ac),var(--ac2))}
 .reader-askrow button:active{transform:scale(.96)}
 .reader .more{margin-top:14px}
+
+/* ===== FIXES 2026-07-12 (fit-to-screen glitch + read-fade contrast) — PERMANENT, do not regress ===== */
+/* 1. News is an accordion: keep ONE column at every fit level so categories never jump between columns */
+#p-news[data-fit="2"],#p-news[data-fit="3"],#p-news[data-fit="4"]{column-count:1!important}
+@media(min-width:760px){#p-news[data-fit="2"],#p-news[data-fit="3"],#p-news[data-fit="4"]{column-count:1!important}}
+/* 2. Collapsed dense hero: hide decorative cloud/waveform overlays that garbled the title */
+.panel.dense .hero:not(.xopen)::before,.panel.dense .hero:not(.xopen)::after{display:none!important;content:none!important}
+:root[data-theme="studio"] .panel.dense .hero:not(.xopen)::after{display:none!important}
+/* 3. Read cards stay readable in EVERY theme (was opacity:.5 — too light). Full opacity when open/hovered */
+.story.read,.nbrow.read{opacity:.85}
+.crow.read .ct{opacity:.72}
+.story.read.xopen,.story.read:hover,.story.read:focus-within,.nbrow.read:hover{opacity:1}
+.crow.read.open .ct,.crow.read:hover .ct{opacity:1}
 </style>
 </head>
 <body data-tt="news">
