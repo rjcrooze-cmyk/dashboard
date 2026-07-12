@@ -1062,7 +1062,7 @@ Answer the reader's question directly in 2-4 sentences, leading with the answer.
   try{ let text;
     if(window.cowork&&window.cowork.askClaude){ const res=await window.cowork.askClaude(prompt,it?[it]:[]);
       text=typeof res==="string"?res:(res&&(res.text||res.content||res.output))||JSON.stringify(res);
-    } else { const rr=await fetch(__ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt})});
+    } else { const rr=await fetch(__ep,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({prompt, url:(it&&it.url)||"", title:(c.dataset.title||(it&&it.t)||"")})});
       let jj={}; try{ jj=await rr.json(); }catch(e){}
       if(!rr.ok) throw new Error((jj&&jj.error)||("HTTP "+rr.status));
       text=jj.text||jj.answer||(jj.content&&jj.content[0]&&jj.content[0].text)||JSON.stringify(jj); }
