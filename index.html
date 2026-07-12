@@ -645,6 +645,25 @@ body.reader-lock{overflow:hidden}
 .crow.read .ct{opacity:.72}
 .story.read.xopen,.story.read:hover,.story.read:focus-within,.nbrow.read:hover{opacity:1}
 .crow.read.open .ct,.crow.read:hover .ct{opacity:1}
+
+/* ===== Dense/Max: tight full-width grid, no per-section line breaks (2026-07-12) — replaces column-count masonry which glitched in Safari and wasted space ===== */
+.panel.active[data-fit="2"]:not(#p-news){display:grid;grid-template-columns:1fr;gap:6px 10px;align-items:start}
+.panel.active[data-fit="3"]:not(#p-news),
+.panel.active[data-fit="4"]:not(#p-news){display:grid;gap:7px 10px;align-items:start;grid-auto-flow:row dense;grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:760px){
+  .panel.active[data-fit="2"]:not(#p-news){grid-template-columns:repeat(2,minmax(0,1fr))}
+  .panel.active[data-fit="3"]:not(#p-news){grid-template-columns:repeat(3,minmax(0,1fr))}
+  .panel.active[data-fit="4"]:not(#p-news){grid-template-columns:repeat(4,minmax(0,1fr))}
+}
+@media(min-width:1200px){
+  .panel.active[data-fit="4"]:not(#p-news){grid-template-columns:repeat(5,minmax(0,1fr))}
+}
+/* span-all rows for non-card blocks (fit 2 keeps section labels; fit 3/4 hide them) */
+.panel.active[data-fit="2"]:not(#p-news)>.phead,.panel.active[data-fit="2"]:not(#p-news)>.fitbar,.panel.active[data-fit="2"]:not(#p-news)>.glance,.panel.active[data-fit="2"]:not(#p-news)>details,.panel.active[data-fit="2"]:not(#p-news)>.empty,.panel.active[data-fit="2"]:not(#p-news)>.legend,.panel.active[data-fit="2"]:not(#p-news)>.brk,.panel.active[data-fit="2"]:not(#p-news)>.sec,
+.panel.active[data-fit="3"]:not(#p-news)>.phead,.panel.active[data-fit="3"]:not(#p-news)>.fitbar,.panel.active[data-fit="3"]:not(#p-news)>.glance,.panel.active[data-fit="3"]:not(#p-news)>details,.panel.active[data-fit="3"]:not(#p-news)>.empty,.panel.active[data-fit="3"]:not(#p-news)>.legend,.panel.active[data-fit="3"]:not(#p-news)>.brk,
+.panel.active[data-fit="4"]:not(#p-news)>.phead,.panel.active[data-fit="4"]:not(#p-news)>.fitbar,.panel.active[data-fit="4"]:not(#p-news)>.glance,.panel.active[data-fit="4"]:not(#p-news)>details,.panel.active[data-fit="4"]:not(#p-news)>.empty,.panel.active[data-fit="4"]:not(#p-news)>.legend,.panel.active[data-fit="4"]:not(#p-news)>.brk{grid-column:1/-1}
+.panel.active[data-fit="3"]:not(#p-news)>.sec,.panel.active[data-fit="4"]:not(#p-news)>.sec{display:none!important}
+.panel.active[data-fit="2"]:not(#p-news) .story.xopen,.panel.active[data-fit="3"]:not(#p-news) .story.xopen,.panel.active[data-fit="4"]:not(#p-news) .story.xopen{grid-column:1/-1}
 </style>
 </head>
 <body data-tt="news">
@@ -1131,10 +1150,7 @@ function renderYouTube(){
   const isShort=it=>!!(it&&it.short);
   const all=[]; groups.forEach(g=>(g.items||[]).concat(g.keys||[]).forEach(it=>{ if(it&&(it.t||it.title)&&isRealItem(it)) all.push(it); }));
   const longs=all.filter(it=>!isShort(it)), shorts=all.filter(isShort);
-  const gl=longs.filter(it=>it.glance).map(it=>it.glance);
-  if(gl.length){ const box=document.createElement("details"); box.className="glance glass"; box.open=true;
-    box.innerHTML=`<summary>Today's videos — key takeaways</summary><div class="glance-body">${gl.map((g,i)=>`<div class="glance-row"><span class="glance-tag">${i+1}</span><span class="glance-items">${esc(g)}</span></div>`).join("")}</div>`;
-    p.appendChild(box); }
+  // (YouTube key-takeaways box removed per Rohit 2026-07-12)
   const buckets={}; longs.forEach(it=>{ const k=classifyYT(it); (buckets[k]=buckets[k]||[]).push(it); });
   YT_CATS.forEach(([k,emoji,label])=>{ const arr=buckets[k]; if(!arr||!arr.length) return;
     p.appendChild(secE(emoji,label+" · "+arr.length));
@@ -1343,7 +1359,8 @@ function mountFit(id){ const panel=document.getElementById("p-"+id); if(!panel) 
   const seg=bar.querySelector(".fit-seg");
   function apply(v){ v=Math.max(1,Math.min(4,+v||1)); panel.dataset.fit=v; panel.classList.toggle("dense",v>1);
     [...seg.querySelectorAll("button")].forEach(b=>{ const on=(+b.dataset.v===v); b.classList.toggle("on",on); b.setAttribute("aria-pressed",on?"true":"false"); });
-    store.set("fit_"+id,v); }
+    store.set("fit_"+id,v);
+    try{ const _d=panel.style.display; panel.style.display="none"; void panel.offsetHeight; panel.style.display=_d; }catch(e){} }
   seg.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>apply(b.dataset.v)));
   panel.insertBefore(bar,panel.firstChild); apply(lvl);
 }
