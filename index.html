@@ -627,6 +627,8 @@ body.reader-lock{overflow:hidden}
 .reader-askrow button:active{transform:scale(.96)}
 .reader .more{margin-top:14px}
 
+/* slim per-tab header date (2026-07-16) */
+.slim-date{display:block;flex-basis:100%;font-size:.72rem;font-weight:700;letter-spacing:.02em;color:var(--mut);margin-top:1px;text-transform:uppercase}
 /* ===== FIXES v2 2026-07-12 (fit levels, hover flicker, read contrast) — PERMANENT, do not regress ===== */
 /* NEWS fit levels — distinct AND stable (no CSS multicol on news; grid keeps categories in place):
    Condensed(2)=single dense column · Dense(3)=2-col category grid (wide) · Max(4)=3-col wide / 2-col phone */
@@ -742,7 +744,7 @@ body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
     </div>
     <div class="slim-head" id="slimHead">
       <span class="slim-emoji" id="slimEmoji" aria-hidden="true"></span>
-      <div class="slim-title"><span id="slimName"></span><span class="slim-count" id="slimCount"></span></div>
+      <div class="slim-title"><span id="slimName"></span><span class="slim-count" id="slimCount"></span><span class="slim-date" id="slimDate"></span></div>
     </div>
     <div class="update-status" id="updateStatus"></div>
     </header>
@@ -1090,6 +1092,16 @@ function breaker(emoji,anim){
   d.innerHTML=`<span class="brk-line"></span><span class="brk-emo ${anim||"bob"}">${emoji}</span><span class="brk-line"></span>`;
   return d;
 }
+function glanceBox(rows,label){
+  const real=(rows||[]).filter(r=>r&&r.g);
+  if(real.length<2) return null;
+  const box=document.createElement("details"); box.className="glance glass"; box.open=true;
+  const byTag={}, order=[];
+  real.forEach(x=>{ const t=x.tag||""; if(!(t in byTag)){byTag[t]=[];order.push(t);} byTag[t].push(x.g); });
+  box.innerHTML=`<summary>${esc(label||"In brief \u00b7 today in 30 seconds")}</summary><div class="glance-body">`+
+    order.map(t=>`<div class="glance-row">${t?`<span class="glance-tag">${esc(t)}</span>`:""}<span class="glance-items">${byTag[t].map(esc).join(" \u00b7 ")}</span></div>`).join("")+`</div>`;
+  return box;
+}
 // ---- renderers ----
 function heroPick(items){ const real=(items||[]).filter(isRealItem); if(!real.length) return null;
   return real.find(i=>(i.imp||"").toLowerCase()==="critical")||real.find(i=>(i.imp||"").toLowerCase()==="important")||real[0]; }
@@ -1163,6 +1175,7 @@ function renderScienceLike(pid,S,label,verifiedTxt){
   if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="Nothing loaded yet — tap Update."; p.appendChild(e); return; }
   const isSci=pid==="p-science";
   p.appendChild(panelHead(isSci?"🔬":"🧬", isSci?"Science":"Science Daily", isSci?"✨":"🔭", "spin"));
+  {const _gb=glanceBox((items||[]).filter(isRealItem).slice(0,12).map(it=>({tag:it.tag||(isSci?"Science":"Study"), g:it.glance||it.t})), "In 30 seconds \u00b7 "+(isSci?"today's breakthroughs":"today's studies")); if(_gb) p.appendChild(_gb);}
   p.appendChild(document.createRange().createContextualFragment(legendHtml()));
   const hero=heroPick(items);
   if(hero){ p.appendChild(sec("Lead")); p.appendChild(story(hero,{hero:true,kind:false})); }
@@ -1338,6 +1351,7 @@ function renderAitrends(){
   // #1 = hero
   const top=items[0];
   {const _lg=document.createElement("div"); _lg.innerHTML=legendHtml(); if(_lg.firstElementChild) p.appendChild(_lg.firstElementChild);}
+  {const _gb=glanceBox(items.slice(0,8).map(it=>({tag:"", g:it.glance||it.t})), "In 30 seconds \u00b7 what's trending in AI"); if(_gb) p.appendChild(_gb);}
   p.appendChild(sec("Most trending · last 48h"));
   const h=document.createElement("div"); h.className="hero srow";
   STORY.set(h,top); ELEMS.set(cardKey(top),h);
@@ -1522,6 +1536,7 @@ function setSlimHeader(id){
   try{ const em=document.getElementById("slimEmoji"); if(em){ const tb=TABS.find(t=>t.id===id); em.textContent=tb?tb.icon:""; } }catch(e){}
   if(nm) nm.textContent=meta[0];
   if(ct){ const n=slimCountFor(id); ct.textContent=(n&&meta[1])?(n+" "+meta[1]):""; }
+  try{ const dt=document.getElementById("slimDate"); if(dt) dt.textContent=(typeof DATA!=="undefined"&&DATA.date)?DATA.date:""; }catch(e){}
 }
 function activate(id){
   document.body.dataset.tt=id;
