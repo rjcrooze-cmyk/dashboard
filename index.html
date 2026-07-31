@@ -1561,7 +1561,7 @@ function setSlimHeader(id){
   if(ct){ const n=slimCountFor(id); ct.textContent=(n&&meta[1])?(n+" "+meta[1]):""; }
   try{ const dt=document.getElementById("slimDate"); if(dt) dt.textContent=(typeof DATA!=="undefined"&&DATA.date)?DATA.date:""; }catch(e){}
 }
-function activate(id){
+function activate(id,opts){
   document.body.dataset.tt=id;
   setSlimHeader(id);
   TABS.forEach(t=>{ const el=document.getElementById("p-"+t.id); if(el) el.classList.toggle("active",t.id===id); });
@@ -1572,6 +1572,7 @@ function activate(id){
   if(moreBtn) moreBtn.classList.toggle("active",overflow.some(t=>t.id===id));
   store.set("tab",id);
   kbdIdx=-1; clearKbdCur(); applyFilter();
+  if(!(opts&&opts.keepScroll)){ try{ window.scrollTo(0,0); }catch(e){} try{ document.documentElement.scrollTop=0; document.body.scrollTop=0; }catch(e){} }
 }
 // ---- grade collection: ring + clickable pills + popup ----
 function gradeItems(){
@@ -1631,7 +1632,7 @@ function closeGrade(){ gradeOvl.classList.remove("open"); }
 document.getElementById("gradeX").onclick=closeGrade;
 gradeOvl.addEventListener("click",e=>{ if(e.target===gradeOvl) closeGrade(); });
 function jumpTo(tab,key){
-  closeGrade(); activate(tab);
+  closeGrade(); activate(tab,{keepScroll:true});
   setTimeout(()=>{ const el=ELEMS.get(key); if(!el) return;
     let d=el.closest("details"); while(d){ d.open=true; d=d.parentElement?d.parentElement.closest("details"):null; }
     if(el.classList.contains("crow")) el.classList.add("open");
