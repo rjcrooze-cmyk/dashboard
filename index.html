@@ -770,6 +770,7 @@ body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
   </div>
 
   <section class="panel" id="p-news"></section>
+  <section class="panel" id="p-breakthroughs"></section>
   <section class="panel" id="p-aitrends"></section>
   <section class="panel" id="p-science"></section>
   <section class="panel" id="p-scidaily"></section>
@@ -814,19 +815,15 @@ window.__SOM={"edition": 3424, "date": "July 31, 2026", "label": "Star of Mysore
 /*SOM_END*/
 
 const TABS = [
-  {id:"news",     icon:"📰", label:"News"},
-  {id:"aitrends", icon:"🔥", label:"AI Trends"},
-  {id:"science",  icon:"🔬", label:"Science"},
-  {id:"scidaily", icon:"🧬", label:"Sci Daily"},
-  {id:"watch",    icon:"⭐", label:"Watch"},
-  {id:"youtube",  icon:"▶️", label:"YouTube"},
-  {id:"elon",     icon:"𝕏",  label:"Elon"},
-  {id:"mind",     icon:"🧠", label:"Mind"},
-  {id:"loa",      icon:"🌙", label:"Mindset"},
-  {id:"som",      icon:"🗞️", label:"SOM"},
-  {id:"following",icon:"🔔", label:"Following"}
+  {id:"news",         icon:"📰", label:"News"},
+  {id:"breakthroughs",icon:"💡", label:"Breakthroughs"},
+  {id:"youtube",      icon:"▶️", label:"YouTube"},
+  {id:"elon",         icon:"𝕏",  label:"Elon"},
+  {id:"loa",          icon:"🌙", label:"Mindset"},
+  {id:"som",          icon:"🗞️", label:"SOM"},
+  {id:"following",    icon:"🔔", label:"Following"}
 ];
-const PRIMARY = ["news","aitrends","science","youtube","elon"];   // Sci Daily, Watch, Mind, Mindset, SOM, Following live in "More"
+const PRIMARY = ["news","breakthroughs","youtube","elon","following"];   // Sci Daily, Watch, Mind, Mindset, SOM, Following live in "More"
 const store = {
   get(k,d){ try{ return JSON.parse(localStorage.getItem("dash_"+k)) ?? d; }catch(e){ return d; } },
   set(k,v){ try{ localStorage.setItem("dash_"+k, JSON.stringify(v)); }catch(e){} }
@@ -1171,11 +1168,14 @@ function renderNews(){
   setMode(mode);
 }
 
-function renderScienceLike(pid,S,label,verifiedTxt){
-  const p=document.getElementById(pid); if(!p) return; p.innerHTML="";
+function renderScienceLike(pid,S,label,verifiedTxt,tgt,catLabel){
+  const p=tgt||document.getElementById(pid); if(!p) return; if(!tgt) p.innerHTML="";
   const items=(S&&S.items)||[];
-  if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="Nothing loaded yet — tap Update."; p.appendChild(e); return; }
   const isSci=pid==="p-science";
+  if(tgt){ const real=items.filter(isRealItem); if(!real.length) return;
+    p.appendChild(sec(catLabel||(isSci?"🔬 Science":"🧬 Science Daily")));
+    real.forEach(it=>p.appendChild(story(it,{kind:false,tileTxt:isSci?"🔬":"🧬",kc:"var(--ac)"}))); return; }
+  if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="Nothing loaded yet — tap Update."; p.appendChild(e); return; }
   p.appendChild(panelHead(isSci?"🔬":"🧬", isSci?"Science":"Science Daily", isSci?"✨":"🔭", "spin"));
   {const _gb=glanceBox((items||[]).filter(isRealItem).slice(0,12).map(it=>({tag:it.tag||(isSci?"Science":"Study"), g:it.glance||it.t})), "In 30 seconds \u00b7 "+(isSci?"today's breakthroughs":"today's studies")); if(_gb) p.appendChild(_gb);}
   p.appendChild(document.createRange().createContextualFragment(legendHtml()));
@@ -1297,9 +1297,12 @@ function renderElon(){
     });
   } else if(!news.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="No Elon data yet — tap Update."; p.appendChild(e); }
 }
-function renderMind(){
-  const p=document.getElementById("p-mind"); if(!p) return; p.innerHTML="";
+function renderMind(tgt){
+  const p=tgt||document.getElementById("p-mind"); if(!p) return; if(!tgt) p.innerHTML="";
   const M=DATA.mind||{};
+  if(tgt){ const its=[]; (M.groups||[]).forEach(g=>(g.items||[]).forEach(it=>{ if(isRealItem(it)) its.push(it); }));
+    if(!its.length) return; p.appendChild(sec("🧠 Mind & Brain"));
+    its.forEach(it=>p.appendChild(story(it,{kind:false,tileTxt:"🧠",kc:"var(--ac)"}))); return; }
   const groups=M.groups||[]; let any=false; let heroDone=false; let firstGrp=true;
   p.appendChild(panelHead("🧠","Mind","💭","float"));
   p.appendChild(document.createRange().createContextualFragment(legendHtml()));
@@ -1361,16 +1364,43 @@ function trendAsk(el){
   const gi=el.querySelector(".ask-in"); el.querySelector(".ask-go").onclick=()=>askQuestion(el,gi);
   gi.addEventListener("keydown",e=>{if(e.key==="Enter")askQuestion(el,gi);});
 }
-function renderAitrends(){
-  const p=document.getElementById("p-aitrends"); if(!p) return; p.innerHTML="";
+function renderBreakthroughs(){
+  const p=document.getElementById("p-breakthroughs"); if(!p) return; p.innerHTML="";
+  p.appendChild(panelHead("💡","Breakthroughs","⚡","spin"));
+  const gl=[];
+  ((DATA.aitrends&&DATA.aitrends.items)||[]).filter(isRealItem).slice(0,6).forEach(it=>gl.push({tag:"🔥 AI", g:it.glance||it.t}));
+  ((DATA.science&&DATA.science.items)||[]).filter(isRealItem).slice(0,6).forEach(it=>gl.push({tag:"🔬 Science", g:it.glance||it.t}));
+  ((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).filter(isRealItem).slice(0,6).forEach(it=>gl.push({tag:"🧬 Sci Daily", g:it.glance||it.t}));
+  ((DATA.mind&&DATA.mind.groups)||[]).forEach(grp=>(grp.items||[]).filter(isRealItem).slice(0,2).forEach(it=>gl.push({tag:"🧠 Mind", g:it.glance||it.t})));
+  ((DATA.life&&DATA.life.items)||[]).filter(isRealItem).slice(0,6).forEach(it=>gl.push({tag:"✨ Life", g:it.glance||it.t}));
+  const gb=glanceBox(gl,"In 30 seconds · today's breakthroughs"); if(gb) p.appendChild(gb);
+  {const _lg=document.createElement("div"); _lg.innerHTML=legendHtml(); if(_lg.firstElementChild) p.appendChild(_lg.firstElementChild);}
+  try{ renderAitrends(p); }catch(e){}
+  try{ renderScienceLike("p-science",DATA.science,"","",p,"🔬 Science"); }catch(e){}
+  try{ renderScienceLike("p-scidaily",DATA.scienceDaily,"","",p,"🧬 Science Daily"); }catch(e){}
+  try{ renderMind(p); }catch(e){}
+  try{ const L=((DATA.life&&DATA.life.items)||[]).filter(isRealItem);
+    if(L.length){ p.appendChild(sec("✨ Life & Living")); L.forEach(it=>p.appendChild(story(it,{kind:false,tileTxt:"✨",kc:"var(--ac)"}))); } }catch(e){}
+  if(!p.querySelector(".story,.hero,.trend")){ const e=document.createElement("p"); e.className="empty"; e.textContent="No breakthroughs loaded yet — tap Update."; p.appendChild(e); }
+}
+function renderAitrends(tgt){
+  const p=tgt||document.getElementById("p-aitrends"); if(!p) return; if(!tgt) p.innerHTML="";
   const A=(typeof DATA.aitrends==="object"&&DATA.aitrends)?DATA.aitrends:null;
   const items=((A&&A.items)||[]).filter(isRealItem);
-  if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="The AI trend radar goes live after the next morning update — tap Update."; p.appendChild(e); return; }
+  if(!items.length){ if(!tgt){ const e=document.createElement("p"); e.className="empty"; e.textContent="The AI trend radar goes live after the next morning update — tap Update."; p.appendChild(e); } return; }
   const DELTA={new:["🆕 NEW","d-new"],rising:["▲ RISING","d-rising"],steady:["▬ STEADY","d-steady"],cooling:["▼ COOLING","d-cooling"]};
   const heatPct=v=>Math.max(2,Math.min(100,Math.round(+v||0)));
   const askBits='<div class="more"></div><div class="acts"><button class="mini act-ask">Ask</button></div><div class="ask-box" style="display:none"><input type="text" class="ask-in" placeholder="Ask anything about this trend…"><button class="mini ask-go">Ask</button></div>';
   function chips(it){ const d=DELTA[(it.delta||"steady").toLowerCase()]||DELTA.steady;
     return `<span class="pill ${d[1]}">${d[0]}</span>${pillH("var(--ac)","🔥 "+heatPct(it.heat))}${it.sources?pillH("var(--ac2)",it.sources+" sources"):""}`; }
+  if(tgt){ p.appendChild(sec("🔥 AI · trending · last 48h"));
+    items.forEach((it,ri)=>{ const row=document.createElement("div"); row.className="trend gcard srow"+(isReadItem(it)?" read":"");
+      row.style.setProperty("--kc","var(--ac)"); STORY.set(row,it); ELEMS.set(cardKey(it),row);
+      row.dataset.title=it.t||""; row.dataset.summary=it.s||"";
+      const openL=it.url?`<a href="${esc(it.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--ac);font-weight:700;font-size:.72rem">open source ↗</a>`:"";
+      row.innerHTML=`<span class="trank">${ri+1}</span><div class="sbody"><div class="chiprow">${chips(it)}</div><p class="st-t">${esc(it.t)}</p><p class="st-s">${esc(it.s||"")}</p>${assessHtml(it.assess)}<div class="heat"><i style="width:${heatPct(it.heat)}%"></i></div>${openL}${askBits}</div>`;
+      markOnOpen(row,it); trendAsk(row); p.appendChild(row); });
+    return; }
   // #1 = hero
   const top=items[0];
   {const _lg=document.createElement("div"); _lg.innerHTML=legendHtml(); if(_lg.firstElementChild) p.appendChild(_lg.firstElementChild);}
@@ -1437,8 +1467,13 @@ function wireFollow(el,it){ const b=el&&el.querySelector&&el.querySelector(".act
 function renderFollowing(){
   const p=document.getElementById("p-following"); if(!p) return; p.innerHTML="";
   p.appendChild(panelHead("🔔","Following","📡","spin"));
+  let hadWatch=false;
+  try{ const W=((DATA.watch&&DATA.watch.items)||[]).filter(it=>it&&it.t);
+    if(W.length){ hadWatch=true; p.appendChild(sec("⭐ Watch · biggest breakthroughs tracked"));
+      W.forEach(it=>p.appendChild(story(it,{kind:false,tileTxt:"⭐",kc:"var(--ac)"}))); } }catch(e){}
   const f=scanFollows(); const keys=Object.keys(f).sort((a,b)=>{ const A=(f[a].history||[])[0],B=(f[b].history||[])[0]; return new Date((B&&B.d)||0)-new Date((A&&A.d)||0); });
-  if(!keys.length){ const e=document.createElement("p"); e.className="empty"; e.innerHTML="You're not following anything yet.<br>Tap <b>☆ Follow</b> on any story to track its subject — new developments collect here each day, newest first."; p.appendChild(e); return; }
+  if(!keys.length){ if(!hadWatch){ const e=document.createElement("p"); e.className="empty"; e.innerHTML="You're not following anything yet.<br>Tap <b>☆ Follow</b> on any story to track its subject — new developments collect here each day, newest first."; p.appendChild(e); } return; }
+  if(hadWatch) p.appendChild(sec("🔔 Following subjects"));
   keys.forEach(k=>{ const sub=f[k]; const hist=sub.history||[]; const latest=hist[0];
     const card=document.createElement("div"); card.className="gcard fol";
     const rows=hist.map(h=>`<div class="fol-row"><span class="fol-d">${esc(fShort(h.d))}</span><span class="fol-t">${esc(h.t)}</span></div>`).join("");
@@ -1509,7 +1544,7 @@ document.addEventListener("click",function(e){
 
 // ---- tabs / activation / theme switch ----
 const nav=document.getElementById("tabs");
-const RENDERERS={news:renderNews,aitrends:renderAitrends,science:renderScience,scidaily:renderScidaily,watch:renderWatch,youtube:renderYouTube,elon:renderElon,mind:renderMind,loa:renderLoa,som:renderSom,following:renderFollowing};
+const RENDERERS={news:renderNews,breakthroughs:renderBreakthroughs,aitrends:renderAitrends,science:renderScience,scidaily:renderScidaily,watch:renderWatch,youtube:renderYouTube,elon:renderElon,mind:renderMind,loa:renderLoa,som:renderSom,following:renderFollowing};
 const rendered={};
 function ensureRendered(id){ if(rendered[id]) return; rendered[id]=true;
   try{ if(RENDERERS[id]) RENDERERS[id](); }catch(e){ console&&console.warn&&console.warn("render "+id,e); }
@@ -1540,9 +1575,10 @@ if(overflow.length){
   window.addEventListener("resize",()=>{ if(moreMenu.classList.contains("open")) positionMenu(); });
 }
 function closeMore(){ if(moreMenu) moreMenu.classList.remove("open"); }
-const TAB_META={news:["News",""],aitrends:["AI Trends","trends"],science:["Science","breakthroughs"],scidaily:["Science Daily","studies"],youtube:["YouTube","videos"],elon:["Elon","updates"],mind:["Mind","findings"],loa:["Mindset","messages"],som:["Star of Mysore","pages"]};
+const TAB_META={news:["News",""],breakthroughs:["Breakthroughs","breakthroughs"],aitrends:["AI Trends","trends"],science:["Science","breakthroughs"],scidaily:["Science Daily","studies"],youtube:["YouTube","videos"],elon:["Elon","updates"],mind:["Mind","findings"],loa:["Mindset","messages"],som:["Star of Mysore","pages"]};
 function slimCountFor(id){
   try{
+    if(id==="breakthroughs"){var bn=0;bn+=((DATA.aitrends&&DATA.aitrends.items)||[]).filter(isRealItem).length;bn+=((DATA.science&&DATA.science.items)||[]).filter(isRealItem).length;bn+=((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).filter(isRealItem).length;((DATA.mind&&DATA.mind.groups)||[]).forEach(function(g){bn+=((g.items)||[]).filter(isRealItem).length;});bn+=((DATA.life&&DATA.life.items)||[]).filter(isRealItem).length;return bn;}
     if(id==="aitrends") return ((typeof DATA.aitrends==="object"&&DATA.aitrends&&DATA.aitrends.items)||[]).filter(isRealItem).length;
     if(id==="science") return ((DATA.science&&DATA.science.items)||[]).filter(isRealItem).length;
     if(id==="scidaily") return ((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).filter(isRealItem).length;
@@ -1579,12 +1615,12 @@ function gradeItems(){
   const out={critical:[],important:[],interesting:[]};
   const push=(it,tab)=>{ const k=(it&&it.imp||"").toLowerCase(); if(out[k]&&isRealItem(it)) out[k].push({it,tab}); };
   ((DATA.news&&DATA.news.cats)||[]).forEach(c=>(c.items||[]).forEach(it=>push(it,"news")));
-  ((DATA.science&&DATA.science.items)||[]).forEach(it=>push(it,"science"));
-  ((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).forEach(it=>push(it,"scidaily"));
+  ((DATA.science&&DATA.science.items)||[]).forEach(it=>push(it,"breakthroughs"));
+  ((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).forEach(it=>push(it,"breakthroughs"));
   ((DATA.youtube&&DATA.youtube.groups)||[]).forEach(g=>{(g.items||[]).forEach(it=>push(it,"youtube"));(g.keys||[]).forEach(it=>push(it,"youtube"));});
   (DATA.elonNews||[]).forEach(it=>push(it,"elon"));
   ((DATA.elon&&DATA.elon.items)||[]).forEach(it=>push(it,"elon"));
-  ((DATA.mind&&DATA.mind.groups)||[]).forEach(g=>(g.items||[]).forEach(it=>push(it,"mind")));
+  ((DATA.mind&&DATA.mind.groups)||[]).forEach(g=>(g.items||[]).forEach(it=>push(it,"breakthroughs")));
   return out;
 }
 const GRADES=gradeItems();
