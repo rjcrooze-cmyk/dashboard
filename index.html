@@ -1103,6 +1103,12 @@ function glanceBox(rows,label){
 // ---- renderers ----
 function heroPick(items){ const real=(items||[]).filter(isRealItem); if(!real.length) return null;
   return real.find(i=>(i.imp||"").toLowerCase()==="critical")||real.find(i=>(i.imp||"").toLowerCase()==="important")||real[0]; }
+function newsScore(it){
+  const im={critical:4,important:3,interesting:2,noise:1}[(it&&it.imp||"").toLowerCase()]||0;
+  let rec=0; try{ const t=Date.parse((typeof pubDate==="function"?pubDate(it):"")||""); if(!isNaN(t)) rec=Math.max(0,Math.min(1,1-(Date.now()-t)/(72*3600*1000))); }catch(e){}
+  const fy=(it&&it.forYou)?1:0;
+  return im*100 + fy*8 + rec*5;   // most important first; For-You + recency break ties
+}
 function renderNews(){
   const p=document.getElementById("p-news"); if(!p) return; p.innerHTML="";
   const N=DATA.news||{}; const cats=N.cats||[];
@@ -1111,59 +1117,47 @@ function renderNews(){
   const all=[]; cats.forEach(c=>(c.items||[]).forEach(it=>{ it.__cat=c.h; all.push(it); }));
   const hero=heroPick(all);
   if(hero){ p.appendChild(sec("Lead story")); const h=story(hero,{hero:true}); const w=h.querySelector(".why2"); if(w){const b=w.querySelector("b"); if(b)b.textContent="Why it leads"; w.className="why";} p.appendChild(h); }
-  // density toolbar
+  // ONE flat list — no categories — most important first
+  const flat=all.filter(it=>isRealItem(it)&&!(hero&&it===hero)).sort((a,b)=>newsScore(b)-newsScore(a));
   let mode=store.get("newsDensity","compact");
   const total=all.filter(isRealItem).length;
   const bar=document.createElement("div"); bar.className="news-toolbar";
-  bar.innerHTML=`<span>${total} stories · ${cats.filter(c=>(c.items||[]).length).length} categories</span>
-    <button class="mini" id="newsExpandAll" style="border:1px solid var(--edge2);border-radius:999px;padding:5px 11px;font-weight:800;font-size:.62rem">⇕ Expand all</button>
+  bar.innerHTML=`<span>${total} stories · most important first</span>
     <div class="dens-seg"><button data-m="compact">Compact</button><button data-m="cards">Cards</button></div>`;
   p.appendChild(bar);
-  // in-brief (News only)
-  const gl=[]; cats.forEach(c=>(c.items||[]).filter(isRealItem).slice(0,2).forEach(it=>gl.push({tag:c.tag||c.h,g:it.glance||it.t})));
+  // in-brief (News only) — flat, in importance order, no category grouping
+  const gl=flat.slice(0,8).map(it=>it.glance||it.t);
   if(gl.length){ const box=document.createElement("details"); box.className="glance glass"; box.open=true;
-    const byTag={}; gl.forEach(x=>{(byTag[x.tag]=byTag[x.tag]||[]).push(x.g);});
-    box.innerHTML=`<summary>In brief · today in 30 seconds</summary><div class="glance-body">${Object.keys(byTag).map(t=>`<div class="glance-row"><span class="glance-tag">${esc(t)}</span><span class="glance-items">${byTag[t].map(esc).join(" · ")}</span></div>`).join("")}</div>`;
+    box.innerHTML=`<summary>In brief · today in 30 seconds</summary><div class="glance-body"><div class="glance-row"><span class="glance-items">${gl.map(esc).join(" · ")}</span></div></div>`;
     p.appendChild(box); }
   const listWrap=document.createElement("div"); listWrap.id="newsList"; p.appendChild(listWrap);
   function renderCompact(){
     listWrap.innerHTML="";
-    cats.forEach((c,ci)=>{ const items=(c.items||[]).filter(it=>!(hero&&it===hero)); if(!items.length) return;
-      const real=items.filter(isRealItem); const unread=real.filter(it=>!isReadItem(it)).length;
-      const d=document.createElement("details"); d.className="cat gcard"; if(store.get("newsCatsOpen",false)&&ci<1) d.open=true;
-      const chip=unread>0?`<span class="cn unread">${unread} new</span>`:`<span class="cn">${real.length}</span>`;
-      d.innerHTML=`<summary><span class="chev">▶</span>${esc(c.h)}${chip}</summary>`;
-      items.forEach(it=>{
-        const row=document.createElement("div"); row.className="crow srow"+(isReadItem(it)?" read":"");
-        STORY.set(row,it); ELEMS.set(cardKey(it),row);
-        row.dataset.title=it.t||""; row.dataset.summary=it.s||"";
-        const impc=({critical:"#ef4444",important:"#f59e0b",interesting:"#3b82f6",noise:"#94a3b8"})[(it.imp||"").toLowerCase()]||"#94a3b8";
-        const link=it.url?`<a href="${esc(it.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--ac);font-weight:700;font-size:.72rem">open ↗</a>`:"";
-        row.innerHTML=`<span class="cd" style="--cdc:${impc};background:${impc}"></span><div class="ct">${esc(it.t)} <span class="csrc">· ${esc(it.src||it.__cat||"")}</span>
-          <div class="cx">${it.s?`<div class="cs">${esc(it.s)}</div>`:""}${factChips(it.facts,impc)}${it.why?`<div class="why2"><b>Why it matters</b>${esc(it.why)}</div>`:""}${it.forYou?`<div class="fy">★ ${esc(it.forYou)}</div>`:""}<div class="more"></div><div class="acts" onclick="event.stopPropagation()"><button class="mini act-ask">Ask</button>${followBtn(it)}<span style="margin-left:auto">${link}</span></div><div class="ask-box" style="display:none" onclick="event.stopPropagation()"><input type="text" class="ask-in" placeholder="Ask anything about this…"><button class="mini ask-go">Ask</button></div></div></div>`;
-        row.querySelector(".act-ask").onclick=e=>toggleAsk(e.target);
-        wireFollow(row,it);
-        const cgi=row.querySelector(".ask-in"); row.querySelector(".ask-go").onclick=()=>askQuestion(row,cgi);
-        cgi.addEventListener("keydown",e=>{if(e.key==="Enter")askQuestion(row,cgi);});
-        row.addEventListener("click",()=>{ row.classList.toggle("open"); if(!row.classList.contains("read")){ row.classList.add("read"); setRead(it,true); const chp=d.querySelector(".cn"); if(chp){ const u=items.filter(x=>isRealItem(x)&&!isReadItem(x)).length; chp.className="cn"+(u>0?" unread":""); chp.textContent=u>0?u+" new":real.length; } } });
-        d.appendChild(row);
-      });
-      listWrap.appendChild(d);
+    flat.forEach(it=>{
+      const row=document.createElement("div"); row.className="crow srow"+(isReadItem(it)?" read":"");
+      STORY.set(row,it); ELEMS.set(cardKey(it),row);
+      row.dataset.title=it.t||""; row.dataset.summary=it.s||"";
+      const impc=({critical:"#ef4444",important:"#f59e0b",interesting:"#3b82f6",noise:"#94a3b8"})[(it.imp||"").toLowerCase()]||"#94a3b8";
+      const link=it.url?`<a href="${esc(it.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--ac);font-weight:700;font-size:.72rem">open ↗</a>`:"";
+      row.innerHTML=`<span class="cd" style="--cdc:${impc};background:${impc}"></span><div class="ct">${esc(it.t)} <span class="csrc">· ${esc(it.src||it.__cat||"")}</span>
+        <div class="cx">${it.s?`<div class="cs">${esc(it.s)}</div>`:""}${factChips(it.facts,impc)}${it.why?`<div class="why2"><b>Why it matters</b>${esc(it.why)}</div>`:""}${it.forYou?`<div class="fy">★ ${esc(it.forYou)}</div>`:""}<div class="more"></div><div class="acts" onclick="event.stopPropagation()"><button class="mini act-ask">Ask</button>${followBtn(it)}<span style="margin-left:auto">${link}</span></div><div class="ask-box" style="display:none" onclick="event.stopPropagation()"><input type="text" class="ask-in" placeholder="Ask anything about this…"><button class="mini ask-go">Ask</button></div></div></div>`;
+      row.querySelector(".act-ask").onclick=e=>toggleAsk(e.target);
+      wireFollow(row,it);
+      const cgi=row.querySelector(".ask-in"); row.querySelector(".ask-go").onclick=()=>askQuestion(row,cgi);
+      cgi.addEventListener("keydown",e=>{if(e.key==="Enter")askQuestion(row,cgi);});
+      row.addEventListener("click",()=>{ row.classList.toggle("open"); if(!row.classList.contains("read")){ row.classList.add("read"); setRead(it,true); } });
+      listWrap.appendChild(row);
     });
     const done=document.createElement("div"); done.className="allcaught"; done.textContent="— that's everything, you're all caught up —"; listWrap.appendChild(done);
   }
   function renderCards(){
     listWrap.innerHTML="";
-    cats.forEach(c=>{ const items=(c.items||[]); if(!items.length) return;
-      listWrap.appendChild(sec(c.h));
-      items.forEach(it=>{ if(hero&&it===hero) return; listWrap.appendChild(story(it,{})); });
-    });
+    flat.forEach(it=>listWrap.appendChild(story(it,{})));
   }
   function setMode(m){ mode=m; store.set("newsDensity",m);
     [...bar.querySelectorAll(".dens-seg button")].forEach(b=>b.classList.toggle("on",b.dataset.m===m));
     if(m==="compact") renderCompact(); else renderCards(); }
   [...bar.querySelectorAll(".dens-seg button")].forEach(b=>b.onclick=()=>setMode(b.dataset.m));
-  { const xb=bar.querySelector("#newsExpandAll"); if(xb) xb.onclick=()=>{ const cats=[...listWrap.querySelectorAll("details.cat")]; const anyClosed=cats.some(c=>!c.open); cats.forEach(c=>c.open=anyClosed); xb.textContent=anyClosed?"⇕ Collapse all":"⇕ Expand all"; }; }
   setMode(mode);
 }
 
