@@ -822,7 +822,7 @@ const TABS = [
   {id:"mind",         icon:"🧠", label:"Mind & Mindset"},
   {id:"som",          icon:"🗞️", label:"SOM"}
 ];
-const PRIMARY = ["news","breakthroughs","youtube","elon","mind"];   // SOM lives in "More"; Mindset merged into Mind; Watch/Following removed
+const PRIMARY = ["news","breakthroughs","youtube","elon","mind","som"];   // all tabs primary — SOM at the right end replaces the old "More" overflow
 const store = {
   get(k,d){ try{ return JSON.parse(localStorage.getItem("dash_"+k)) ?? d; }catch(e){ return d; } },
   set(k,v){ try{ localStorage.setItem("dash_"+k, JSON.stringify(v)); }catch(e){} }
@@ -1361,22 +1361,38 @@ function trendAsk(el){
   const gi=el.querySelector(".ask-in"); el.querySelector(".ask-go").onclick=()=>askQuestion(el,gi);
   gi.addEventListener("keydown",e=>{if(e.key==="Enter")askQuestion(el,gi);});
 }
+function bigScore(it){
+  const a=(it&&it.assess)||{}; const m=Math.max(0,Math.min(5,+a.mag||0));
+  const ev={proven:3,strong:2,early:1,speculative:0}[(a.evidence||"").toLowerCase()]||0;
+  const im={critical:3,important:2,interesting:1,noise:0}[(it&&it.imp||"").toLowerCase()]||0;
+  const heat=Math.max(0,Math.min(100,+((it&&it.heat)||0)))/100;
+  if(typeof (it&&it.big)==="number") return it.big;   // explicit override
+  let rec=0; try{ const t=Date.parse((typeof pubDate==="function"?pubDate(it):"")||""); if(!isNaN(t)) rec=Math.max(0,Math.min(1,1-(Date.now()-t)/(72*3600*1000))); }catch(e){}
+  return m*1000 + ev*70 + im*20 + heat*8 + rec*3;   // full "how big" ordering, finest within each tier
+}
 function renderBreakthroughs(){
   const p=document.getElementById("p-breakthroughs"); if(!p) return; p.innerHTML="";
   p.appendChild(panelHead("💡","Breakthroughs","⚡","spin"));
-  const gl=[];
-  ((DATA.aitrends&&DATA.aitrends.items)||[]).filter(isRealItem).slice(0,6).forEach(it=>gl.push({tag:"🔥 AI", g:it.glance||it.t}));
-  ((DATA.science&&DATA.science.items)||[]).filter(isMajor).slice(0,6).forEach(it=>gl.push({tag:"🔬 Science", g:it.glance||it.t}));
-  ((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).filter(isMajor).slice(0,6).forEach(it=>gl.push({tag:"🧬 Sci Daily", g:it.glance||it.t}));
-  ((DATA.life&&DATA.life.items)||[]).filter(isMajor).slice(0,6).forEach(it=>gl.push({tag:"✨ Life", g:it.glance||it.t}));
-  const gb=glanceBox(gl,"In 30 seconds · today's breakthroughs"); if(gb) p.appendChild(gb);
+  // ONE list, no categories — every Major/Historic breakthrough, biggest first
+  let items=[];
+  const add=arr=>(arr||[]).forEach(it=>{ if(isMajor(it)) items.push(it); });
+  add(DATA.aitrends&&DATA.aitrends.items);
+  add(DATA.science&&DATA.science.items);
+  add(DATA.scienceDaily&&DATA.scienceDaily.items);
+  add(DATA.life&&DATA.life.items);
+  items.sort((a,b)=>bigScore(b)-bigScore(a));   // full descending by how big
+  const gb=glanceBox(items.slice(0,8).map(it=>({tag:"", g:it.glance||it.t})), "In 30 seconds · biggest first"); if(gb) p.appendChild(gb);
   {const _lg=document.createElement("div"); _lg.innerHTML=legendHtml(); if(_lg.firstElementChild) p.appendChild(_lg.firstElementChild);}
-  try{ renderAitrends(p); }catch(e){}
-  try{ renderScienceLike("p-science",DATA.science,"","",p,"🔬 Science"); }catch(e){}
-  try{ renderScienceLike("p-scidaily",DATA.scienceDaily,"","",p,"🧬 Science Daily"); }catch(e){}
-  try{ const L=((DATA.life&&DATA.life.items)||[]).filter(isMajor);
-    if(L.length){ p.appendChild(sec("✨ Life & Living")); L.forEach(it=>p.appendChild(story(it,{kind:false,tileTxt:"✨",kc:"var(--ac)"}))); } }catch(e){}
-  if(!p.querySelector(".story,.hero,.trend")){ const e=document.createElement("p"); e.className="empty"; e.textContent="No breakthroughs loaded yet — tap Update."; p.appendChild(e); }
+  if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="No major breakthroughs today — only Historic and Major make this list."; p.appendChild(e); return; }
+  // Red flag: the single biggest item of the day when it reaches Historic (or an explicitly flagged item)
+  const forced=items.find(it=>it&&(it.flag===true||(it.assess&&it.assess.flag===true)));
+  const top=items[0]; const flagIt=forced||((top&&((top.assess&&+top.assess.mag)||0)===5)?top:null);
+  items.forEach(it=>{ const mag=(it.assess&&+it.assess.mag)||0;
+    const card=story(it,{kind:false,tileTxt:(mag===5?"🏆":"🔬"),kc:"var(--ac)"});
+    if(it===flagIt){ card.classList.add("bigflag"); card.style.position="relative";
+      card.style.boxShadow="0 0 0 2px #ef4444, 0 8px 24px rgba(239,68,68,.30)";
+      card.insertAdjacentHTML("afterbegin",'<span class="rf" title="Biggest breakthrough of the day" style="position:absolute;top:6px;right:8px;font-size:1.55rem;line-height:1;z-index:4;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45))">🚩</span>'); }
+    p.appendChild(card); });
 }
 function renderAitrends(tgt){
   const p=tgt||document.getElementById("p-aitrends"); if(!p) return; if(!tgt) p.innerHTML="";
@@ -1573,7 +1589,7 @@ function closeMore(){ if(moreMenu) moreMenu.classList.remove("open"); }
 const TAB_META={news:["News",""],breakthroughs:["Breakthroughs","breakthroughs"],aitrends:["AI Trends","trends"],science:["Science","breakthroughs"],scidaily:["Science Daily","studies"],youtube:["YouTube","videos"],elon:["Elon","updates"],mind:["Mind & Mindset","items"],som:["Star of Mysore","pages"]};
 function slimCountFor(id){
   try{
-    if(id==="breakthroughs"){var bn=0;bn+=((DATA.aitrends&&DATA.aitrends.items)||[]).filter(isRealItem).length;bn+=((DATA.science&&DATA.science.items)||[]).filter(isMajor).length;bn+=((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).filter(isMajor).length;bn+=((DATA.life&&DATA.life.items)||[]).filter(isMajor).length;return bn;}
+    if(id==="breakthroughs"){var bn=0;bn+=((DATA.aitrends&&DATA.aitrends.items)||[]).filter(isMajor).length;bn+=((DATA.science&&DATA.science.items)||[]).filter(isMajor).length;bn+=((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).filter(isMajor).length;bn+=((DATA.life&&DATA.life.items)||[]).filter(isMajor).length;return bn;}
     if(id==="aitrends") return ((typeof DATA.aitrends==="object"&&DATA.aitrends&&DATA.aitrends.items)||[]).filter(isRealItem).length;
     if(id==="science") return ((DATA.science&&DATA.science.items)||[]).filter(isRealItem).length;
     if(id==="scidaily") return ((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).filter(isRealItem).length;
