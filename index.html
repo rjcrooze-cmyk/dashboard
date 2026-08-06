@@ -819,7 +819,7 @@ const TABS = [
   {id:"breakthroughs",icon:"💡", label:"Breakthroughs"},
   {id:"youtube",      icon:"▶️", label:"YouTube"},
   {id:"elon",         icon:"𝕏",  label:"Elon"},
-  {id:"mind",         icon:"🧠", label:"Mind & Mindset"},
+  {id:"mind",         icon:"🧠", label:"Mind"},
   {id:"som",          icon:"🗞️", label:"SOM"}
 ];
 const PRIMARY = ["news","breakthroughs","youtube","elon","mind","som"];   // all tabs primary — SOM at the right end replaces the old "More" overflow
@@ -1299,7 +1299,7 @@ function renderElon(){
 }
 function renderMind(){
   const p=document.getElementById("p-mind"); if(!p) return; p.innerHTML="";
-  p.appendChild(panelHead("🧠","Mind & Mindset","💭","float"));
+  p.appendChild(panelHead("🧠","Mind","💭","float"));
   p.appendChild(document.createRange().createContextualFragment(legendHtml()));
   const M=DATA.mind||{}; const groups=M.groups||[]; let any=false; let firstGrp=true;
   // Mind = only Major/Historic, research-backed items (never video-only)
@@ -1586,7 +1586,7 @@ if(overflow.length){
   window.addEventListener("resize",()=>{ if(moreMenu.classList.contains("open")) positionMenu(); });
 }
 function closeMore(){ if(moreMenu) moreMenu.classList.remove("open"); }
-const TAB_META={news:["News",""],breakthroughs:["Breakthroughs","breakthroughs"],aitrends:["AI Trends","trends"],science:["Science","breakthroughs"],scidaily:["Science Daily","studies"],youtube:["YouTube","videos"],elon:["Elon","updates"],mind:["Mind & Mindset","items"],som:["Star of Mysore","pages"]};
+const TAB_META={news:["News",""],breakthroughs:["Breakthroughs","breakthroughs"],aitrends:["AI Trends","trends"],science:["Science","breakthroughs"],scidaily:["Science Daily","studies"],youtube:["YouTube","videos"],elon:["Elon","updates"],mind:["Mind","items"],som:["Star of Mysore","pages"]};
 function slimCountFor(id){
   try{
     if(id==="breakthroughs"){var bn=0;bn+=((DATA.aitrends&&DATA.aitrends.items)||[]).filter(isMajor).length;bn+=((DATA.science&&DATA.science.items)||[]).filter(isMajor).length;bn+=((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).filter(isMajor).length;bn+=((DATA.life&&DATA.life.items)||[]).filter(isMajor).length;return bn;}
