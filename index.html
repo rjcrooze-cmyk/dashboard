@@ -959,7 +959,7 @@ function stagePill(it){if(!it||!it.stage)return"";const s=String(it.stage).toLow
   const m=map[s];return m?pillH(m[1],esc(m[0]),m[2]):"";}
 function factChips(f,color){if(!Array.isArray(f)||!f.length)return"";
   return `<div class="facts">${f.slice(0,4).map(x=>`<span class="fact" style="--kc:${color}"><span class="fl">${esc(x.l||"")}</span><b>${esc(x.v||"")}</b></span>`).join("")}</div>`;}
-function forYouHtml(it){return (it&&it.forYou)?`<div class="fy">★ ${esc(it.forYou)}</div>`:"";}
+function forYouHtml(it){return "";}  /* For-You / personalization removed 2026-08-06 */
 function subBadge(sub,inline){const m=SUB_META[(sub||"").toLowerCase()];if(!m)return"";return `<span class="sub${inline?" inline":""}" style="--sc:${m[1]}">${m[0]}</span>`;}
 function assessHtml(a){ if(!a) return "";
   const ev=(a.evidence||"").toLowerCase(), evc=AS_EVC[ev]||"#8d8d94";
@@ -993,14 +993,13 @@ function story(it,opts){
   const vid=ytId(it.url);
   const sticker=(opts.subject&&SUB_META[(it.subject||"").toLowerCase()])?it.subject:null;
   const thumb=vid?`<span class="thumbwrap">${sticker?subBadge(it.subject,false):""}<a href="${esc(it.url)}" target="_blank" rel="noopener"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumbwrap').style.display='none'"><span class="play"></span></a></span>`:(sticker?subBadge(it.subject,true):"");
-  const chips=[opts.kind!==false?kindPill(it.kind):"",impPill(it.imp),stagePill(it),(it.forYou?pillH("#f2b705","★ FOR YOU"):""),newDot(it,read0)].filter(Boolean).join("");
+  const chips=[opts.kind!==false?kindPill(it.kind):"",impPill(it.imp),stagePill(it),newDot(it,read0)].filter(Boolean).join("");
   const body=
     (chips?`<div class="chiprow">${chips}</div>`:"")+
     thumb+
     `<p class="st-t">${title}</p>`+
     (it.s?`<p class="st-s">${esc(it.s)}</p>`:"")+
     factChips(it.facts,kc)+
-    (it.why?`<div class="why2"><b>Why it matters</b>${esc(it.why)}</div>`:"")+
     ((it.points&&it.points.length)?`<details class="pts"><summary>${esc(it.pointsLabel||(it.points.length+" key takeaways"))}</summary>${it.points.map(p=>`<div class="pt"><span class="pt-t">${esc(p.t)}</span>${p.s?`<span class="pt-s">${esc(p.s)}</span>`:""}</div>`).join("")}</details>`:"")+
     assessHtml(it.assess)+
     forYouHtml(it)+
@@ -1106,8 +1105,7 @@ function heroPick(items){ const real=(items||[]).filter(isRealItem); if(!real.le
 function newsScore(it){
   const im={critical:4,important:3,interesting:2,noise:1}[(it&&it.imp||"").toLowerCase()]||0;
   let rec=0; try{ const t=Date.parse((typeof pubDate==="function"?pubDate(it):"")||""); if(!isNaN(t)) rec=Math.max(0,Math.min(1,1-(Date.now()-t)/(72*3600*1000))); }catch(e){}
-  const fy=(it&&it.forYou)?1:0;
-  return im*100 + fy*8 + rec*5;   // most important first; For-You + recency break ties
+  return im*100 + rec*5;   // most important first (impact on daily life); recency breaks ties
 }
 function renderNews(){
   const p=document.getElementById("p-news"); if(!p) return; p.innerHTML="";
@@ -1116,7 +1114,7 @@ function renderNews(){
   sinceStrip(p);
   const all=[]; cats.forEach(c=>(c.items||[]).forEach(it=>{ it.__cat=c.h; all.push(it); }));
   const hero=heroPick(all);
-  if(hero){ p.appendChild(sec("Lead story")); const h=story(hero,{hero:true}); const w=h.querySelector(".why2"); if(w){const b=w.querySelector("b"); if(b)b.textContent="Why it leads"; w.className="why";} p.appendChild(h); }
+  if(hero){ p.appendChild(sec("Most important — vital to be aware of today")); p.appendChild(story(hero,{hero:true})); }
   // ONE flat list — no categories — most important first
   const flat=all.filter(it=>isRealItem(it)&&!(hero&&it===hero)).sort((a,b)=>newsScore(b)-newsScore(a));
   let mode=store.get("newsDensity","compact");
@@ -1140,7 +1138,7 @@ function renderNews(){
       const impc=({critical:"#ef4444",important:"#f59e0b",interesting:"#3b82f6",noise:"#94a3b8"})[(it.imp||"").toLowerCase()]||"#94a3b8";
       const link=it.url?`<a href="${esc(it.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--ac);font-weight:700;font-size:.72rem">open ↗</a>`:"";
       row.innerHTML=`<span class="cd" style="--cdc:${impc};background:${impc}"></span><div class="ct">${esc(it.t)} <span class="csrc">· ${esc(it.src||it.__cat||"")}</span>
-        <div class="cx">${it.s?`<div class="cs">${esc(it.s)}</div>`:""}${factChips(it.facts,impc)}${it.why?`<div class="why2"><b>Why it matters</b>${esc(it.why)}</div>`:""}${it.forYou?`<div class="fy">★ ${esc(it.forYou)}</div>`:""}<div class="more"></div><div class="acts" onclick="event.stopPropagation()"><button class="mini act-ask">Ask</button>${followBtn(it)}<span style="margin-left:auto">${link}</span></div><div class="ask-box" style="display:none" onclick="event.stopPropagation()"><input type="text" class="ask-in" placeholder="Ask anything about this…"><button class="mini ask-go">Ask</button></div></div></div>`;
+        <div class="cx">${it.s?`<div class="cs">${esc(it.s)}</div>`:""}${factChips(it.facts,impc)}<div class="more"></div><div class="acts" onclick="event.stopPropagation()"><button class="mini act-ask">Ask</button>${followBtn(it)}<span style="margin-left:auto">${link}</span></div><div class="ask-box" style="display:none" onclick="event.stopPropagation()"><input type="text" class="ask-in" placeholder="Ask anything about this…"><button class="mini ask-go">Ask</button></div></div></div>`;
       row.querySelector(".act-ask").onclick=e=>toggleAsk(e.target);
       wireFollow(row,it);
       const cgi=row.querySelector(".ask-in"); row.querySelector(".ask-go").onclick=()=>askQuestion(row,cgi);
@@ -1518,8 +1516,8 @@ function openReader(it){
   const chips=(it.imp?`<span class="reader-chip" style="--pc:${impc}">${esc(it.imp)}</span>`:"")+(it.tag?`<span class="reader-chip">${esc(it.tag)}</span>`:"");
   const gl=(it.glance&&it.glance!==it.t)?`<p class="reader-glance">${esc(it.glance)}</p>`:"";
   const body=it.s?`<p class="reader-s">${esc(it.s)}</p>`:"";
-  const why=it.why?`<div class="reader-why"><b>Why it matters</b>${esc(it.why)}</div>`:"";
-  const fy=it.forYou?`<div class="reader-fy">★ ${esc(it.forYou)}</div>`:"";
+  const why="";  /* Why-it-matters removed 2026-08-06 */
+  const fy="";  /* For-You removed 2026-08-06 */
   const asx=(typeof assessHtml==="function"&&it.assess)?assessHtml(it.assess):"";
   const eli2=it.eli?`<div class="reader-why"><b>In plain terms</b>${esc(it.eli)}</div>`:"";
   const pts=(it.points&&it.points.length)?`<div class="reader-pts"><div class="reader-pts-h">${esc(it.pointsLabel||"Key takeaways")}</div>`+it.points.map(p=>`<div class="reader-pt"><b>${esc(p.t)}</b>${p.s?`<span>${esc(p.s)}</span>`:""}</div>`).join("")+`</div>`:"";
