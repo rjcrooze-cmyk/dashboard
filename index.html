@@ -1112,11 +1112,10 @@ function glanceBox(rows,label){
 // ---- renderers ----
 function heroPick(items){ const real=(items||[]).filter(isRealItem); if(!real.length) return null;
   return real.find(i=>(i.imp||"").toLowerCase()==="critical")||real.find(i=>(i.imp||"").toLowerCase()==="important")||real[0]; }
-function proxBonus(it){ const c=(it&&it.__cat||""); if(/Mysuru|Mysore/.test(c))return 42; if(/Karnataka/.test(c))return 30; if(/Bengaluru/.test(c))return 25; if(/Kerala/.test(c))return 15; return 0; }
 function newsScore(it){
   const im={critical:4,important:3,interesting:2,noise:1}[(it&&it.imp||"").toLowerCase()]||0;
   let rec=0; try{ const t=Date.parse((typeof pubDate==="function"?pubDate(it):"")||""); if(!isNaN(t)) rec=Math.max(0,Math.min(1,1-(Date.now()-t)/(72*3600*1000))); }catch(e){}
-  return im*100 + proxBonus(it) + rec*5;   // impact first; home-proximity (Mysuru-first) lifts locals within a tier; recency breaks ties
+  return im*100 + rec*5;   // most important first (impact on daily life); recency breaks ties
 }
 function renderNews(){
   const p=document.getElementById("p-news"); if(!p) return; p.innerHTML="";
@@ -1126,13 +1125,12 @@ function renderNews(){
   const all=[]; cats.forEach(c=>(c.items||[]).forEach(it=>{ it.__cat=c.h; all.push(it); }));
   // MUST-KNOW ONLY — big stories everyone's following; drop the smaller/interesting/filler news
   const mustKnow=it=>{ const k=(it&&it.imp||"").toLowerCase(); return k==="critical"||k==="important"; };
-  const scored=all.filter(it=>isRealItem(it)&&mustKnow(it)).sort((a,b)=>newsScore(b)-newsScore(a));
-  const hero=scored[0]||null;
+  const hero=heroPick(all.filter(mustKnow));
   if(hero){ p.appendChild(sec("Most important — vital to be aware of today")); p.appendChild(story(hero,{hero:true})); }
-  // ONE flat list — no categories — most important first (home-proximity aware), must-know only
-  const flat=scored.slice(1);
+  // ONE flat list — no categories — most important first, must-know only
+  const flat=all.filter(it=>isRealItem(it)&&mustKnow(it)&&!(hero&&it===hero)).sort((a,b)=>newsScore(b)-newsScore(a));
   let mode=store.get("newsDensity","compact");
-  const total=scored.length;
+  const total=all.filter(it=>isRealItem(it)&&mustKnow(it)).length;
   const bar=document.createElement("div"); bar.className="news-toolbar";
   bar.innerHTML=`<span>${total} must-know stories</span>
     <div class="dens-seg"><button data-m="compact">Compact</button><button data-m="cards">Cards</button></div>`;
