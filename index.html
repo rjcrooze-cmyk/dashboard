@@ -726,16 +726,6 @@ body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
 :root[data-theme="dark"]{--dock:#161c2c}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="studio"]){--dock:#161c2c}}
 :root[data-theme="studio"]{--dock:#ffffff}
-
-/* ===== audit fixes 2026-08-07: loading shimmer + phone tap targets ===== */
-@keyframes qaPulse{0%,100%{opacity:.55}50%{opacity:1}}
-.exp.qa.loading{animation:qaPulse 1.05s ease-in-out infinite}
-@media(max-width:560px){
-  .mini{min-height:38px;padding:8px 13px}
-  #newsList .crow .acts a[href]{min-height:34px;display:inline-flex;align-items:center}
-  .crow .cx .acts .mini{min-height:36px}
-  .tool{min-width:40px;min-height:40px;display:inline-flex;align-items:center;justify-content:center}
-}
 </style>
 </head>
 <body data-tt="news">
@@ -1002,7 +992,7 @@ function story(it,opts){
   const age=relAge(pubDate(it));
   const vid=ytId(it.url);
   const sticker=(opts.subject&&SUB_META[(it.subject||"").toLowerCase()])?it.subject:null;
-  const thumb=vid?`<span class="thumbwrap">${sticker?subBadge(it.subject,false):""}<a href="${esc(it.url)}" target="_blank" rel="noopener" aria-label="Watch: ${esc(it.t||"")}"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumbwrap').style.display='none'"><span class="play"></span></a></span>`:(sticker?subBadge(it.subject,true):"");
+  const thumb=vid?`<span class="thumbwrap">${sticker?subBadge(it.subject,false):""}<a href="${esc(it.url)}" target="_blank" rel="noopener"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumbwrap').style.display='none'"><span class="play"></span></a></span>`:(sticker?subBadge(it.subject,true):"");
   const chips=[opts.kind!==false?kindPill(it.kind):"",impPill(it.imp),stagePill(it),newDot(it,read0)].filter(Boolean).join("");
   const body=
     (chips?`<div class="chiprow">${chips}</div>`:"")+
@@ -1121,7 +1111,6 @@ function renderNews(){
   const p=document.getElementById("p-news"); if(!p) return; p.innerHTML="";
   const N=DATA.news||{}; const cats=N.cats||[];
   if(!cats.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="No news loaded yet — tap Update."; p.appendChild(e); return; }
-  sinceStrip(p);
   const all=[]; cats.forEach(c=>(c.items||[]).forEach(it=>{ it.__cat=c.h; all.push(it); }));
   // MUST-KNOW ONLY — big stories everyone's following; drop the smaller/interesting/filler news
   const mustKnow=it=>{ const k=(it&&it.imp||"").toLowerCase(); return k==="critical"||k==="important"; };
@@ -1324,7 +1313,7 @@ function mindsetCard(m){
   STORY.set(d,it); ELEMS.set(cardKey(it),d);
   const age=relAge(pubDate(m));
   const vid=m.vid||ytId(m.url);
-  const thumb=vid?`<span class="thumbwrap"><a href="${esc(m.url)}" target="_blank" rel="noopener" aria-label="Watch: ${esc((m.who||m.author||"")+" "+(m.t||m.title||""))}"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumbwrap').style.display='none'"><span class="play"></span></a></span>`:"";
+  const thumb=vid?`<span class="thumbwrap"><a href="${esc(m.url)}" target="_blank" rel="noopener"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumbwrap').style.display='none'"><span class="play"></span></a></span>`:"";
   const title=m.t||m.title||"";
   const summary=m.gist||m.msg||m.s||"";
   d.innerHTML=`<div class="auth">${esc(m.who||m.author||"")}${title?` · <span style="opacity:.7">${esc(title)}</span>`:""}</div>`+thumb+
@@ -1384,7 +1373,7 @@ function renderBreakthroughs(){
   add(DATA.scienceDaily&&DATA.scienceDaily.items);
   add(DATA.life&&DATA.life.items);
   items.sort((a,b)=>bigScore(b)-bigScore(a));   // full descending by how big
-  const gb=glanceBox(items.slice(0,8).map(it=>({tag:(AS_TIERS[(it.assess&&+it.assess.mag)||0]||""), g:it.glance||it.t})), "In 30 seconds · biggest first"); if(gb) p.appendChild(gb);
+  const gb=glanceBox(items.slice(0,8).map(it=>({tag:"", g:it.glance||it.t})), "In 30 seconds · biggest first"); if(gb) p.appendChild(gb);
   {const _lg=document.createElement("div"); _lg.innerHTML=legendHtml(); if(_lg.firstElementChild) p.appendChild(_lg.firstElementChild);}
   if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="No major breakthroughs today — only Historic and Major make this list."; p.appendChild(e); return; }
   // Red flag: the single biggest item of the day when it reaches Historic (or an explicitly flagged item)
@@ -1539,10 +1528,9 @@ function openReader(it){
     const ain=row.querySelector(".ask-in"), ago=row.querySelector(".ask-go");
     if(ago&&ain){ ago.onclick=()=>askQuestion(row,ain); ain.addEventListener("keydown",e=>{ if(e.key==="Enter") askQuestion(row,ain); }); } }
   r.scrollTop=0; r.classList.add("open"); document.body.classList.add("reader-lock");
-  try{ openReader.__prev=document.activeElement; var _rx=document.getElementById("readerX"); if(_rx) _rx.focus(); }catch(e){}
   try{ if(typeof setRead==="function") setRead(it,true); }catch(e){}
 }
-function closeReader(){ const r=document.getElementById("reader"); if(r) r.classList.remove("open"); document.body.classList.remove("reader-lock"); try{ if(openReader.__prev&&openReader.__prev.focus) openReader.__prev.focus(); }catch(e){} }
+function closeReader(){ const r=document.getElementById("reader"); if(r) r.classList.remove("open"); document.body.classList.remove("reader-lock"); }
 (function(){ const rx=document.getElementById("readerX"); if(rx) rx.onclick=closeReader;
   const r=document.getElementById("reader"); if(r) r.addEventListener("click",e=>{ if(e.target===r) closeReader(); });
   document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ const rr=document.getElementById("reader"); if(rr&&rr.classList.contains("open")){ e.stopPropagation(); closeReader(); } } },true);
