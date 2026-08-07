@@ -6,7 +6,7 @@
     /*THUMBS_START*/ ... /*THUMBS_END*/   (inline video thumbnails)
     /*SOM_START*/ ... /*SOM_END*/         (Star of Mysore page images)
   Everything else (tabs, CSS, render functions, freshness guard) is the template - edit freely,
-  but KEEP those six markers intact and do NOT remove the Science Daily tab or re-add Audio/Tools tabs.
+  but KEEP those six markers intact. Current tab row: News · Breakthroughs · YouTube · Elon · Mind & Mindset · SOM. Do NOT re-add Audio/Tools/Science/Science-Daily/AI-Trends/Watch/Following tabs.
   The placeholders here are just sample data so the page renders in a browser while you edit.
 
   STUDIO EDITION notes (data contract and localStorage keys are unchanged):
@@ -726,6 +726,16 @@ body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
 :root[data-theme="dark"]{--dock:#161c2c}
 @media(prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="studio"]){--dock:#161c2c}}
 :root[data-theme="studio"]{--dock:#ffffff}
+
+/* ===== audit fixes 2026-08-07: loading shimmer + phone tap targets ===== */
+@keyframes qaPulse{0%,100%{opacity:.55}50%{opacity:1}}
+.exp.qa.loading{animation:qaPulse 1.05s ease-in-out infinite}
+@media(max-width:560px){
+  .mini{min-height:38px;padding:8px 13px}
+  #newsList .crow .acts a[href]{min-height:34px;display:inline-flex;align-items:center}
+  .crow .cx .acts .mini{min-height:36px}
+  .tool{min-width:40px;min-height:40px;display:inline-flex;align-items:center;justify-content:center}
+}
 </style>
 </head>
 <body data-tt="news">
@@ -819,7 +829,7 @@ const TABS = [
   {id:"breakthroughs",icon:"💡", label:"Breakthroughs"},
   {id:"youtube",      icon:"▶️", label:"YouTube"},
   {id:"elon",         icon:"𝕏",  label:"Elon"},
-  {id:"mind",         icon:"🧠", label:"Mind"},
+  {id:"mind",         icon:"🧠", label:"Mind & Mindset"},
   {id:"som",          icon:"🗞️", label:"SOM"}
 ];
 const PRIMARY = ["news","breakthroughs","youtube","elon","mind","som"];   // all tabs primary — SOM at the right end replaces the old "More" overflow
@@ -992,7 +1002,7 @@ function story(it,opts){
   const age=relAge(pubDate(it));
   const vid=ytId(it.url);
   const sticker=(opts.subject&&SUB_META[(it.subject||"").toLowerCase()])?it.subject:null;
-  const thumb=vid?`<span class="thumbwrap">${sticker?subBadge(it.subject,false):""}<a href="${esc(it.url)}" target="_blank" rel="noopener"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumbwrap').style.display='none'"><span class="play"></span></a></span>`:(sticker?subBadge(it.subject,true):"");
+  const thumb=vid?`<span class="thumbwrap">${sticker?subBadge(it.subject,false):""}<a href="${esc(it.url)}" target="_blank" rel="noopener" aria-label="Watch: ${esc(it.t||"")}"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumbwrap').style.display='none'"><span class="play"></span></a></span>`:(sticker?subBadge(it.subject,true):"");
   const chips=[opts.kind!==false?kindPill(it.kind):"",impPill(it.imp),stagePill(it),newDot(it,read0)].filter(Boolean).join("");
   const body=
     (chips?`<div class="chiprow">${chips}</div>`:"")+
@@ -1102,10 +1112,11 @@ function glanceBox(rows,label){
 // ---- renderers ----
 function heroPick(items){ const real=(items||[]).filter(isRealItem); if(!real.length) return null;
   return real.find(i=>(i.imp||"").toLowerCase()==="critical")||real.find(i=>(i.imp||"").toLowerCase()==="important")||real[0]; }
+function proxBonus(it){ const c=(it&&it.__cat||""); if(/Mysuru|Mysore/.test(c))return 42; if(/Karnataka/.test(c))return 30; if(/Bengaluru/.test(c))return 25; if(/Kerala/.test(c))return 15; return 0; }
 function newsScore(it){
   const im={critical:4,important:3,interesting:2,noise:1}[(it&&it.imp||"").toLowerCase()]||0;
   let rec=0; try{ const t=Date.parse((typeof pubDate==="function"?pubDate(it):"")||""); if(!isNaN(t)) rec=Math.max(0,Math.min(1,1-(Date.now()-t)/(72*3600*1000))); }catch(e){}
-  return im*100 + rec*5;   // most important first (impact on daily life); recency breaks ties
+  return im*100 + proxBonus(it) + rec*5;   // impact first; home-proximity (Mysuru-first) lifts locals within a tier; recency breaks ties
 }
 function renderNews(){
   const p=document.getElementById("p-news"); if(!p) return; p.innerHTML="";
@@ -1115,12 +1126,13 @@ function renderNews(){
   const all=[]; cats.forEach(c=>(c.items||[]).forEach(it=>{ it.__cat=c.h; all.push(it); }));
   // MUST-KNOW ONLY — big stories everyone's following; drop the smaller/interesting/filler news
   const mustKnow=it=>{ const k=(it&&it.imp||"").toLowerCase(); return k==="critical"||k==="important"; };
-  const hero=heroPick(all.filter(mustKnow));
+  const scored=all.filter(it=>isRealItem(it)&&mustKnow(it)).sort((a,b)=>newsScore(b)-newsScore(a));
+  const hero=scored[0]||null;
   if(hero){ p.appendChild(sec("Most important — vital to be aware of today")); p.appendChild(story(hero,{hero:true})); }
-  // ONE flat list — no categories — most important first, must-know only
-  const flat=all.filter(it=>isRealItem(it)&&mustKnow(it)&&!(hero&&it===hero)).sort((a,b)=>newsScore(b)-newsScore(a));
+  // ONE flat list — no categories — most important first (home-proximity aware), must-know only
+  const flat=scored.slice(1);
   let mode=store.get("newsDensity","compact");
-  const total=all.filter(it=>isRealItem(it)&&mustKnow(it)).length;
+  const total=scored.length;
   const bar=document.createElement("div"); bar.className="news-toolbar";
   bar.innerHTML=`<span>${total} must-know stories</span>
     <div class="dens-seg"><button data-m="compact">Compact</button><button data-m="cards">Cards</button></div>`;
@@ -1264,7 +1276,7 @@ function renderElon(){
   if(news.length){ p.appendChild(sec("News")); news.forEach(it=>p.appendChild(story(it,{kind:false,tileTxt:"🗞️",kc:"var(--ac)"}))); }
   const items=(E.items||[]).slice().sort((a,b)=>(b.likes||0)-(a.likes||0)||(b.views||0)-(a.views||0));
   if(items.length){
-    p.appendChild(sec("Elon's posts · ranked by engagement · "+(E.day||"")));
+    p.appendChild(sec("Elon's posts · most notable first · "+(E.day||"")));
     function nfmt(n){n=+n||0;return n>=1e6?(n/1e6).toFixed(1)+"M":n>=1e3?(n/1e3).toFixed(n>=1e4?0:1)+"K":""+n;}
     function ftime(iso){const d=new Date(iso);return isNaN(d.getTime())?"":d.toLocaleString(undefined,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"});}
     items.forEach((it,i)=>{
@@ -1314,7 +1326,7 @@ function mindsetCard(m){
   STORY.set(d,it); ELEMS.set(cardKey(it),d);
   const age=relAge(pubDate(m));
   const vid=m.vid||ytId(m.url);
-  const thumb=vid?`<span class="thumbwrap"><a href="${esc(m.url)}" target="_blank" rel="noopener"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumbwrap').style.display='none'"><span class="play"></span></a></span>`:"";
+  const thumb=vid?`<span class="thumbwrap"><a href="${esc(m.url)}" target="_blank" rel="noopener" aria-label="Watch: ${esc((m.who||m.author||"")+" "+(m.t||m.title||""))}"><img class="thumb" loading="lazy" alt="" src="${esc(ytThumb(vid))}" onerror="this.closest('.thumbwrap').style.display='none'"><span class="play"></span></a></span>`:"";
   const title=m.t||m.title||"";
   const summary=m.gist||m.msg||m.s||"";
   d.innerHTML=`<div class="auth">${esc(m.who||m.author||"")}${title?` · <span style="opacity:.7">${esc(title)}</span>`:""}</div>`+thumb+
@@ -1336,8 +1348,7 @@ function renderSom(){
 }
 // ---- "Since yesterday" memory strip (renders DATA.since when the task provides it) ----
 function sinceStrip(p){
-  const S=(typeof DATA.since==="object"&&DATA.since)?DATA.since:null;
-  const items=(S&&S.items)||[]; if(!items.length) return;
+  const S=DATA.since; const items=Array.isArray(S)?S:((S&&S.items)||[]); if(!items.length) return;
   const KIND={thread:["Δ MOVED","var(--ac)"],followup:["★ FOLLOW-UP","#f2b705"],receipt:["✓ RECEIPT","#22c55e"]};
   const box=document.createElement("div"); box.className="since glass";
   box.innerHTML='<div class="sh">Since yesterday — your world model</div>'+items.slice(0,6).map(it=>{
@@ -1375,7 +1386,7 @@ function renderBreakthroughs(){
   add(DATA.scienceDaily&&DATA.scienceDaily.items);
   add(DATA.life&&DATA.life.items);
   items.sort((a,b)=>bigScore(b)-bigScore(a));   // full descending by how big
-  const gb=glanceBox(items.slice(0,8).map(it=>({tag:"", g:it.glance||it.t})), "In 30 seconds · biggest first"); if(gb) p.appendChild(gb);
+  const gb=glanceBox(items.slice(0,8).map(it=>({tag:(AS_TIERS[(it.assess&&+it.assess.mag)||0]||""), g:it.glance||it.t})), "In 30 seconds · biggest first"); if(gb) p.appendChild(gb);
   {const _lg=document.createElement("div"); _lg.innerHTML=legendHtml(); if(_lg.firstElementChild) p.appendChild(_lg.firstElementChild);}
   if(!items.length){ const e=document.createElement("p"); e.className="empty"; e.textContent="No major breakthroughs today — only Historic and Major make this list."; p.appendChild(e); return; }
   // Red flag: the single biggest item of the day when it reaches Historic (or an explicitly flagged item)
@@ -1530,9 +1541,10 @@ function openReader(it){
     const ain=row.querySelector(".ask-in"), ago=row.querySelector(".ask-go");
     if(ago&&ain){ ago.onclick=()=>askQuestion(row,ain); ain.addEventListener("keydown",e=>{ if(e.key==="Enter") askQuestion(row,ain); }); } }
   r.scrollTop=0; r.classList.add("open"); document.body.classList.add("reader-lock");
+  try{ openReader.__prev=document.activeElement; var _rx=document.getElementById("readerX"); if(_rx) _rx.focus(); }catch(e){}
   try{ if(typeof setRead==="function") setRead(it,true); }catch(e){}
 }
-function closeReader(){ const r=document.getElementById("reader"); if(r) r.classList.remove("open"); document.body.classList.remove("reader-lock"); }
+function closeReader(){ const r=document.getElementById("reader"); if(r) r.classList.remove("open"); document.body.classList.remove("reader-lock"); try{ if(openReader.__prev&&openReader.__prev.focus) openReader.__prev.focus(); }catch(e){} }
 (function(){ const rx=document.getElementById("readerX"); if(rx) rx.onclick=closeReader;
   const r=document.getElementById("reader"); if(r) r.addEventListener("click",e=>{ if(e.target===r) closeReader(); });
   document.addEventListener("keydown",function(e){ if(e.key==="Escape"){ const rr=document.getElementById("reader"); if(rr&&rr.classList.contains("open")){ e.stopPropagation(); closeReader(); } } },true);
@@ -1580,7 +1592,7 @@ if(overflow.length){
   window.addEventListener("resize",()=>{ if(moreMenu.classList.contains("open")) positionMenu(); });
 }
 function closeMore(){ if(moreMenu) moreMenu.classList.remove("open"); }
-const TAB_META={news:["News",""],breakthroughs:["Breakthroughs","breakthroughs"],aitrends:["AI Trends","trends"],science:["Science","breakthroughs"],scidaily:["Science Daily","studies"],youtube:["YouTube","videos"],elon:["Elon","updates"],mind:["Mind","items"],som:["Star of Mysore","pages"]};
+const TAB_META={news:["News",""],breakthroughs:["Breakthroughs","breakthroughs"],aitrends:["AI Trends","trends"],science:["Science","breakthroughs"],scidaily:["Science Daily","studies"],youtube:["YouTube","videos"],elon:["Elon","updates"],mind:["Mind & Mindset","items"],som:["Star of Mysore","pages"]};
 function slimCountFor(id){
   try{
     if(id==="breakthroughs"){var bn=0;bn+=((DATA.aitrends&&DATA.aitrends.items)||[]).filter(isMajor).length;bn+=((DATA.science&&DATA.science.items)||[]).filter(isMajor).length;bn+=((DATA.scienceDaily&&DATA.scienceDaily.items)||[]).filter(isMajor).length;bn+=((DATA.life&&DATA.life.items)||[]).filter(isMajor).length;return bn;}
