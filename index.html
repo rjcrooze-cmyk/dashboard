@@ -732,11 +732,16 @@ body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
 .costbar .cb-h{flex:0 0 auto;font-weight:850;font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--mut)}
 .cb-row{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
 .cb-row::-webkit-scrollbar{display:none}
-.cx{flex:0 0 auto;display:inline-flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:11px;background:color-mix(in srgb,var(--mut) 12%,transparent);text-decoration:none;white-space:nowrap}
-.cx-l{font-size:.66rem;font-weight:750;color:var(--ink2)}
-.cx-v{font-size:.79rem;font-weight:850;color:var(--ink)}
-.cx-d{font-size:.63rem;font-weight:800}
-.cx-p{color:var(--mut);font-size:.58rem;vertical-align:super}
+.cb-row .cx{flex:0 0 auto;display:inline-flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:11px;background:color-mix(in srgb,var(--mut) 12%,transparent);text-decoration:none;white-space:nowrap}
+.cb-row .cx-l{font-size:.66rem;font-weight:750;color:var(--ink2)}
+.cb-row .cx-v{font-size:.79rem;font-weight:850;color:var(--ink)}
+.cb-row .cx-d{font-size:.63rem;font-weight:800}
+.cb-row .cx-p{color:var(--mut);font-size:.58rem;vertical-align:super}
+/* FIX 2026-08-08: the five rules above MUST stay scoped to .cb-row — an unscoped .cx collided
+   with the news-card expand container (also class .cx) and laid the whole expanded story + Ask
+   thread out as one nowrap inline-flex line running off-screen on phones. Do not regress.
+   Belt-and-braces wrap insurance for expanded content and Ask answers: */
+.crow .cx,.crow .cx .cs,.more .exp{overflow-wrap:anywhere;word-break:break-word;white-space:normal;min-width:0}
 :root[data-theme="studio"] .costbar .cb-h{color:#6f6f6b}
 </style>
 </head>
