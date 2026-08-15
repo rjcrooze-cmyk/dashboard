@@ -863,6 +863,26 @@ body:not([data-tt="news"]) :is(:root[data-theme="clean"],:root[data-theme="dark"
 :root[data-theme="clean"] .basis b,:root[data-theme="dark"] .basis b{color:var(--mut)!important;font-weight:500!important}
 :root[data-theme="clean"] .seen,:root[data-theme="dark"] .seen{font-size:.72rem!important;color:var(--mut)!important;margin:8px 0 0!important}
 
+/* ---- inline expand, not an overlay ---- */
+:root[data-theme="clean"] .story.xopen .st-s,:root[data-theme="dark"] .story.xopen .st-s,
+:root[data-theme="clean"] .trend.xopen .st-s,:root[data-theme="dark"] .trend.xopen .st-s{display:none!important}
+:root[data-theme="clean"] .story.xopen,:root[data-theme="dark"] .story.xopen,
+:root[data-theme="clean"] .trend.xopen,:root[data-theme="dark"] .trend.xopen{grid-column:1/-1!important}
+:root[data-theme="clean"] .story.xopen .st-t,:root[data-theme="dark"] .story.xopen .st-t{font-size:1.3rem!important;line-height:1.26!important}
+:root[data-theme="clean"] .story>.more,:root[data-theme="dark"] .story>.more,
+:root[data-theme="clean"] .trend>.more,:root[data-theme="dark"] .trend>.more{max-width:680px}
+:root[data-theme="clean"] .xg,:root[data-theme="dark"] .xg{
+  font-size:1.02rem;line-height:1.55;color:var(--ink);font-weight:500;margin:12px 0 14px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+:root[data-theme="clean"] .xs,:root[data-theme="dark"] .xs{font-size:.98rem;line-height:1.72;color:var(--ink2);margin:0}
+:root[data-theme="clean"] .xeli,:root[data-theme="dark"] .xeli{background:var(--sub);border-radius:10px;padding:14px 16px;margin-top:18px;color:var(--ink2);font-size:.92rem;line-height:1.6}
+:root[data-theme="clean"] .xeli b,:root[data-theme="dark"] .xeli b{display:block;margin-bottom:6px;color:var(--ink);font-weight:600}
+:root[data-theme="clean"] .xpts,:root[data-theme="dark"] .xpts{margin-top:22px;border-top:1px solid var(--line);padding-top:18px}
+:root[data-theme="clean"] .xpts-h,:root[data-theme="dark"] .xpts-h{font-size:.72rem;text-transform:uppercase;letter-spacing:.02em;color:var(--mut);font-weight:600;margin-bottom:12px}
+:root[data-theme="clean"] .xpt,:root[data-theme="dark"] .xpt{margin-bottom:14px}
+:root[data-theme="clean"] .xopen-src,:root[data-theme="dark"] .xopen-src{display:inline-block;margin-top:20px;color:var(--ac)!important;font-size:.9rem;font-weight:500}
+:root[data-theme="clean"] .story.xopen>.more,:root[data-theme="dark"] .story.xopen>.more,
+:root[data-theme="clean"] .trend.xopen>.more,:root[data-theme="dark"] .trend.xopen>.more{flex:0 0 100%!important;width:auto!important;height:auto!important;margin:2px 0 0!important;overflow:visible!important}
+
 </style>
 </head>
 <body data-tt="news">
@@ -1662,6 +1682,29 @@ function mountFit(id){ const panel=document.getElementById("p-"+id); if(!panel) 
 }
 try{ scanFollows(); }catch(e){}
 // Full-screen article reader — opening a card in a densified/fit-to-screen tab fills the screen so it's easy to read.
+
+// ---- INLINE EXPAND (2026-08-15): tapping a card unhides its long form in place.
+// Replaces the full-screen reader overlay, which rendered at the bottom of the page.
+function toggleInline(card,it){
+  if(!card) return;
+  const box=card.querySelector(":scope > .more"); if(!box) return;
+  if(card.classList.contains("xopen")){ card.classList.remove("xopen"); box.innerHTML=""; return; }
+  document.querySelectorAll(".panel .xopen").forEach(c=>{ if(c!==card){ c.classList.remove("xopen"); const m=c.querySelector(":scope > .more"); if(m) m.innerHTML=""; } });
+  let html="";
+  if(it.glance&&it.glance!==it.t) html+=`<p class="xg">${esc(it.glance)}</p>`;
+  if(it.s) html+=`<p class="xs">${esc(it.s)}</p>`;
+  try{ if(typeof assessHtml==="function"&&it.assess) html+=assessHtml(it.assess); }catch(e){}
+  if(it.eli) html+=`<div class="xeli"><b>In plain terms</b>${esc(it.eli)}</div>`;
+  if(it.points&&it.points.length){
+    html+=`<div class="xpts"><div class="xpts-h">${esc(it.pointsLabel||"Key takeaways")}</div>`+
+      it.points.map(pt=>`<div class="xpt"><div class="pt-t">${esc(pt.t||"")}</div><div class="pt-s">${esc(pt.s||"")}</div></div>`).join("")+`</div>`;
+  }
+  if(it.url) html+=`<a class="xopen-src" href="${esc(it.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">Open full source ↗</a>`;
+  box.innerHTML=html; card.classList.add("xopen");
+  try{ if(typeof setRead==="function") setRead(it,true); }catch(e){}
+  const top=card.getBoundingClientRect().top;
+  if(top<0||top>window.innerHeight*0.6) card.scrollIntoView({behavior:"smooth",block:"start"});
+}
 function openReader(it){
   if(!it) return; const r=document.getElementById("reader"), b=document.getElementById("readerBody"); if(!r||!b) return;
   const impc=({critical:"#ef4444",important:"#f59e0b",interesting:"#3b82f6",noise:"#94a3b8"})[(it.imp||"").toLowerCase()]||"var(--ac)";
@@ -1696,7 +1739,7 @@ document.addEventListener("click",function(e){
   if(e.target.closest("a,button,input,textarea,select,summary,.ask-box,.fitbar,.acts,.pts,.fol-hist")) return;
   const card=e.target.closest(".story,.trend,.hero,.crow"); if(!card) return;
   const it=(typeof STORY!=="undefined")?STORY.get(card):null;
-  if(it){ e.preventDefault(); e.stopPropagation(); openReader(it); }
+  if(it){ e.preventDefault(); e.stopPropagation(); toggleInline(card,it); }
   else { card.classList.toggle("xopen"); }
 },true);
 
