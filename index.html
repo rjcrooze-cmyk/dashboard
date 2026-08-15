@@ -692,6 +692,55 @@ body:not([data-tt="news"]) :is(:root[data-theme="clean"],:root[data-theme="dark"
 /* News keeps only the masthead date — no second heading */
 :root[data-theme="clean"] .mast,:root[data-theme="dark"] .mast{border-bottom:1px solid var(--line)!important;margin-bottom:6px!important}
 
+/* ---- ONE minimal footer line per card (2026-08-15): source · time · Ask,
+   with basis folded in as the same small grey type. Card becomes a wrapping
+   flex row; every child is full-width except the footer bits, and an EMPTY
+   .more collapses so it can't break the line. ---- */
+:root[data-theme="clean"] .story,:root[data-theme="dark"] .story,
+:root[data-theme="clean"] .trend,:root[data-theme="dark"] .trend{
+  display:flex!important;flex-wrap:wrap!important;align-items:baseline!important;column-gap:0}
+:root[data-theme="clean"] .story>*,:root[data-theme="dark"] .story>*,
+:root[data-theme="clean"] .trend>*,:root[data-theme="dark"] .trend>*{flex:0 0 100%;min-width:0}
+:root[data-theme="clean"] .story>.src,:root[data-theme="dark"] .story>.src,
+:root[data-theme="clean"] .story>.meta,:root[data-theme="dark"] .story>.meta,
+:root[data-theme="clean"] .story>.acts,:root[data-theme="dark"] .story>.acts,
+:root[data-theme="clean"] .trend>.src,:root[data-theme="dark"] .trend>.src,
+:root[data-theme="clean"] .trend>.meta,:root[data-theme="dark"] .trend>.meta,
+:root[data-theme="clean"] .trend>.acts,:root[data-theme="dark"] .trend>.acts{
+  flex:0 0 auto!important;width:auto!important;margin:11px 0 0!important;padding:0!important;
+  font-size:.75rem!important;line-height:1.2!important;color:var(--mut)!important;font-weight:400!important;
+  border:0!important;background:none!important}
+:root[data-theme="clean"] .story>.more:empty,:root[data-theme="dark"] .story>.more:empty,
+:root[data-theme="clean"] .trend>.more:empty,:root[data-theme="dark"] .trend>.more:empty{
+  flex:0 0 0!important;width:0!important;height:0!important;margin:0!important;padding:0!important;overflow:hidden}
+/* separators between the footer bits */
+:root[data-theme="clean"] .story>.src::after,:root[data-theme="dark"] .story>.src::after,
+:root[data-theme="clean"] .story>.meta::after,:root[data-theme="dark"] .story>.meta::after,
+:root[data-theme="clean"] .trend>.src::after,:root[data-theme="dark"] .trend>.src::after,
+:root[data-theme="clean"] .trend>.meta::after,:root[data-theme="dark"] .trend>.meta::after{
+  content:"·";margin:0 8px;color:var(--mut);opacity:.55}
+:root[data-theme="clean"] .story>.src a,:root[data-theme="dark"] .story>.src a,
+:root[data-theme="clean"] .trend>.src a,:root[data-theme="dark"] .trend>.src a{
+  color:var(--mut)!important;font-weight:400!important;font-size:.75rem!important;text-decoration:none}
+@media (hover:hover){:root[data-theme="clean"] .story>.src a:hover,:root[data-theme="dark"] .story>.src a:hover{color:var(--ac)!important}}
+/* Ask — the one red thing on the page */
+:root[data-theme="clean"] .act-ask,:root[data-theme="dark"] .act-ask{
+  background:none!important;border:0!important;padding:0!important;box-shadow:none!important;border-radius:0!important;
+  font-size:.75rem!important;font-weight:500!important;letter-spacing:0!important;text-transform:none!important;cursor:pointer}
+:root[data-theme="clean"] .act-ask{color:#d70015!important}
+:root[data-theme="dark"]  .act-ask{color:#ff453a!important}
+:root[data-theme="clean"] .acts .fol,:root[data-theme="dark"] .acts .fol{display:none!important}
+:root[data-theme="clean"] .ask-box,:root[data-theme="dark"] .ask-box{margin-top:10px!important;gap:6px}
+:root[data-theme="clean"] .ask-in,:root[data-theme="dark"] .ask-in{
+  background:var(--sub)!important;border:0!important;border-radius:8px!important;font-size:.85rem!important;padding:9px 11px!important;color:var(--ink)!important}
+:root[data-theme="clean"] .ask-go{background:#d70015!important;color:#fff!important;border:0!important}
+:root[data-theme="dark"]  .ask-go{background:#ff453a!important;color:#fff!important;border:0!important}
+/* basis — same small grey type, one quiet line, no label emphasis */
+:root[data-theme="clean"] .basis,:root[data-theme="dark"] .basis{
+  font-size:.72rem!important;line-height:1.35!important;color:var(--mut)!important;margin:8px 0 0!important;font-weight:400!important}
+:root[data-theme="clean"] .basis b,:root[data-theme="dark"] .basis b{color:var(--mut)!important;font-weight:500!important}
+:root[data-theme="clean"] .seen,:root[data-theme="dark"] .seen{font-size:.72rem!important;color:var(--mut)!important;margin:8px 0 0!important}
+
 </style>
 </head>
 <body data-tt="news">
