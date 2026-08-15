@@ -883,6 +883,126 @@ body:not([data-tt="news"]) :is(:root[data-theme="clean"],:root[data-theme="dark"
 :root[data-theme="clean"] .story.xopen>.more,:root[data-theme="dark"] .story.xopen>.more,
 :root[data-theme="clean"] .trend.xopen>.more,:root[data-theme="dark"] .trend.xopen>.more{flex:0 0 100%!important;width:auto!important;height:auto!important;margin:2px 0 0!important;overflow:visible!important}
 
+/* ---- LAYOUT REPAIR 2026-08-15 ----
+   (a) News is a FLAT list and uses .crow rows, NOT .story — it must never be
+       gridded and needs its own document styling.
+   (b) Source and time are removed from every card footer; only Ask remains.
+   (c) Nothing may exceed the viewport width. ---- */
+:root[data-theme="clean"] #p-news.active,:root[data-theme="dark"] #p-news.active,
+:root[data-theme="clean"] #newsList,:root[data-theme="dark"] #newsList{
+  display:block!important;grid-template-columns:none!important;column-count:auto!important;max-width:760px!important}
+:root[data-theme="clean"] #p-news:not(.active),:root[data-theme="dark"] #p-news:not(.active){display:none!important}
+:root[data-theme="clean"] .crow,:root[data-theme="dark"] .crow{
+  display:block!important;padding:18px 0 19px!important;border-top:0!important;
+  border-bottom:1px solid var(--line)!important;border-radius:0!important;background:none!important;cursor:pointer}
+:root[data-theme="clean"] .crow .cd,:root[data-theme="dark"] .crow .cd{display:none!important}
+:root[data-theme="clean"] .crow .ct,:root[data-theme="dark"] .crow .ct{
+  font-size:1.02rem!important;line-height:1.34!important;font-weight:600!important;letter-spacing:-.02em!important;color:var(--ink)!important}
+:root[data-theme="clean"] .crow.open .ct,:root[data-theme="dark"] .crow.open .ct{font-size:1.24rem!important;line-height:1.26!important}
+:root[data-theme="clean"] .crow .cx,:root[data-theme="dark"] .crow .cx{margin-top:12px!important;max-width:680px}
+:root[data-theme="clean"] .crow .cx .cs,:root[data-theme="dark"] .crow .cx .cs{
+  font-size:.97rem!important;line-height:1.72!important;color:var(--ink2)!important;margin:0 0 12px!important}
+@media (hover:hover){:root[data-theme="clean"] .crow:hover .ct,:root[data-theme="dark"] .crow:hover .ct{color:var(--ac)!important}}
+:root[data-theme="clean"] .crow.read .ct,:root[data-theme="dark"] .crow.read .ct{opacity:.62}
+
+/* (b) no source, no timestamp — anywhere */
+:root[data-theme="clean"] .story>.src,:root[data-theme="dark"] .story>.src,
+:root[data-theme="clean"] .story>.meta,:root[data-theme="dark"] .story>.meta,
+:root[data-theme="clean"] .trend>.src,:root[data-theme="dark"] .trend>.src,
+:root[data-theme="clean"] .trend>.meta,:root[data-theme="dark"] .trend>.meta,
+:root[data-theme="clean"] .crow .csrc,:root[data-theme="dark"] .crow .csrc,
+:root[data-theme="clean"] .seen,:root[data-theme="dark"] .seen{display:none!important}
+:root[data-theme="clean"] .story>.acts,:root[data-theme="dark"] .story>.acts,
+:root[data-theme="clean"] .trend>.acts,:root[data-theme="dark"] .trend>.acts{margin:12px 0 0!important}
+
+/* (c) hard overflow guard */
+:root[data-theme="clean"] html,:root[data-theme="dark"] html{overflow-x:clip}
+:root[data-theme="clean"] body,:root[data-theme="dark"] body{overflow-x:clip;max-width:100vw}
+:root[data-theme="clean"] .panel,:root[data-theme="dark"] .panel,
+:root[data-theme="clean"] .wrap,:root[data-theme="dark"] .wrap{min-width:0;max-width:min(760px,100%)}
+:root[data-theme="clean"] .story,:root[data-theme="dark"] .story,
+:root[data-theme="clean"] .trend,:root[data-theme="dark"] .trend,
+:root[data-theme="clean"] .crow,:root[data-theme="dark"] .crow{max-width:100%;overflow-wrap:anywhere}
+:root[data-theme="clean"] .costbar,:root[data-theme="dark"] .costbar{max-width:100%;overflow-x:auto}
+:root[data-theme="clean"] .costbar,:root[data-theme="dark"] .costbar{
+  display:block!important;max-width:100%!important;overflow-x:auto!important;overflow-y:hidden!important;
+  -webkit-overflow-scrolling:touch;padding:14px 0 16px!important;border-bottom:1px solid var(--line)!important}
+:root[data-theme="clean"] .cb-row,:root[data-theme="dark"] .cb-row{
+  display:flex!important;flex-wrap:nowrap!important;width:max-content!important;min-width:100%!important;overflow:visible!important;gap:8px}
+:root[data-theme="clean"] .cb-row .cx,:root[data-theme="dark"] .cb-row .cx{flex:0 0 auto!important;white-space:nowrap!important}
+:root[data-theme="clean"] .cb-h,:root[data-theme="dark"] .cb-h{font-size:.7rem!important;color:var(--mut)!important;letter-spacing:.02em}
+@media (min-width:900px){
+  :root[data-theme="clean"] .panel:not(#p-news),:root[data-theme="dark"] .panel:not(#p-news),
+  :root[data-theme="clean"] .wrap:has(.panel.active:not(#p-news)),:root[data-theme="dark"] .wrap:has(.panel.active:not(#p-news)){max-width:1180px}
+}
+/* grid only on wide screens, and never for News */
+:root[data-theme="clean"] .panel.active[data-fit="4"],:root[data-theme="dark"] .panel.active[data-fit="4"]{display:block}
+@media (min-width:900px){
+  :root[data-theme="clean"] .panel.active[data-fit="4"]:not(#p-news),:root[data-theme="dark"] .panel.active[data-fit="4"]:not(#p-news){
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:38px;align-items:start}
+}
+@media (min-width:1280px){
+  :root[data-theme="clean"] .panel.active[data-fit="4"]:not(#p-news),:root[data-theme="dark"] .panel.active[data-fit="4"]:not(#p-news){
+    grid-template-columns:repeat(3,minmax(0,1fr));column-gap:30px}
+}
+
+/* hard clip for the horizontally-scrolling cost strip */
+:root[data-theme="clean"] .wrap,:root[data-theme="dark"] .wrap{overflow-x:clip}
+:root[data-theme="clean"] .panel,:root[data-theme="dark"] .panel{overflow-x:clip}
+:root[data-theme="clean"] .costbar,:root[data-theme="dark"] .costbar{contain:paint;width:100%!important}
+/* ---- magnitude badge: one solid chip after the headline ---- */
+.mgb{display:inline-block;vertical-align:baseline;margin-left:8px;padding:2px 7px;border-radius:5px;
+  font-size:.6rem;font-weight:700;letter-spacing:.06em;line-height:1.5;color:#fff;white-space:nowrap;text-transform:uppercase}
+.mgb-m{background:#e07a00}
+.mgb-h{background:#d70015}
+:root[data-theme="dark"] .mgb-m{background:#ff9f0a;color:#000}
+:root[data-theme="dark"] .mgb-h{background:#ff453a;color:#fff}
+/* ---- assess: no lego bricks, no ★ WATCH, no "How big" label ---- */
+:root[data-theme="clean"] .mag,:root[data-theme="dark"] .mag,
+:root[data-theme="clean"] .as-lbl,:root[data-theme="dark"] .as-lbl,
+:root[data-theme="clean"] .as-tier,:root[data-theme="dark"] .as-tier,
+:root[data-theme="clean"] .as-row,:root[data-theme="dark"] .as-row,
+:root[data-theme="clean"] .legend,:root[data-theme="dark"] .legend,
+:root[data-theme="clean"] .act-follow,:root[data-theme="dark"] .act-follow,
+:root[data-theme="clean"] .fol,:root[data-theme="dark"] .fol{display:none!important}
+:root[data-theme="clean"] .assess,:root[data-theme="dark"] .assess{
+  background:none!important;border:0!important;border-radius:0!important;padding:0!important;margin:16px 0 0!important;box-shadow:none!important}
+:root[data-theme="clean"] .verdict,:root[data-theme="dark"] .verdict{
+  font-size:.95rem!important;font-weight:600!important;color:var(--ink)!important;background:none!important;
+  border:0!important;border-left:2px solid var(--ac)!important;padding:0 0 0 12px!important;margin:0 0 8px!important}
+:root[data-theme="clean"] .as-meta,:root[data-theme="dark"] .as-meta{font-size:.7rem;color:var(--mut);letter-spacing:.04em;margin-bottom:4px}
+:root[data-theme="clean"] html{background:#fff}
+:root[data-theme="dark"] html{background:#000}
+
+/* ---- FINAL layout guards 2026-08-15 ---- */
+/* single column below 900px, always */
+@media (max-width:899px){
+  :root[data-theme="clean"] .panel.active,:root[data-theme="dark"] .panel.active{
+    display:block!important;grid-template-columns:none!important;column-count:auto!important}
+}
+/* card summary: 2-line clamp (base CSS hides it at fit 4 — override) */
+:root[data-theme="clean"] .panel .st-s,:root[data-theme="dark"] .panel .st-s{
+  display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  font-size:.87rem!important;line-height:1.5!important;margin-top:6px!important;color:var(--ink2)!important}
+:root[data-theme="clean"] .story.xopen .st-s,:root[data-theme="dark"] .story.xopen .st-s,
+:root[data-theme="clean"] .trend.xopen .st-s,:root[data-theme="dark"] .trend.xopen .st-s{display:none!important}
+/* the 🚩 hero flag is replaced by the HISTORIC badge */
+:root[data-theme="clean"] .bigflag::before,:root[data-theme="dark"] .bigflag::before,
+:root[data-theme="clean"] .bigflag::after,:root[data-theme="dark"] .bigflag::after{content:none!important;display:none!important}
+:root[data-theme="clean"] .bigflag,:root[data-theme="dark"] .bigflag{
+  box-shadow:none!important;border:0!important;outline:0!important;background:none!important}
+/* white/black canvas, no inherited wash */
+:root[data-theme="clean"] html,:root[data-theme="clean"] body{background:#fff!important;background-image:none!important}
+:root[data-theme="dark"] html,:root[data-theme="dark"] body{background:#000!important;background-image:none!important}
+
+:root[data-theme="clean"] .rf,:root[data-theme="dark"] .rf{display:none!important}
+:root[data-theme="clean"] .chiprow,:root[data-theme="dark"] .chiprow,
+:root[data-theme="clean"] .story .src,:root[data-theme="dark"] .story .src,
+:root[data-theme="clean"] .story .meta,:root[data-theme="dark"] .story .meta,
+:root[data-theme="clean"] .trend .src,:root[data-theme="dark"] .trend .src,
+:root[data-theme="clean"] .trend .meta,:root[data-theme="dark"] .trend .meta,
+:root[data-theme="clean"] .crow .csrc,:root[data-theme="dark"] .crow .csrc{display:none!important}
+:root[data-theme="clean"] .xopen-src,:root[data-theme="dark"] .xopen-src{display:inline-block!important}
 </style>
 </head>
 <body data-tt="news">
@@ -1118,15 +1238,20 @@ function factChips(f,color){if(!Array.isArray(f)||!f.length)return"";
 function forYouHtml(it){return "";}  /* For-You / personalization removed 2026-08-06 */
 function subBadge(sub,inline){const m=SUB_META[(sub||"").toLowerCase()];if(!m)return"";return `<span class="sub${inline?" inline":""}" style="--sc:${m[1]}">${m[0]}</span>`;}
 function assessHtml(a){ if(!a) return "";
+  // 2026-08-15: the LEGO strip and the ★ WATCH marker are gone. Magnitude shows as a
+  // single solid badge inline after the headline (MAJOR = orange, HISTORIC = red),
+  // injected by magBadge() in story(). Everything else stays in the expanded view.
   const ev=(a.evidence||"").toLowerCase(), evc=AS_EVC[ev]||"#8d8d94";
-  const magN=Math.max(1,Math.min(5,Math.round(+a.mag||0)));
-  const star=(magN>=4&&(ev==="proven"||ev==="strong"))?pillH("#f2b705","★ WATCH"):"";
-  const magH=`<span class="mag">${MAGC.map((c,i)=>`<i style="--mc:${c}" class="${i<magN?"":"off"}"></i>`).join("")}</span>`;
-  return `<div class="assess">
-    <div class="as-row"><span class="as-lbl">How big</span>${magH}<span class="as-tier">${AS_TIERS[magN]}</span>${star}</div>
-    <div class="as-row"><span class="as-lbl">When</span>${pillH("var(--ac)",esc((a.timeline||"unclear").toUpperCase()))}<span class="as-lbl" style="flex:0 0 auto;margin-left:6px">Proof</span>${pillH(evc,esc(AS_EVL[ev]||"—"))}</div>
-    ${a.verdict?`<div class="verdict" style="--evc:${evc}">${esc(a.verdict)}</div>`:""}
-    ${a.basis?`<div class="basis"><b>Basis:</b> ${esc(a.basis)}</div>`:""}</div>`;}
+  const bits=[];
+  if(a.timeline) bits.push(esc(String(a.timeline).toUpperCase()));
+  if(a.evidence) bits.push(esc(String(a.evidence).toUpperCase()));
+  return `<div class="assess">${a.verdict?`<div class="verdict" style="--evc:${evc}">${esc(a.verdict)}</div>`:""}`+
+    (bits.length?`<div class="as-meta">${bits.join(" &middot; ")}</div>`:"")+
+    `${a.basis?`<div class="basis">${esc(a.basis)}</div>`:""}</div>`;}
+function magBadge(a){ const m=Math.max(0,Math.min(5,Math.round(+((a||{}).mag)||0)));
+  if(m===5) return `<span class="mgb mgb-h">HISTORIC</span>`;
+  if(m===4) return `<span class="mgb mgb-m">MAJOR</span>`;
+  return ""; }
 function legendHtml(){return `<details class="legend gcard"><summary>How the ratings work ▾</summary><div class="lgd">
   <div class="lgd-row"><span class="mag">${MAGC.map(c=>`<i style="--mc:${c}"></i>`).join("")}</span><b>How big</b><small>— if it fully pans out: 5 Historic · 4 Major · 3 Notable · 2 Incremental · 1 Curiosity</small></div>
   <div class="lgd-row">${pillH("var(--ac)","WHEN")}<small>time until everyday life feels it — long horizons are information, not a downgrade</small></div>
@@ -1153,7 +1278,7 @@ function story(it,opts){
   const body=
     (chips?`<div class="chiprow">${chips}</div>`:"")+
     thumb+
-    `<p class="st-t">${title}</p>`+
+    `<p class="st-t">${title}${(typeof magBadge==="function"&&it.assess)?magBadge(it.assess):""}</p>`+
     (it.s?`<p class="st-s">${esc(it.s)}</p>`:"")+
     factChips(it.facts,kc)+
     ((it.points&&it.points.length)?`<details class="pts"><summary>${esc(it.pointsLabel||(it.points.length+" key takeaways"))}</summary>${it.points.map(p=>`<div class="pt"><span class="pt-t">${esc(p.t)}</span>${p.s?`<span class="pt-s">${esc(p.s)}</span>`:""}</div>`).join("")}</details>`:"")+
@@ -1583,7 +1708,7 @@ function renderAitrends(tgt){
       row.style.setProperty("--kc","var(--ac)"); STORY.set(row,it); ELEMS.set(cardKey(it),row);
       row.dataset.title=it.t||""; row.dataset.summary=it.s||"";
       const openL=it.url?`<a href="${esc(it.url)}" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="color:var(--ac);font-weight:700;font-size:.72rem">open source ↗</a>`:"";
-      row.innerHTML=`<span class="trank">${ri+1}</span><div class="sbody"><div class="chiprow">${chips(it)}</div><p class="st-t">${esc(it.t)}</p><p class="st-s">${esc(it.s||"")}</p>${assessHtml(it.assess)}<div class="heat"><i style="width:${heatPct(it.heat)}%"></i></div>${openL}${askBits}</div>`;
+      row.innerHTML=`<span class="trank">${ri+1}</span><div class="sbody"><div class="chiprow">${chips(it)}</div><p class="st-t">${esc(it.t)}${(typeof magBadge==="function"&&it.assess)?magBadge(it.assess):""}</p><p class="st-s">${esc(it.s||"")}</p>${assessHtml(it.assess)}<div class="heat"><i style="width:${heatPct(it.heat)}%"></i></div>${openL}${askBits}</div>`;
       markOnOpen(row,it); trendAsk(row); p.appendChild(row); });
     return; }
   // #1 = hero
@@ -1687,7 +1812,15 @@ try{ scanFollows(); }catch(e){}
 // Replaces the full-screen reader overlay, which rendered at the bottom of the page.
 function toggleInline(card,it){
   if(!card) return;
-  const box=card.querySelector(":scope > .more"); if(!box) return;
+  // News rows (.crow) have no .more — they carry their own .cx expander.
+  if(card.classList.contains("crow")){
+    const was=card.classList.contains("open");
+    document.querySelectorAll(".crow.open").forEach(r=>{ if(r!==card) r.classList.remove("open"); });
+    card.classList.toggle("open",!was);
+    if(!was){ try{ if(typeof setRead==="function") setRead(it,true); }catch(e){} }
+    return; }
+  let box=card.querySelector(":scope > .more");
+  if(!box){ box=document.createElement("div"); box.className="more"; card.appendChild(box); }
   if(card.classList.contains("xopen")){ card.classList.remove("xopen"); box.innerHTML=""; return; }
   document.querySelectorAll(".panel .xopen").forEach(c=>{ if(c!==card){ c.classList.remove("xopen"); const m=c.querySelector(":scope > .more"); if(m) m.innerHTML=""; } });
   let html="";
@@ -1977,6 +2110,24 @@ function armReveals(panel){ /* reveal-on-scroll disabled 2026-07-11 — cards re
 refreshBadges();
 const savedTab=store.get("tab","news");
 activate(TABS.some(t=>t.id===savedTab)?savedTab:"news");
+// ---- delegated expand handler (2026-08-15). Owns card taps for every tab:
+// .crow (News) toggles its built-in .open; .story/.trend/.hero expand inline via toggleInline.
+document.addEventListener("click",function(e){
+  if(e.target.closest("a,button,input,textarea,select,summary,.ask-box,.acts,.pts,.fitbar,nav,.fab-sheet,.more-menu")) return;
+  const row=e.target.closest(".crow");
+  if(row){ e.preventDefault(); e.stopPropagation();
+    const wasOpen=row.classList.contains("open");
+    document.querySelectorAll(".crow.open").forEach(r=>r.classList.remove("open"));
+    if(!wasOpen){ row.classList.add("open"); try{ const it=(typeof STORY!=="undefined")?STORY.get(row):null; if(it&&typeof setRead==="function") setRead(it,true);}catch(x){} }
+    return; }
+  const card=e.target.closest(".story,.trend,.hero");
+  if(!card||!card.closest(".panel")) return;
+  let it=null; try{ it=(typeof STORY!=="undefined")?STORY.get(card):null; }catch(x){}
+  if(!it) return;
+  e.preventDefault(); e.stopPropagation();
+  if(typeof toggleInline==="function") toggleInline(card,it);
+},false);
+
 </script>
 </body>
 </html>
