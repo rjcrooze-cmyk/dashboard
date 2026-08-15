@@ -441,7 +441,7 @@ body.no-ai .act-ask::after{content:" \2197"}
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Inter,system-ui,"Hind Mysuru",sans-serif;
   -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.011em;font-size:.96rem;line-height:1.62}
 :root[data-theme="clean"] .wrap,:root[data-theme="dark"] .wrap{max-width:760px}
-:root[data-theme="clean"] .panel,:root[data-theme="dark"] .panel{column-count:initial!important;display:block!important;grid-template-columns:none!important}
+
 
 /* ---- THE core move: cards become document rows ---- */
 :root[data-theme="clean"] .glass,:root[data-theme="clean"] .gcard,:root[data-theme="clean"] .hero,
@@ -540,6 +540,113 @@ body.no-ai .act-ask::after{content:" \2197"}
 :root[data-theme="clean"] .thumb,:root[data-theme="dark"] .thumb{border-radius:8px!important;border:0!important;box-shadow:none!important}
 :root[data-theme="clean"] .sompage,:root[data-theme="dark"] .sompage{border-radius:0!important;border:1px solid var(--line)!important;box-shadow:none!important;padding:0!important}
 
+/* ---- FIT MODES (restored 2026-08-15; they were lost with the Studio block).
+   Clean is a row/hairline layout, so multicol is wrong — fit 2-4 use CSS grid.
+   Only the ACTIVE panel is ever displayed: .panel{display:none}/.panel.active{display:block}
+   must never be overridden, or every tab stacks into one endless scroll. ---- */
+:root[data-theme="clean"] .panel,:root[data-theme="dark"] .panel{column-count:auto!important;column-gap:0!important}
+:root[data-theme="clean"] .panel.active,:root[data-theme="dark"] .panel.active{display:block}
+:root[data-theme="clean"] .panel[data-fit="1"],:root[data-theme="dark"] .panel[data-fit="1"]{--fitgap:0px}
+@media (min-width:760px){
+  :root[data-theme="clean"] .panel[data-fit="3"],:root[data-theme="dark"] .panel[data-fit="3"],
+  :root[data-theme="clean"] .panel[data-fit="4"],:root[data-theme="dark"] .panel[data-fit="4"]{
+    display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:34px;align-items:start}
+  :root[data-theme="clean"] .panel[data-fit="4"],:root[data-theme="dark"] .panel[data-fit="4"]{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:26px}
+  :root[data-theme="clean"] .panel[data-fit="3"]>.sec,:root[data-theme="dark"] .panel[data-fit="3"]>.sec,
+  :root[data-theme="clean"] .panel[data-fit="4"]>.sec,:root[data-theme="dark"] .panel[data-fit="4"]>.sec,
+  :root[data-theme="clean"] .panel[data-fit]>.fitbar,:root[data-theme="dark"] .panel[data-fit]>.fitbar,
+  :root[data-theme="clean"] .panel[data-fit]>.mast,:root[data-theme="dark"] .panel[data-fit]>.mast,
+  :root[data-theme="clean"] .panel[data-fit]>.hero,:root[data-theme="dark"] .panel[data-fit]>.hero,
+  :root[data-theme="clean"] .panel[data-fit]>.glance,:root[data-theme="dark"] .panel[data-fit]>.glance,
+  :root[data-theme="clean"] .panel[data-fit]>.slim-head,:root[data-theme="dark"] .panel[data-fit]>.slim-head,
+  :root[data-theme="clean"] .panel[data-fit]>.legend,:root[data-theme="dark"] .panel[data-fit]>.legend,
+  :root[data-theme="clean"] .panel[data-fit]>.costbar,:root[data-theme="dark"] .panel[data-fit]>.costbar,
+  :root[data-theme="clean"] .panel[data-fit]>.som-head,:root[data-theme="dark"] .panel[data-fit]>.som-head{grid-column:1/-1}
+  :root[data-theme="clean"] .panel[data-fit="3"],:root[data-theme="clean"] .panel[data-fit="4"]{max-width:1180px}
+  :root[data-theme="dark"] .panel[data-fit="3"],:root[data-theme="dark"] .panel[data-fit="4"]{max-width:1180px}
+}
+/* wider measure when densified so grid columns aren't cramped */
+@media (min-width:760px){:root[data-theme="clean"] .wrap:has(.panel.active[data-fit="3"]),:root[data-theme="clean"] .wrap:has(.panel.active[data-fit="4"]),
+  :root[data-theme="dark"] .wrap:has(.panel.active[data-fit="3"]),:root[data-theme="dark"] .wrap:has(.panel.active[data-fit="4"]){max-width:1220px}}
+/* Condensed / Dense / Max tighten the row rhythm — visibly, at every width */
+:root[data-theme="clean"] .panel[data-fit="2"] .story,:root[data-theme="dark"] .panel[data-fit="2"] .story,
+:root[data-theme="clean"] .panel[data-fit="2"] .trend,:root[data-theme="dark"] .panel[data-fit="2"] .trend{padding:15px 0 16px!important}
+:root[data-theme="clean"] .panel[data-fit="3"] .story,:root[data-theme="dark"] .panel[data-fit="3"] .story,
+:root[data-theme="clean"] .panel[data-fit="3"] .trend,:root[data-theme="dark"] .panel[data-fit="3"] .trend{padding:12px 0 13px!important}
+:root[data-theme="clean"] .panel[data-fit="4"] .story,:root[data-theme="dark"] .panel[data-fit="4"] .story,
+:root[data-theme="clean"] .panel[data-fit="4"] .trend,:root[data-theme="dark"] .panel[data-fit="4"] .trend{padding:9px 0 10px!important}
+:root[data-theme="clean"] .panel[data-fit="2"] .st-t,:root[data-theme="dark"] .panel[data-fit="2"] .st-t{font-size:1rem}
+:root[data-theme="clean"] .panel[data-fit="3"] .st-t,:root[data-theme="dark"] .panel[data-fit="3"] .st-t{font-size:.95rem;line-height:1.3}
+:root[data-theme="clean"] .panel[data-fit="4"] .st-t,:root[data-theme="dark"] .panel[data-fit="4"] .st-t{font-size:.9rem;line-height:1.28}
+:root[data-theme="clean"] .panel[data-fit="3"] .st-s,:root[data-theme="dark"] .panel[data-fit="3"] .st-s{font-size:.86rem;line-height:1.5;margin-top:5px}
+:root[data-theme="clean"] .panel[data-fit="4"] .st-s,:root[data-theme="dark"] .panel[data-fit="4"] .st-s{display:none}
+:root[data-theme="clean"] .panel[data-fit="4"] .meta,:root[data-theme="dark"] .panel[data-fit="4"] .meta{margin-top:5px}
+:root[data-theme="clean"] .panel[data-fit="3"] .sec,:root[data-theme="dark"] .panel[data-fit="3"] .sec,
+:root[data-theme="clean"] .panel[data-fit="4"] .sec,:root[data-theme="dark"] .panel[data-fit="4"] .sec{margin:22px 0 2px}
+:root[data-theme="clean"] .panel[data-fit="4"] .hero .st-t,:root[data-theme="dark"] .panel[data-fit="4"] .hero .st-t{font-size:1.18rem}
+/* fit bar: readable, not a floating card */
+:root[data-theme="clean"] .fitbar,:root[data-theme="dark"] .fitbar{
+  background:none!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;
+  box-shadow:none!important;padding:10px 0 12px!important;margin:0 0 4px!important;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+:root[data-theme="clean"] .fb-ic,:root[data-theme="dark"] .fb-ic{display:none}
+:root[data-theme="clean"] .fb-lbl,:root[data-theme="dark"] .fb-lbl{font-size:.74rem;color:var(--mut);font-weight:500}
+:root[data-theme="clean"] .fit-seg,:root[data-theme="dark"] .fit-seg{display:flex;gap:2px;padding:2px;border-radius:9px}
+:root[data-theme="clean"] .fit-seg button,:root[data-theme="dark"] .fit-seg button{
+  border:0;background:none;color:var(--ink2);font:500 .74rem/1 inherit;padding:7px 11px;border-radius:7px;cursor:pointer}
+:root[data-theme="clean"] .fit-seg button.on{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(0,0,0,.12)}
+:root[data-theme="dark"]  .fit-seg button.on{background:#3a3a3c;color:#fff}
+
+/* ---- BOTTOM DOCK: solid surface, clearly legible tabs ---- */
+:root[data-theme="clean"] nav.tabs,:root[data-theme="dark"] nav.tabs{
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+:root[data-theme="clean"] nav.tabs{background:#f5f5f7!important;border:1px solid rgba(0,0,0,.10)!important;box-shadow:0 6px 24px -12px rgba(0,0,0,.25)!important}
+:root[data-theme="dark"]  nav.tabs{background:#1c1c1e!important;border:1px solid rgba(255,255,255,.12)!important;box-shadow:0 6px 24px -12px #000!important}
+:root[data-theme="clean"] .tab,:root[data-theme="dark"] .tab{
+  color:var(--mut)!important;font-size:.66rem!important;font-weight:600!important;letter-spacing:0!important;
+  text-transform:none!important;padding:9px 4px!important;margin:0!important;border-radius:9px!important;box-shadow:none!important}
+:root[data-theme="clean"] .tab .ico,:root[data-theme="dark"] .tab .ico{display:inline!important;font-size:1rem;line-height:1;opacity:.75}
+:root[data-theme="clean"] .tab.on{background:#fff!important;color:#000!important;box-shadow:0 1px 2px rgba(0,0,0,.14)!important}
+:root[data-theme="dark"]  .tab.on{background:#3a3a3c!important;color:#fff!important;box-shadow:none!important}
+:root[data-theme="clean"] .tab.on .ico,:root[data-theme="dark"] .tab.on .ico{opacity:1}
+@media (max-width:560px){
+  :root[data-theme="clean"] nav.tabs,:root[data-theme="dark"] nav.tabs{left:0!important;right:0!important;bottom:0!important;border-radius:0!important;border-left:0!important;border-right:0!important;border-bottom:0!important;padding:5px 4px!important;padding-bottom:calc(5px + env(safe-area-inset-bottom))!important}
+  :root[data-theme="clean"] .tab,:root[data-theme="dark"] .tab{font-size:.58rem!important;padding:6px 2px!important;gap:3px!important}
+  :root[data-theme="clean"] .wrap,:root[data-theme="dark"] .wrap{padding-bottom:16px}
+  body{padding-bottom:94px}
+}
+@media (min-width:1000px){
+  :root[data-theme="clean"] nav.tabs,:root[data-theme="dark"] nav.tabs{border-radius:14px!important}
+  :root[data-theme="clean"] .tab,:root[data-theme="dark"] .tab{justify-content:flex-start!important;padding:10px 12px!important;font-size:.8rem!important}
+}
+
+/* ---- the ⋯ button: small, quiet, opens view + settings ---- */
+:root[data-theme="clean"] .fab-menu,:root[data-theme="dark"] .fab-menu{
+  width:32px!important;height:32px!important;min-width:32px!important;padding:0!important;border-radius:50%!important;
+  font-size:1rem!important;line-height:1!important;font-weight:600!important;letter-spacing:0!important;
+  display:inline-flex;align-items:center;justify-content:center;border:0!important;box-shadow:none!important;opacity:.7}
+:root[data-theme="clean"] .fab-menu{background:#f5f5f7!important;color:#1d1d1f!important}
+:root[data-theme="dark"]  .fab-menu{background:#2c2c2e!important;color:#f5f5f7!important}
+:root[data-theme="clean"] .fab-menu:hover,:root[data-theme="dark"] .fab-menu:hover{opacity:1}
+:root[data-theme="clean"] .more-btn,:root[data-theme="dark"] .more-btn{
+  width:30px!important;height:30px!important;min-width:30px!important;padding:0!important;border-radius:50%!important;
+  font-size:.9rem!important;line-height:1!important;display:inline-flex;align-items:center;justify-content:center;opacity:.65}
+:root[data-theme="clean"] .more-btn{background:#f5f5f7!important;color:#1d1d1f!important}
+:root[data-theme="dark"]  .more-btn{background:#2c2c2e!important;color:#f5f5f7!important}
+:root[data-theme="clean"] .more-btn:hover,:root[data-theme="dark"] .more-btn:hover{opacity:1}
+
+/* ---- readability floor: nothing below AA on either canvas ---- */
+:root[data-theme="clean"]{--ink2:#3f3f43;--mut:#6e6e73}
+:root[data-theme="dark"]{--ink2:#d8d8dd;--mut:#98989d}
+:root[data-theme="clean"] .st-s,:root[data-theme="dark"] .st-s{color:var(--ink2)!important}
+:root[data-theme="clean"] .empty,:root[data-theme="dark"] .empty{color:var(--mut)!important;padding:26px 0!important}
+:root[data-theme="clean"] .exp,:root[data-theme="clean"] .qa,:root[data-theme="clean"] .pt-s,:root[data-theme="clean"] .sbody,
+:root[data-theme="dark"] .exp,:root[data-theme="dark"] .qa,:root[data-theme="dark"] .pt-s,:root[data-theme="dark"] .sbody{color:var(--ink2)!important}
+:root[data-theme="clean"] .pt-t,:root[data-theme="dark"] .pt-t{color:var(--ink)!important;font-weight:600!important}
+:root[data-theme="clean"] .read,:root[data-theme="dark"] .read{opacity:.62!important}
+:root[data-theme="clean"] .read:hover,:root[data-theme="dark"] .read:hover,
+:root[data-theme="clean"] .read.open,:root[data-theme="dark"] .read.open{opacity:1!important}
+:root[data-theme="clean"] .sompage img,:root[data-theme="dark"] .sompage img{display:block;width:100%}
+
 </style>
 </head>
 <body data-tt="news">
@@ -570,6 +677,8 @@ body.no-ai .act-ask::after{content:" \2197"}
         <button class="theme-opt" data-th="clean" title="Clean — Apple-inspired white"><span class="em">◍</span>Clean</button>
         <button class="theme-opt" data-th="dark" title="Dark — Clean, in true black"><span class="em">🌙</span>Dark</button>
       </div>
+      <div class="fab-row" style="margin-top:0"><span class="fab-lbl">View</span></div>
+      <div class="fit-seg" id="fabFit" role="group" aria-label="Fit to screen" style="display:flex;gap:2px;padding:2px 4px 6px"><button type="button" data-v="1">Comfortable</button><button type="button" data-v="2">Condensed</button><button type="button" data-v="3">Dense</button><button type="button" data-v="4">Max</button></div>
       <button class="fab-item" id="filterBtn">⌕ Filter stories</button>
       <button class="fab-item" id="askSetupBtn">🤖 Ask AI setup</button>
       <div class="fab-row"><span class="fab-lbl">Text size</span><button class="tool" id="fsMinus" aria-label="Smaller">A−</button><button class="tool" id="fsPlus" aria-label="Larger">A+</button></div>
@@ -704,6 +813,7 @@ const isRealItem = it => !!it && !PLACE_RE.test(String((it&&(it.t||it.author))||
     document.querySelectorAll(".theme-opt").forEach(b=>b.classList.toggle("on",b.dataset.th===c)); };
   window.cycleTheme=function(){ const next=VALID[(VALID.indexOf(cur())+1)%VALID.length]; store.set("theme",next); applyTheme(); };
   document.querySelectorAll(".theme-opt").forEach(b=>{ b.onclick=()=>{ store.set("theme",b.dataset.th); applyTheme(); }; });
+  document.querySelectorAll("#fabFit button").forEach(b=>{ b.onclick=()=>{ if(window.applyFitAll) applyFitAll(b.dataset.v); }; });
   applyTheme();
 })();
 (function(){ const S=[0.875,0.9375,1,1.0625,1.125,1.1875]; let i=store.get("fs",2); if(typeof i!=="number"||i<0||i>=S.length)i=2;
