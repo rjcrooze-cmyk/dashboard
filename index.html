@@ -29,7 +29,7 @@
     silently marks it read (dash_read) and powers unread badges. "In brief" box exists on News ONLY.
   - If you redesign again, update the daily task's STRUCTURE LOCK section in the SAME edit.
 -->
-<html lang="en">
+<html lang="en" data-theme="clean">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -933,7 +933,6 @@ body:not([data-tt="news"]) :is(:root[data-theme="clean"],:root[data-theme="dark"
 :root[data-theme="clean"] .cb-h,:root[data-theme="dark"] .cb-h{font-size:.7rem!important;color:var(--mut)!important;letter-spacing:.02em}
 @media (min-width:900px){
   :root[data-theme="clean"] .panel:not(#p-news),:root[data-theme="dark"] .panel:not(#p-news),
-  :root[data-theme="clean"] .wrap:has(.panel.active:not(#p-news)),:root[data-theme="dark"] .wrap:has(.panel.active:not(#p-news)){max-width:1180px}
 }
 /* grid only on wide screens, and never for News */
 :root[data-theme="clean"] .panel.active[data-fit="4"],:root[data-theme="dark"] .panel.active[data-fit="4"]{display:block}
@@ -1003,6 +1002,55 @@ body:not([data-tt="news"]) :is(:root[data-theme="clean"],:root[data-theme="dark"
 :root[data-theme="clean"] .trend .meta,:root[data-theme="dark"] .trend .meta,
 :root[data-theme="clean"] .crow .csrc,:root[data-theme="dark"] .crow .csrc{display:none!important}
 :root[data-theme="clean"] .xopen-src,:root[data-theme="dark"] .xopen-src{display:inline-block!important}
+/* ================= FINAL PASS 2026-08-15 =================
+   (1) data-theme is set in the MARKUP; if JS or localStorage ever fails the page
+       must still be white — never the old blue glass canvas.
+   (2) Ask sits on the same line as the TIMELINE · EVIDENCE meta.
+   (3) No read-fade.
+       -webkit- prefixes kept, 100svh/100% instead of 100vh where it matters. */
+html{background:#fff}
+.blob,#skyGround{display:none!important}
+/* (2) Ask on the meta line */
+:root[data-theme="clean"] .assess,:root[data-theme="dark"] .assess{display:contents!important}
+:root[data-theme="clean"] .verdict,:root[data-theme="dark"] .verdict{flex:0 0 100%!important;order:1}
+:root[data-theme="clean"] .basis,:root[data-theme="dark"] .basis{flex:0 0 100%!important;order:2}
+:root[data-theme="clean"] .as-meta,:root[data-theme="dark"] .as-meta{
+  flex:0 0 auto!important;order:3;margin:12px 0 0!important;font-size:.72rem!important;color:var(--mut)!important;letter-spacing:.04em!important}
+:root[data-theme="clean"] .story>.acts,:root[data-theme="dark"] .story>.acts,
+:root[data-theme="clean"] .trend>.acts,:root[data-theme="dark"] .trend>.acts{order:4;margin:12px 0 0 12px!important}
+:root[data-theme="clean"] .as-meta::after,:root[data-theme="dark"] .as-meta::after{content:"·";margin-left:12px;opacity:.55}
+:root[data-theme="clean"] .story>.more,:root[data-theme="dark"] .story>.more,
+:root[data-theme="clean"] .trend>.more,:root[data-theme="dark"] .trend>.more{order:9}
+:root[data-theme="clean"] .ask-box,:root[data-theme="dark"] .ask-box{order:10;flex:0 0 100%!important}
+/* (3) no fade on read items */
+:root[data-theme="clean"] .read,:root[data-theme="dark"] .read,
+:root[data-theme="clean"] .crow.read .ct,:root[data-theme="dark"] .crow.read .ct,
+:root[data-theme="clean"] .story.read,:root[data-theme="dark"] .story.read,
+:root[data-theme="clean"] .trend.read,:root[data-theme="dark"] .trend.read{opacity:1!important;filter:none!important}
+/* (4) cross-browser layout parity */
+:root[data-theme="clean"] html,:root[data-theme="dark"] html,
+:root[data-theme="clean"] body,:root[data-theme="dark"] body{overflow-x:hidden!important;max-width:100%!important}
+:root[data-theme="clean"] .wrap,:root[data-theme="dark"] .wrap,
+:root[data-theme="clean"] .panel,:root[data-theme="dark"] .panel{overflow-x:hidden!important}
+:root[data-theme="clean"] .costbar,:root[data-theme="dark"] .costbar{
+  contain:none!important;overflow-x:auto!important;-webkit-overflow-scrolling:touch;width:100%!important;max-width:100%!important}
+:root[data-theme="clean"] .story,:root[data-theme="dark"] .story,
+:root[data-theme="clean"] .trend,:root[data-theme="dark"] .trend{
+  display:-webkit-box;display:-webkit-flex;display:flex!important;-webkit-flex-wrap:wrap;flex-wrap:wrap!important}
+:root[data-theme="clean"] .panel .st-s,:root[data-theme="dark"] .panel .st-s{
+  display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+@supports not (overflow:clip){:root[data-theme="clean"] .wrap,:root[data-theme="dark"] .wrap{overflow-x:hidden}}
+/* THE BLUE: .slim-head's animated hero band (::before conic-gradient in the accent,
+   ::after linear-gradient) was sizing to the whole page and tinting everything.
+   Clean has no hero band. */
+:root[data-theme="clean"] .slim-head::before,:root[data-theme="dark"] .slim-head::before,
+:root[data-theme="clean"] .slim-head::after,:root[data-theme="dark"] .slim-head::after,
+:root[data-theme="clean"] .mast::after,:root[data-theme="dark"] .mast::after,
+:root[data-theme="clean"] .hero::before,:root[data-theme="dark"] .hero::before,
+:root[data-theme="clean"] .hero::after,:root[data-theme="dark"] .hero::after{
+  content:none!important;display:none!important;background:none!important;background-image:none!important;opacity:0!important}
+:root[data-theme="clean"] .slim-head,:root[data-theme="dark"] .slim-head{
+  animation:none!important;overflow:visible!important;isolation:auto}
 </style>
 </head>
 <body data-tt="news">
