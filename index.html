@@ -10,7 +10,8 @@
   The placeholders here are just sample data so the page renders in a browser while you edit.
 
   STUDIO EDITION notes (data contract and localStorage keys are unchanged):
-  - THREE explicit theme buttons in the ⋯ menu (✨ Studio / ☀ Glass / 🌙 Dark) — no cycling toggle.
+  - FOUR explicit theme buttons in the ⋯ menu (✨ Studio / ☀ Glass / ◍ Clean / 🌙 Dark) — no cycling toggle.
+    Clean = Apple-inspired pure white; Dark = its true-black counterpart. Both use ONE accent on every tab.
     Stored in dash_theme; DEFAULT is "studio" (any old stored "retro" value falls back to studio).
     The "t" key still cycles all three.
   - STUDIO theme = the NuPhy Kick75 product-page look: real sampled colours (#ededed grey,
@@ -57,12 +58,12 @@ body{font:400 .95rem/1.55 -apple-system,BlinkMacSystemFont,system-ui,"Segoe UI",
   --shadow:0 14px 34px rgba(30,40,90,.12),0 2px 8px rgba(30,40,90,.06);
   --crit:#ef4444;--impt:#f59e0b;--gold:#f2b705;--good:#22c55e}
 :root[data-theme="dark"]{color-scheme:dark;
-  --bg:#080b13;--ink:#eef0f8;--ink2:#c2c7d8;--mut:#7d8399;
-  --glassA:rgba(24,29,46,.62);--glassB:rgba(24,29,46,.44);
-  --topline:rgba(255,255,255,.2);--edge:rgba(255,255,255,.13);--edge2:rgba(255,255,255,.05);
-  --grid:rgba(120,150,255,.10);
-  --shadow:0 16px 40px rgba(0,0,0,.5),0 2px 10px rgba(0,0,0,.32)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="studio"]){color-scheme:dark;
+  --bg:#000000;--ink:#f5f5f7;--ink2:#d1d1d6;--mut:#8e8e93;
+  --glassA:#1c1c1e;--glassB:#1c1c1e;
+  --topline:rgba(255,255,255,.06);--edge:rgba(255,255,255,.12);--edge2:rgba(255,255,255,.10);
+  --grid:rgba(255,255,255,.04);
+  --shadow:0 1px 2px rgba(0,0,0,.6),0 12px 30px -14px rgba(0,0,0,.8)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="studio"]):not([data-theme="clean"]){color-scheme:dark;
   --bg:#080b13;--ink:#eef0f8;--ink2:#c2c7d8;--mut:#7d8399;
   --glassA:rgba(24,29,46,.62);--glassB:rgba(24,29,46,.44);
   --topline:rgba(255,255,255,.2);--edge:rgba(255,255,255,.13);--edge2:rgba(255,255,255,.05);
@@ -123,7 +124,7 @@ body:not([data-tt="news"]) .slim-head{display:block}
 .fab-item:hover{background:color-mix(in srgb,var(--ac) 12%,transparent)}
 .fab-row{display:flex;align-items:center;gap:7px;padding:8px 12px;border-top:1px solid var(--edge2);margin-top:3px}
 .fab-lbl{flex:1;font-size:.72rem;font-weight:700;color:var(--mut)}
-.theme-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:2px 4px 6px}
+.theme-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;padding:2px 4px 6px}
 .theme-opt{display:flex;flex-direction:column;align-items:center;gap:4px;padding:9px 4px 8px;border-radius:12px;cursor:pointer;border:1px solid var(--edge2);background:color-mix(in srgb,var(--mut) 8%,transparent);color:var(--ink2);font:800 .58rem/1 inherit;letter-spacing:.03em;transition:transform .08s ease,box-shadow .08s ease}
 .theme-opt .em{font-size:1.05rem;line-height:1}
 .theme-opt:active{transform:translateY(1px)}
@@ -724,7 +725,7 @@ body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
 /* solid mobile tab-dock background per theme (Rohit 2026-07-12) */
 :root{--dock:#ffffff}
 :root[data-theme="dark"]{--dock:#161c2c}
-@media(prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="studio"]){--dock:#161c2c}}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]):not([data-theme="studio"]):not([data-theme="clean"]){--dock:#161c2c}}
 :root[data-theme="studio"]{--dock:#ffffff}
 
 /* ===== input-cost strip (top of News) ===== */
@@ -743,6 +744,93 @@ body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
    Belt-and-braces wrap insurance for expanded content and Ask answers: */
 .crow .cx,.crow .cx .cs,.more .exp{overflow-wrap:anywhere;word-break:break-word;white-space:normal;min-width:0}
 :root[data-theme="studio"] .costbar .cb-h{color:#6f6f6b}
+
+/* =========================================================================
+   CLEAN (Apple-inspired) + Apple DARK — added 2026-08-15 at Rohit's request.
+   Pure white / true black, hairline borders, one accent across EVERY tab,
+   no gradients, no blobs, no glass blur. Minimal, classy, identical per tab.
+   ========================================================================= */
+:root[data-theme="clean"]{color-scheme:light;
+  --bg:#ffffff;--ink:#1d1d1f;--ink2:#424245;--mut:#86868b;
+  --glassA:#ffffff;--glassB:#ffffff;
+  --topline:transparent;--edge:rgba(0,0,0,.10);--edge2:rgba(0,0,0,.08);
+  --grid:transparent;
+  --shadow:0 1px 2px rgba(0,0,0,.04),0 10px 26px -18px rgba(0,0,0,.18);
+  --crit:#ff3b30;--impt:#ff9500;--gold:#ffcc00;--good:#34c759;
+  --ac:#0071e3;--ac2:#0071e3;--hA:#0071e3;--hB:#0071e3;
+  --rgbA:#0071e3;--rgbB:#0071e3;--rgbC:#0071e3;--rgbD:#0071e3}
+:root[data-theme="dark"]{
+  --crit:#ff453a;--impt:#ff9f0a;--gold:#ffd60a;--good:#30d158;
+  --ac:#0a84ff;--ac2:#0a84ff;--hA:#0a84ff;--hB:#0a84ff;
+  --rgbA:#0a84ff;--rgbB:#0a84ff;--rgbC:#0a84ff;--rgbD:#0a84ff}
+
+/* one accent on every tab — kill the per-tab hue shifts */
+:root[data-theme="clean"] body[data-tt]{--ac:#0071e3;--ac2:#0071e3;--hA:#0071e3;--hB:#0071e3}
+:root[data-theme="dark"]  body[data-tt]{--ac:#0a84ff;--ac2:#0a84ff;--hA:#0a84ff;--hB:#0a84ff}
+
+/* page canvas: flat, no washes, no decorative objects */
+:root[data-theme="clean"] body{background:#ffffff}
+:root[data-theme="dark"]  body{background:#000000}
+:root[data-theme="clean"] body::before,:root[data-theme="dark"] body::before{background-image:none;-webkit-mask:none;mask:none;opacity:0}
+:root[data-theme="clean"] .blob,:root[data-theme="dark"] .blob,
+:root[data-theme="clean"] #skyGround,:root[data-theme="dark"] #skyGround{display:none!important}
+
+/* typography — SF stack, tight Apple tracking */
+:root[data-theme="clean"] body,:root[data-theme="dark"] body{
+  font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Inter,system-ui,"Hind Mysuru",sans-serif;
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.01em}
+
+/* surfaces — flat cards, hairline border, no blur, no gradient border-box */
+:root[data-theme="clean"] .glass,:root[data-theme="clean"] .gcard,:root[data-theme="clean"] .hero,
+:root[data-theme="clean"] .fab-sheet,:root[data-theme="clean"] .sheet,:root[data-theme="clean"] .kbd-card,
+:root[data-theme="clean"] .more-menu,:root[data-theme="clean"] .filter-bar,:root[data-theme="clean"] .mast{
+  background:#ffffff!important;border:1px solid rgba(0,0,0,.09)!important;border-radius:18px;
+  box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 28px -20px rgba(0,0,0,.22)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+:root[data-theme="dark"] .glass,:root[data-theme="dark"] .gcard,:root[data-theme="dark"] .hero,
+:root[data-theme="dark"] .fab-sheet,:root[data-theme="dark"] .sheet,:root[data-theme="dark"] .kbd-card,
+:root[data-theme="dark"] .more-menu,:root[data-theme="dark"] .filter-bar,:root[data-theme="dark"] .mast{
+  background:#1c1c1e!important;border:1px solid rgba(255,255,255,.10)!important;border-radius:18px;
+  box-shadow:0 1px 2px rgba(0,0,0,.5)!important;
+  backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+@media (hover:hover){
+  :root[data-theme="clean"] .story.gcard:hover,:root[data-theme="clean"] .trend.gcard:hover{
+    box-shadow:0 1px 2px rgba(0,0,0,.05),0 18px 36px -22px rgba(0,0,0,.3)!important;transform:none}
+  :root[data-theme="dark"] .story.gcard:hover,:root[data-theme="dark"] .trend.gcard:hover{
+    background:#2c2c2e!important;transform:none}}
+
+/* headings & accents — solid ink, no gradient text */
+:root[data-theme="clean"] .sec,:root[data-theme="dark"] .sec{
+  font-weight:700;font-size:.78rem;letter-spacing:-.01em;text-transform:none;color:var(--ink)}
+:root[data-theme="clean"] .sec::before,:root[data-theme="dark"] .sec::before{display:none}
+:root[data-theme="clean"] .ring .rn,:root[data-theme="dark"] .ring .rn,
+:root[data-theme="clean"] #slimName,:root[data-theme="dark"] #slimName,
+:root[data-theme="clean"] .legend>summary,:root[data-theme="dark"] .legend>summary,
+:root[data-theme="clean"] .since .sh,:root[data-theme="dark"] .since .sh{
+  background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;
+  -webkit-text-fill-color:currentColor!important;color:var(--ink)!important;font-weight:700;letter-spacing:-.02em}
+:root[data-theme="clean"] .ring,:root[data-theme="dark"] .ring{filter:none}
+:root[data-theme="clean"] .mast::before,:root[data-theme="dark"] .mast::before{display:none}
+
+/* pills, chips, controls — Apple capsule grey */
+:root[data-theme="clean"] .tool,:root[data-theme="clean"] .fit-seg,:root[data-theme="clean"] .dens-seg,
+:root[data-theme="clean"] .cb-row .cx,:root[data-theme="clean"] .m-date span[lang="kn"]{
+  background:#f5f5f7!important;border:1px solid rgba(0,0,0,.06)!important;color:var(--ink2)!important;box-shadow:none!important}
+:root[data-theme="dark"] .tool,:root[data-theme="dark"] .fit-seg,:root[data-theme="dark"] .dens-seg,
+:root[data-theme="dark"] .cb-row .cx,:root[data-theme="dark"] .m-date span[lang="kn"]{
+  background:#2c2c2e!important;border:1px solid rgba(255,255,255,.08)!important;color:var(--ink2)!important;box-shadow:none!important}
+:root[data-theme="clean"] #dateLbl{background:#1d1d1f;color:#fff;border-radius:999px;padding:5px 13px;font-weight:600;letter-spacing:0;box-shadow:none}
+:root[data-theme="dark"] #dateLbl{background:#f5f5f7;color:#000;border-radius:999px;padding:5px 13px;font-weight:600;letter-spacing:0;box-shadow:none}
+
+/* tab rail / bottom dock */
+:root[data-theme="clean"] nav,:root[data-theme="clean"] .dock{background:rgba(255,255,255,.92)!important;border-color:rgba(0,0,0,.08)!important}
+:root[data-theme="dark"] nav,:root[data-theme="dark"] .dock{background:rgba(0,0,0,.92)!important;border-color:rgba(255,255,255,.10)!important}
+
+/* buttons / selected states use the single accent */
+:root[data-theme="clean"] .theme-opt.on,:root[data-theme="dark"] .theme-opt.on{
+  background:var(--ac)!important;color:#fff!important;border-color:transparent!important;box-shadow:none!important}
+:root[data-theme="clean"] a,:root[data-theme="dark"] a{color:var(--ac)}
+
 </style>
 </head>
 <body data-tt="news">
@@ -772,7 +860,8 @@ body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
       <div class="theme-grid" role="group" aria-label="Theme">
         <button class="theme-opt" data-th="studio" title="Studio — the Kick75 product-page look"><span class="em">✨</span>Studio</button>
         <button class="theme-opt" data-th="light" title="Glass — light"><span class="em">☀</span>Glass</button>
-        <button class="theme-opt" data-th="dark" title="Glass — dark"><span class="em">🌙</span>Dark</button>
+        <button class="theme-opt" data-th="clean" title="Clean — Apple-inspired white"><span class="em">◍</span>Clean</button>
+        <button class="theme-opt" data-th="dark" title="Clean — dark"><span class="em">🌙</span>Dark</button>
       </div>
       <button class="fab-item" id="filterBtn">⌕ Filter stories</button>
       <button class="fab-item" id="askSetupBtn">🤖 Ask AI setup</button>
@@ -901,10 +990,10 @@ const isRealItem = it => !!it && !PLACE_RE.test(String((it&&(it.t||it.author))||
 
 // ---- theme (3 explicit choices in the menu: Studio / Glass light / Glass dark) ----
 (function(){ const root=document.documentElement;
-  const VALID=["studio","light","dark"];
+  const VALID=["studio","light","clean","dark"];
   function cur(){ const s=store.get("theme",null); return VALID.includes(s)?s:"studio"; }
   window.applyTheme=function(){ const c=cur(); root.setAttribute("data-theme",c);
-    const tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute("content",c==="dark"?"#080b13":(c==="studio"?"#ededed":"#eef1f8"));
+    const tc=document.querySelector('meta[name="theme-color"]'); if(tc) tc.setAttribute("content",c==="dark"?"#000000":(c==="clean"?"#ffffff":(c==="studio"?"#ededed":"#eef1f8")));
     document.querySelectorAll(".theme-opt").forEach(b=>b.classList.toggle("on",b.dataset.th===c)); };
   window.cycleTheme=function(){ const next=VALID[(VALID.indexOf(cur())+1)%VALID.length]; store.set("theme",next); applyTheme(); };
   document.querySelectorAll(".theme-opt").forEach(b=>{ b.onclick=()=>{ store.set("theme",b.dataset.th); applyTheme(); }; });
