@@ -398,6 +398,126 @@ body.no-ai .act-ask::after{content:" \2197"}
 }
 
 @keyframes pxblink{50%{opacity:.35}}
+/* ---- BASE CSS restored 2026-08-15: these non-theme rules were deleted along with
+   the Studio block. Losing them broke the reader overlay, the cost strip and more.
+   Theme overrides live AFTER this block and still win. ---- */
+.act-follow.on{background:linear-gradient(120deg,var(--ac),var(--ac2));color:#fff;border-color:transparent}
+.fol{padding:15px 17px;margin-bottom:12px}
+.fol-head{display:flex;align-items:flex-start;gap:12px;justify-content:space-between}
+.fol-title{font-weight:850;font-size:1.05rem;color:var(--ink);line-height:1.3}
+.fol-x{flex:0 0 auto;font-size:.58rem!important;letter-spacing:.04em;opacity:.8}
+.fol-x:hover{opacity:1;color:#ef4444}
+.fol-latest{margin-top:8px;font-size:.92rem;color:var(--ink2);font-weight:650;line-height:1.5}
+.fol-latest::before{content:"● LATEST  ";font-size:.55rem;font-weight:850;letter-spacing:.12em;color:#22c55e;vertical-align:middle}
+.fol-hist{margin-top:11px;border-top:1px solid var(--edge2);padding-top:9px}
+.fol-hist>summary{cursor:pointer;list-style:none;font-size:.64rem;font-weight:850;letter-spacing:.11em;text-transform:uppercase;color:var(--mut)}
+.fol-hist>summary::-webkit-details-marker{display:none}
+.fol-hist>summary::after{content:" ▾";color:var(--mut)}
+.fol-hist[open]>summary::after{content:" ▴"}
+.fol-list{margin-top:10px;display:flex;flex-direction:column;gap:9px}
+.fol-row{display:flex;gap:11px;font-size:.82rem}
+.fol-d{flex:0 0 60px;color:var(--mut);font-weight:800;font-size:.66rem;padding-top:2px;white-space:nowrap}
+.fol-t{color:var(--ink2);line-height:1.45}
+.fitbar{display:flex;align-items:center;gap:12px;margin:2px 2px 14px;padding:11px 16px;column-span:all;-webkit-column-span:all}
+.fb-ic{font-size:1.15rem}
+.fb-lbl{font-weight:850;font-size:.64rem;letter-spacing:.13em;text-transform:uppercase;color:var(--mut)}
+.fit-seg{display:flex;gap:5px;flex:1;flex-wrap:wrap}
+.fit-seg button{flex:1;min-width:62px;border:1px solid var(--edge2);background:color-mix(in srgb,var(--mut) 9%,transparent);color:var(--ink2);font:800 .62rem/1 inherit;letter-spacing:.03em;padding:8px 6px;border-radius:11px;cursor:pointer;white-space:nowrap;transition:transform .08s ease}
+.fit-seg button.on{background:linear-gradient(120deg,var(--ac),var(--ac2));color:#fff;border-color:transparent;box-shadow:0 3px 10px color-mix(in srgb,var(--ac) 38%,transparent),inset 0 1px 0 rgba(255,255,255,.35)}
+.fit-seg button:active{transform:scale(.95)}
+.panel[data-fit="4"]{column-count:2;column-gap:12px}
+}
+.panel.dense .story,.panel.dense .crow,.panel.dense .trend,.panel.dense .hero,.panel.dense .gcard,.panel.dense .cat{break-inside:avoid;-webkit-column-break-inside:avoid}
+.panel.dense .story:not(.xopen) .sbody>:not(.st-t),
+.panel.dense .trend:not(.xopen) .sbody>:not(.st-t),
+.panel.dense .hero:not(.xopen)>:not(.st-t){display:none!important}
+.panel.dense .story .tile{display:none}
+.panel.dense .story:not(.xopen),.panel.dense .trend:not(.xopen),.panel.dense .hero:not(.xopen){cursor:pointer}
+.panel.dense .story.xopen,.panel.dense .trend.xopen,.panel.dense .hero.xopen{column-span:all;-webkit-column-span:all;outline:1px solid color-mix(in srgb,var(--ac) 45%,transparent);max-width:860px;margin:4px 0 12px!important;padding:14px 16px!important}
+.panel.dense .story.xopen .st-t,.panel.dense .trend.xopen .st-t{font-size:1.02rem!important;line-height:1.4}
+.panel.dense .story.xopen .st-s,.panel.dense .story.xopen .cs,.panel.dense .trend.xopen .st-s{font-size:.92rem!important;line-height:1.6}
+.panel.dense .story.xopen .tile{display:inline-flex}
+.panel.dense .legend,.panel.dense .phead,.panel.dense .brk,.panel.dense .glance,.panel.dense .news-toolbar,.panel.dense .since{display:none!important}
+.panel.dense .sec{margin:9px 4px 4px;column-span:all;-webkit-column-span:all}
+.panel.dense .story,.panel.dense .gcard,.panel.dense .trend,.panel.dense .crow{padding:8px 11px!important;margin:0 0 8px!important}
+.panel.dense .st-t{font-size:.84rem!important;line-height:1.34;font-weight:700}
+.panel.dense .hero .st-t{font-size:.92rem!important}
+.panel.dense .cat>summary{font-size:.82rem}
+.panel.dense .trank{transform:scale(.82)}
+.reader{position:fixed;inset:0;z-index:85;display:none;background:var(--bg);overflow-y:auto;-webkit-overflow-scrolling:touch}
+.reader.open{display:block}
+.reader .more{margin-top:14px}
+.slim-date{display:block;flex-basis:100%;font-size:.72rem;font-weight:700;letter-spacing:.02em;color:var(--mut);margin-top:1px;text-transform:uppercase}
+#p-news[data-fit="2"],#p-news[data-fit="3"],#p-news[data-fit="4"]{column-count:auto!important}
+#p-news[data-fit="2"] #newsList{display:block}
+#p-news[data-fit="3"] #newsList,#p-news[data-fit="4"] #newsList{display:grid;gap:0 12px;align-items:start;grid-template-columns:repeat(2,minmax(0,1fr))}
+.panel.dense .hero:not(.xopen)::before,.panel.dense .hero:not(.xopen)::after{display:none!important;content:none!important}
+.panel.dense .gcard:hover,.panel.dense .story:hover,.panel.dense .trend:hover,.panel.dense .hero:hover{transform:none!important}
+.story.read.xopen,.story.read:hover,.story.read:focus-within,.nbrow.read:hover{opacity:1}
+.crow.read.open .ct,.crow.read:hover .ct{opacity:1}
+.panel.active[data-fit="2"]:not(#p-news){display:grid;grid-template-columns:1fr;gap:6px 10px;align-items:start}
+.panel.active[data-fit="3"]:not(#p-news),
+.panel.active[data-fit="4"]:not(#p-news){display:grid;gap:7px 10px;align-items:start;grid-auto-flow:row dense;grid-template-columns:repeat(2,minmax(0,1fr))}
+.panel.active[data-fit="3"]:not(#p-news)>.sec,.panel.active[data-fit="4"]:not(#p-news)>.sec{display:none!important}
+.panel.active[data-fit="2"]:not(#p-news) .story.xopen,.panel.active[data-fit="3"]:not(#p-news) .story.xopen,.panel.active[data-fit="4"]:not(#p-news) .story.xopen{grid-column:1/-1}
+.panel.dense .story:not(.xopen) .sbody>.assess,
+.panel.dense .trend:not(.xopen) .sbody>.assess,
+.panel.dense .hero:not(.xopen)>.assess{display:block!important;margin-top:5px}
+.panel.dense .story:not(.xopen) .assess .verdict,.panel.dense .story:not(.xopen) .assess .basis,
+.panel.dense .trend:not(.xopen) .assess .verdict,.panel.dense .trend:not(.xopen) .assess .basis,
+.panel.dense .hero:not(.xopen) .assess .verdict,.panel.dense .hero:not(.xopen) .assess .basis{display:none!important}
+.panel.dense .assess .as-row{gap:6px}
+.panel.dense .assess .as-lbl{font-size:.55rem}
+.panel.dense .assess .as-tier{font-size:.62rem}
+.panel.dense .assess .mag{transform:scale(.82);transform-origin:left center}
+.panel.dense .story:not(.xopen) .sbody>.acts,
+.panel.dense .trend:not(.xopen) .sbody>.acts,
+.panel.dense .hero:not(.xopen)>.acts{display:flex!important;margin-top:6px;border-top:none;padding-top:2px;gap:6px}
+.panel.dense .acts .mini{font-size:.6rem;padding:3px 9px}
+.panel.dense .story:not(.xopen) .sbody>.ask-box,
+.panel.dense .trend:not(.xopen) .sbody>.ask-box{display:none!important}
+.slim-head::before{content:"";position:absolute;inset:-70% -25%;z-index:-1;background:conic-gradient(from 0deg,var(--ac),var(--ac2),#8b5cf6,var(--ac2),var(--ac));filter:blur(48px);opacity:.22;animation:slimspin 14s linear infinite}
+.slim-head::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(120deg,color-mix(in srgb,var(--ac) 8%,transparent),transparent 60%)}
+.slim-emoji{font-size:2.5rem;line-height:1;flex:0 0 auto;display:inline-block;filter:drop-shadow(0 5px 11px rgba(0,0,0,.2));animation:bob 3s ease-in-out infinite}
+.slim-emoji:empty{display:none}
+.slim-count:empty{display:none}
+.costbar{padding:9px 12px;margin-bottom:12px;display:flex;align-items:center;gap:11px}
+.costbar .cb-h{flex:0 0 auto;font-weight:850;font-size:.58rem;letter-spacing:.13em;text-transform:uppercase;color:var(--mut)}
+.cb-row{display:flex;gap:8px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.cb-row::-webkit-scrollbar{display:none}
+.cb-row .cx{flex:0 0 auto;display:inline-flex;align-items:baseline;gap:5px;padding:5px 10px;border-radius:11px;background:color-mix(in srgb,var(--mut) 12%,transparent);text-decoration:none;white-space:nowrap}
+.cb-row .cx-l{font-size:.66rem;font-weight:750;color:var(--ink2)}
+.cb-row .cx-v{font-size:.79rem;font-weight:850;color:var(--ink)}
+.cb-row .cx-d{font-size:.63rem;font-weight:800}
+.cb-row .cx-p{color:var(--mut);font-size:.58rem;vertical-align:super}
+.crow .cx,.crow .cx .cs,.more .exp{overflow-wrap:anywhere;word-break:break-word;white-space:normal;min-width:0}
+/* ---- READER base CSS restored 2026-08-15 (it was lost with the FIXES v2 block,
+   which is why tapping a card did nothing — .open had no styling). ---- */
+body.reader-lock{overflow:hidden}
+.reader-inner{max-width:720px;margin:0 auto;padding:calc(60px + env(safe-area-inset-top)) 22px calc(56px + env(safe-area-inset-bottom))}
+.reader-x{position:fixed;top:calc(14px + env(safe-area-inset-top));right:16px;z-index:86;width:42px;height:42px;border:none;border-radius:50%;cursor:pointer;font-size:1.1rem;color:#fff;background:linear-gradient(120deg,var(--ac),var(--ac2));box-shadow:0 5px 16px color-mix(in srgb,var(--ac) 45%,transparent),inset 0 1px 0 rgba(255,255,255,.35)}
+.reader-x:active{transform:scale(.94)}
+.reader-chips{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:12px}
+.reader-chip{display:inline-flex;align-items:center;padding:4px 11px;border-radius:999px;font-size:.6rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;background:color-mix(in srgb,var(--pc,var(--ac)) 16%,transparent);color:var(--pc,var(--ac));border:1px solid color-mix(in srgb,var(--pc,var(--ac)) 34%,transparent)}
+.reader-h1{font-size:1.6rem;line-height:1.28;font-weight:900;letter-spacing:-.01em;margin:2px 0 10px;color:var(--ink)}
+.reader-meta{font-size:.76rem;font-weight:700;color:var(--mut);margin-bottom:16px}
+.reader-glance{font-size:1.02rem;line-height:1.6;font-weight:700;color:var(--ink);margin:0 0 14px}
+.reader-s{font-size:1.08rem;line-height:1.75;color:var(--ink);margin:0 0 18px}
+.reader-why{font-size:.95rem;line-height:1.6;color:var(--ink);background:color-mix(in srgb,var(--ac) 9%,transparent);border-left:3px solid var(--ac);border-radius:10px;padding:11px 14px;margin:0 0 16px}
+.reader-why b{display:block;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);margin-bottom:4px}
+.reader-fy{font-size:.94rem;line-height:1.55;color:var(--ink);background:color-mix(in srgb,var(--gold,#e7c353) 16%,transparent);border-radius:10px;padding:10px 13px;margin:0 0 16px;font-weight:600}
+.reader-pts{margin:4px 0 18px;border:1px solid var(--edge2);border-radius:16px;overflow:hidden}
+.reader-pts-h{padding:10px 14px;font-size:.64rem;font-weight:900;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);background:color-mix(in srgb,var(--ac) 8%,transparent)}
+.reader-pt{padding:11px 14px;border-top:1px solid var(--edge2);font-size:.95rem;line-height:1.55;color:var(--ink)}
+.reader-pt b{display:block;font-weight:800;margin-bottom:2px;color:var(--ink)}
+.reader-pt span{color:var(--ink)}
+.reader-open{display:inline-block;margin-top:6px;padding:11px 20px;border-radius:14px;font-weight:800;font-size:.85rem;color:#fff;text-decoration:none;background:linear-gradient(120deg,var(--ac),var(--ac2));box-shadow:0 5px 16px color-mix(in srgb,var(--ac) 40%,transparent)}
+.reader-ask{margin-top:22px;border-top:1px solid var(--edge2);padding-top:16px}
+.reader-askrow{display:flex;gap:8px}
+.reader-askrow input{flex:1;border:1px solid var(--edge2);background:color-mix(in srgb,var(--mut) 8%,transparent);border-radius:12px;padding:11px 13px;font:600 .92rem/1.4 inherit;color:var(--ink);outline:none}
+.reader-askrow input:focus{border-color:var(--ac)}
+.reader-askrow button{border:none;border-radius:12px;padding:0 20px;font-weight:800;font-size:.85rem;color:#fff;cursor:pointer;background:linear-gradient(120deg,var(--ac),var(--ac2))}
+.reader-askrow button:active{transform:scale(.96)}
 /* =========================================================================
    CLEAN (Apple-inspired) + its DARK counterpart — rebuilt 2026-08-15.
    DESIGN RULE: Clean is a DOCUMENT, not a dashboard. No cards, no shadows,
@@ -565,7 +685,7 @@ body.no-ai .act-ask::after{content:" \2197"}
 :root[data-theme="clean"] .panel[data-fit="4"] .story,:root[data-theme="dark"] .panel[data-fit="4"] .story,
 :root[data-theme="clean"] .panel[data-fit="4"] .trend,:root[data-theme="dark"] .panel[data-fit="4"] .trend{padding:9px 0 10px!important}
 :root[data-theme="clean"] .panel[data-fit="4"] .st-t,:root[data-theme="dark"] .panel[data-fit="4"] .st-t{font-size:.9rem;line-height:1.28}
-:root[data-theme="clean"] .panel[data-fit="4"] .st-s,:root[data-theme="dark"] .panel[data-fit="4"] .st-s{display:none}
+:root[data-theme="clean"] .panel .st-s,:root[data-theme="dark"] .panel .st-s{display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:.87rem!important;line-height:1.5!important;margin-top:6px!important}
 :root[data-theme="clean"] .panel[data-fit="4"] .meta,:root[data-theme="dark"] .panel[data-fit="4"] .meta{margin-top:5px}
 :root[data-theme="clean"] .panel[data-fit="4"] .sec,:root[data-theme="dark"] .panel[data-fit="4"] .sec{margin:22px 0 2px}
 :root[data-theme="clean"] .panel[data-fit="4"] .hero .st-t,:root[data-theme="dark"] .panel[data-fit="4"] .hero .st-t{font-size:1.18rem}
@@ -632,6 +752,8 @@ body.no-ai .act-ask::after{content:" \2197"}
 :root[data-theme="clean"] .read.open,:root[data-theme="dark"] .read.open{opacity:1!important}
 :root[data-theme="clean"] .sompage img,:root[data-theme="dark"] .sompage img{display:block;width:100%}
 
+
+
 /* ---- MAX-ONLY (2026-08-15): there is no fit switcher any more. Every panel is
    data-fit="4" + .dense, and tapping any card opens the full-screen reader,
    which IS the comfortable view. Do not re-add fit levels 1-3. ---- */
@@ -644,7 +766,7 @@ body.no-ai .act-ask::after{content:" \2197"}
 :root[data-theme="clean"] #reader,:root[data-theme="dark"] #reader{border-radius:0!important;border:0!important;box-shadow:none!important}
 :root[data-theme="clean"] #reader{background:#fff!important}
 :root[data-theme="dark"]  #reader{background:#000!important}
-:root[data-theme="clean"] #readerBody,:root[data-theme="dark"] #readerBody{max-width:680px;margin:0 auto;padding:16px 22px 72px}
+:root[data-theme="clean"] .reader-inner,:root[data-theme="dark"] .reader-inner{max-width:680px;margin:0 auto;padding:16px 22px 72px}
 :root[data-theme="clean"] .reader-h1,:root[data-theme="dark"] .reader-h1{
   font-size:1.72rem;line-height:1.2;letter-spacing:-.028em;font-weight:600;color:var(--ink);margin:6px 0 10px;
   background:none!important;-webkit-text-fill-color:currentColor!important}
@@ -661,10 +783,10 @@ body.no-ai .act-ask::after{content:" \2197"}
 :root[data-theme="clean"] .reader-open,:root[data-theme="dark"] .reader-open{
   display:inline-block;margin-top:26px;color:var(--ac)!important;font-weight:500;font-size:.94rem}
 :root[data-theme="clean"] .reader-chips,:root[data-theme="dark"] .reader-chips{margin-bottom:10px}
-:root[data-theme="clean"] #readerClose,:root[data-theme="dark"] #readerClose{
+:root[data-theme="clean"] .reader-x,:root[data-theme="dark"] .reader-x{
   width:32px;height:32px;border-radius:50%;border:0;font-size:.95rem;opacity:.7}
-:root[data-theme="clean"] #readerClose{background:#f5f5f7;color:#1d1d1f}
-:root[data-theme="dark"]  #readerClose{background:#2c2c2e;color:#f5f5f7}
+:root[data-theme="clean"] .reader-x{background:#f5f5f7;color:#1d1d1f}
+:root[data-theme="dark"]  .reader-x{background:#2c2c2e;color:#f5f5f7}
 
 /* ---- ONE title per tab (2026-08-15). The template renders TWO headings:
    .slim-head (#slimName, gradient-blue) and the in-panel .phead (plain h2).
