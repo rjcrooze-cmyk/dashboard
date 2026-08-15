@@ -546,13 +546,10 @@ body.no-ai .act-ask::after{content:" \2197"}
    must never be overridden, or every tab stacks into one endless scroll. ---- */
 :root[data-theme="clean"] .panel,:root[data-theme="dark"] .panel{column-count:auto!important;column-gap:0!important}
 :root[data-theme="clean"] .panel.active,:root[data-theme="dark"] .panel.active{display:block}
-:root[data-theme="clean"] .panel[data-fit="1"],:root[data-theme="dark"] .panel[data-fit="1"]{--fitgap:0px}
 @media (min-width:760px){
-  :root[data-theme="clean"] .panel[data-fit="3"],:root[data-theme="dark"] .panel[data-fit="3"],
   :root[data-theme="clean"] .panel[data-fit="4"],:root[data-theme="dark"] .panel[data-fit="4"]{
     display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:34px;align-items:start}
   :root[data-theme="clean"] .panel[data-fit="4"],:root[data-theme="dark"] .panel[data-fit="4"]{grid-template-columns:repeat(3,minmax(0,1fr));column-gap:26px}
-  :root[data-theme="clean"] .panel[data-fit="3"]>.sec,:root[data-theme="dark"] .panel[data-fit="3"]>.sec,
   :root[data-theme="clean"] .panel[data-fit="4"]>.sec,:root[data-theme="dark"] .panel[data-fit="4"]>.sec,
   :root[data-theme="clean"] .panel[data-fit]>.fitbar,:root[data-theme="dark"] .panel[data-fit]>.fitbar,
   :root[data-theme="clean"] .panel[data-fit]>.mast,:root[data-theme="dark"] .panel[data-fit]>.mast,
@@ -562,30 +559,18 @@ body.no-ai .act-ask::after{content:" \2197"}
   :root[data-theme="clean"] .panel[data-fit]>.legend,:root[data-theme="dark"] .panel[data-fit]>.legend,
   :root[data-theme="clean"] .panel[data-fit]>.costbar,:root[data-theme="dark"] .panel[data-fit]>.costbar,
   :root[data-theme="clean"] .panel[data-fit]>.som-head,:root[data-theme="dark"] .panel[data-fit]>.som-head{grid-column:1/-1}
-  :root[data-theme="clean"] .panel[data-fit="3"],:root[data-theme="clean"] .panel[data-fit="4"]{max-width:1180px}
-  :root[data-theme="dark"] .panel[data-fit="3"],:root[data-theme="dark"] .panel[data-fit="4"]{max-width:1180px}
 }
 /* wider measure when densified so grid columns aren't cramped */
-@media (min-width:760px){:root[data-theme="clean"] .wrap:has(.panel.active[data-fit="3"]),:root[data-theme="clean"] .wrap:has(.panel.active[data-fit="4"]),
-  :root[data-theme="dark"] .wrap:has(.panel.active[data-fit="3"]),:root[data-theme="dark"] .wrap:has(.panel.active[data-fit="4"]){max-width:1220px}}
 /* Condensed / Dense / Max tighten the row rhythm — visibly, at every width */
-:root[data-theme="clean"] .panel[data-fit="2"] .story,:root[data-theme="dark"] .panel[data-fit="2"] .story,
-:root[data-theme="clean"] .panel[data-fit="2"] .trend,:root[data-theme="dark"] .panel[data-fit="2"] .trend{padding:15px 0 16px!important}
-:root[data-theme="clean"] .panel[data-fit="3"] .story,:root[data-theme="dark"] .panel[data-fit="3"] .story,
-:root[data-theme="clean"] .panel[data-fit="3"] .trend,:root[data-theme="dark"] .panel[data-fit="3"] .trend{padding:12px 0 13px!important}
 :root[data-theme="clean"] .panel[data-fit="4"] .story,:root[data-theme="dark"] .panel[data-fit="4"] .story,
 :root[data-theme="clean"] .panel[data-fit="4"] .trend,:root[data-theme="dark"] .panel[data-fit="4"] .trend{padding:9px 0 10px!important}
-:root[data-theme="clean"] .panel[data-fit="2"] .st-t,:root[data-theme="dark"] .panel[data-fit="2"] .st-t{font-size:1rem}
-:root[data-theme="clean"] .panel[data-fit="3"] .st-t,:root[data-theme="dark"] .panel[data-fit="3"] .st-t{font-size:.95rem;line-height:1.3}
 :root[data-theme="clean"] .panel[data-fit="4"] .st-t,:root[data-theme="dark"] .panel[data-fit="4"] .st-t{font-size:.9rem;line-height:1.28}
-:root[data-theme="clean"] .panel[data-fit="3"] .st-s,:root[data-theme="dark"] .panel[data-fit="3"] .st-s{font-size:.86rem;line-height:1.5;margin-top:5px}
 :root[data-theme="clean"] .panel[data-fit="4"] .st-s,:root[data-theme="dark"] .panel[data-fit="4"] .st-s{display:none}
 :root[data-theme="clean"] .panel[data-fit="4"] .meta,:root[data-theme="dark"] .panel[data-fit="4"] .meta{margin-top:5px}
-:root[data-theme="clean"] .panel[data-fit="3"] .sec,:root[data-theme="dark"] .panel[data-fit="3"] .sec,
 :root[data-theme="clean"] .panel[data-fit="4"] .sec,:root[data-theme="dark"] .panel[data-fit="4"] .sec{margin:22px 0 2px}
 :root[data-theme="clean"] .panel[data-fit="4"] .hero .st-t,:root[data-theme="dark"] .panel[data-fit="4"] .hero .st-t{font-size:1.18rem}
 /* fit bar: readable, not a floating card */
-:root[data-theme="clean"] .fitbar,:root[data-theme="dark"] .fitbar{
+:root[data-theme="clean"] .fitbar,:root[data-theme="dark"] .fitbar{display:none!important;
   background:none!important;border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;
   box-shadow:none!important;padding:10px 0 12px!important;margin:0 0 4px!important;display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 :root[data-theme="clean"] .fb-ic,:root[data-theme="dark"] .fb-ic{display:none}
@@ -647,6 +632,40 @@ body.no-ai .act-ask::after{content:" \2197"}
 :root[data-theme="clean"] .read.open,:root[data-theme="dark"] .read.open{opacity:1!important}
 :root[data-theme="clean"] .sompage img,:root[data-theme="dark"] .sompage img{display:block;width:100%}
 
+/* ---- MAX-ONLY (2026-08-15): there is no fit switcher any more. Every panel is
+   data-fit="4" + .dense, and tapping any card opens the full-screen reader,
+   which IS the comfortable view. Do not re-add fit levels 1-3. ---- */
+:root[data-theme="clean"] .panel .story,:root[data-theme="dark"] .panel .story,
+:root[data-theme="clean"] .panel .trend,:root[data-theme="dark"] .panel .trend{cursor:pointer}
+@media (hover:hover){
+ :root[data-theme="clean"] .panel .story:hover .st-t{color:var(--ac)!important}
+ :root[data-theme="dark"]  .panel .story:hover .st-t{color:var(--ac)!important}}
+/* reader = the comfortable reading view */
+:root[data-theme="clean"] #reader,:root[data-theme="dark"] #reader{border-radius:0!important;border:0!important;box-shadow:none!important}
+:root[data-theme="clean"] #reader{background:#fff!important}
+:root[data-theme="dark"]  #reader{background:#000!important}
+:root[data-theme="clean"] #readerBody,:root[data-theme="dark"] #readerBody{max-width:680px;margin:0 auto;padding:16px 22px 72px}
+:root[data-theme="clean"] .reader-h1,:root[data-theme="dark"] .reader-h1{
+  font-size:1.72rem;line-height:1.2;letter-spacing:-.028em;font-weight:600;color:var(--ink);margin:6px 0 10px;
+  background:none!important;-webkit-text-fill-color:currentColor!important}
+:root[data-theme="clean"] .reader-meta,:root[data-theme="dark"] .reader-meta{font-size:.78rem;color:var(--mut);margin-bottom:22px}
+:root[data-theme="clean"] .reader-glance,:root[data-theme="dark"] .reader-glance{
+  font-size:1.06rem;line-height:1.55;color:var(--ink);font-weight:500;margin:0 0 18px;padding:0 0 18px;border-bottom:1px solid var(--line);background:none!important;border-radius:0!important}
+:root[data-theme="clean"] .reader-s,:root[data-theme="dark"] .reader-s{font-size:1.02rem;line-height:1.72;color:var(--ink2)}
+:root[data-theme="clean"] .reader-why,:root[data-theme="dark"] .reader-why{
+  background:var(--sub)!important;border:0!important;border-radius:10px!important;padding:14px 16px!important;margin-top:20px;color:var(--ink2)!important}
+:root[data-theme="clean"] .reader-why b,:root[data-theme="dark"] .reader-why b{display:block;margin-bottom:6px;color:var(--ink);font-weight:600}
+:root[data-theme="clean"] .reader-pts,:root[data-theme="dark"] .reader-pts{margin-top:26px;border-top:1px solid var(--line);padding-top:20px}
+:root[data-theme="clean"] .reader-pts-h,:root[data-theme="dark"] .reader-pts-h{
+  font-size:.72rem;text-transform:uppercase;letter-spacing:.02em;color:var(--mut);font-weight:600;margin-bottom:12px}
+:root[data-theme="clean"] .reader-open,:root[data-theme="dark"] .reader-open{
+  display:inline-block;margin-top:26px;color:var(--ac)!important;font-weight:500;font-size:.94rem}
+:root[data-theme="clean"] .reader-chips,:root[data-theme="dark"] .reader-chips{margin-bottom:10px}
+:root[data-theme="clean"] #readerClose,:root[data-theme="dark"] #readerClose{
+  width:32px;height:32px;border-radius:50%;border:0;font-size:.95rem;opacity:.7}
+:root[data-theme="clean"] #readerClose{background:#f5f5f7;color:#1d1d1f}
+:root[data-theme="dark"]  #readerClose{background:#2c2c2e;color:#f5f5f7}
+
 </style>
 </head>
 <body data-tt="news">
@@ -677,9 +696,7 @@ body.no-ai .act-ask::after{content:" \2197"}
         <button class="theme-opt" data-th="clean" title="Clean — Apple-inspired white"><span class="em">◍</span>Clean</button>
         <button class="theme-opt" data-th="dark" title="Dark — Clean, in true black"><span class="em">🌙</span>Dark</button>
       </div>
-      <div class="fab-row" style="margin-top:0"><span class="fab-lbl">View</span></div>
-      <div class="fit-seg" id="fabFit" role="group" aria-label="Fit to screen" style="display:flex;gap:2px;padding:2px 4px 6px"><button type="button" data-v="1">Comfortable</button><button type="button" data-v="2">Condensed</button><button type="button" data-v="3">Dense</button><button type="button" data-v="4">Max</button></div>
-      <button class="fab-item" id="filterBtn">⌕ Filter stories</button>
+            <button class="fab-item" id="filterBtn">⌕ Filter stories</button>
       <button class="fab-item" id="askSetupBtn">🤖 Ask AI setup</button>
       <div class="fab-row"><span class="fab-lbl">Text size</span><button class="tool" id="fsMinus" aria-label="Smaller">A−</button><button class="tool" id="fsPlus" aria-label="Larger">A+</button></div>
     </div>
@@ -813,7 +830,6 @@ const isRealItem = it => !!it && !PLACE_RE.test(String((it&&(it.t||it.author))||
     document.querySelectorAll(".theme-opt").forEach(b=>b.classList.toggle("on",b.dataset.th===c)); };
   window.cycleTheme=function(){ const next=VALID[(VALID.indexOf(cur())+1)%VALID.length]; store.set("theme",next); applyTheme(); };
   document.querySelectorAll(".theme-opt").forEach(b=>{ b.onclick=()=>{ store.set("theme",b.dataset.th); applyTheme(); }; });
-  document.querySelectorAll("#fabFit button").forEach(b=>{ b.onclick=()=>{ if(window.applyFitAll) applyFitAll(b.dataset.v); }; });
   applyTheme();
 })();
 (function(){ const S=[0.875,0.9375,1,1.0625,1.125,1.1875]; let i=store.get("fs",2); if(typeof i!=="number"||i<0||i>=S.length)i=2;
@@ -1438,21 +1454,14 @@ function renderFollowing(){
 }
 // Per-tab "Fit to screen" slider — mounts a control at the top of each panel
 const FIT_NAMES={1:"Comfortable",2:"Condensed",3:"Dense",4:"Max"};
-function applyFitAll(v){ v=Math.max(1,Math.min(4,+v||1)); store.set("fit_all",v);
+function applyFitAll(v){ v=4; store.set("fit_all",4);
   document.querySelectorAll(".panel").forEach(pn=>{ pn.dataset.fit=v; pn.classList.toggle("dense",v>1); });
   document.querySelectorAll(".fit-seg button").forEach(b=>{ const on=(+b.dataset.v===v); b.classList.toggle("on",on); b.setAttribute("aria-pressed",on?"true":"false"); });
   const act=document.querySelector(".panel.active"); if(act){ try{ const _d=act.style.display; act.style.display="none"; void act.offsetHeight; act.style.display=_d; }catch(e){} }
 }
 function mountFit(id){ const panel=document.getElementById("p-"+id); if(!panel) return;
   const old=panel.querySelector(":scope > .fitbar"); if(old) old.remove();
-  const lvl=Math.max(1,Math.min(4,+store.get("fit_all",1)||1));
-  const bar=document.createElement("div"); bar.className="fitbar glass";
-  bar.innerHTML=`<span class="fb-ic">🖥️</span><span class="fb-lbl">Fit to screen</span><div class="fit-seg" role="group" aria-label="Fit to screen">`+[1,2,3,4].map(v=>`<button type="button" data-v="${v}" aria-pressed="false">${FIT_NAMES[v]}</button>`).join("")+`</div>`;
-  const seg=bar.querySelector(".fit-seg");
-  seg.querySelectorAll("button").forEach(b=>b.addEventListener("click",()=>applyFitAll(b.dataset.v)));
-  panel.insertBefore(bar,panel.firstChild);
-  panel.dataset.fit=lvl; panel.classList.toggle("dense",lvl>1);
-  [...seg.querySelectorAll("button")].forEach(b=>{ const on=(+b.dataset.v===lvl); b.classList.toggle("on",on); b.setAttribute("aria-pressed",on?"true":"false"); });
+  panel.dataset.fit=4; panel.classList.add("dense");
 }
 try{ scanFollows(); }catch(e){}
 // Full-screen article reader — opening a card in a densified/fit-to-screen tab fills the screen so it's easy to read.
