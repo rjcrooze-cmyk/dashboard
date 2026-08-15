@@ -745,91 +745,148 @@ body:not([data-tt="news"]) .slim-head{display:flex;align-items:center;gap:15px}
 .crow .cx,.crow .cx .cs,.more .exp{overflow-wrap:anywhere;word-break:break-word;white-space:normal;min-width:0}
 :root[data-theme="studio"] .costbar .cb-h{color:#6f6f6b}
 
+
 /* =========================================================================
-   CLEAN (Apple-inspired) + Apple DARK — added 2026-08-15 at Rohit's request.
-   Pure white / true black, hairline borders, one accent across EVERY tab,
-   no gradients, no blobs, no glass blur. Minimal, classy, identical per tab.
+   CLEAN (Apple-inspired) + its DARK counterpart — rebuilt 2026-08-15.
+   DESIGN RULE: Clean is a DOCUMENT, not a dashboard. No cards, no shadows,
+   no radii on content, no emoji, no per-tab colour. Rows are separated by a
+   single hairline and whitespace. Greyscale only; the one accent is used for
+   links and the active tab and nowhere else. Hierarchy = size/weight/value.
+   Studio and Glass are untouched — do not merge these rules into them.
    ========================================================================= */
 :root[data-theme="clean"]{color-scheme:light;
-  --bg:#ffffff;--ink:#1d1d1f;--ink2:#424245;--mut:#86868b;
+  --bg:#ffffff;--ink:#1d1d1f;--ink2:#4a4a4f;--mut:#8a8a8f;
   --glassA:#ffffff;--glassB:#ffffff;
-  --topline:transparent;--edge:rgba(0,0,0,.10);--edge2:rgba(0,0,0,.08);
-  --grid:transparent;
-  --shadow:0 1px 2px rgba(0,0,0,.04),0 10px 26px -18px rgba(0,0,0,.18);
-  --crit:#ff3b30;--impt:#ff9500;--gold:#ffcc00;--good:#34c759;
+  --topline:transparent;--edge:rgba(0,0,0,.09);--edge2:rgba(0,0,0,.07);--grid:transparent;
+  --shadow:none;--line:rgba(0,0,0,.08);--sub:#f6f6f7;
+  --crit:#6e6e73;--impt:#8a8a8f;--gold:#8a8a8f;--good:#6e6e73;
   --ac:#0071e3;--ac2:#0071e3;--hA:#0071e3;--hB:#0071e3;
-  --rgbA:#0071e3;--rgbB:#0071e3;--rgbC:#0071e3;--rgbD:#0071e3}
+  --rgbA:#1d1d1f;--rgbB:#1d1d1f;--rgbC:#1d1d1f;--rgbD:#1d1d1f}
 :root[data-theme="dark"]{
-  --crit:#ff453a;--impt:#ff9f0a;--gold:#ffd60a;--good:#30d158;
+  --line:rgba(255,255,255,.11);--sub:#161618;
+  --crit:#98989d;--impt:#8a8a8f;--gold:#8a8a8f;--good:#98989d;
   --ac:#0a84ff;--ac2:#0a84ff;--hA:#0a84ff;--hB:#0a84ff;
-  --rgbA:#0a84ff;--rgbB:#0a84ff;--rgbC:#0a84ff;--rgbD:#0a84ff}
-
-/* one accent on every tab — kill the per-tab hue shifts */
+  --rgbA:#f5f5f7;--rgbB:#f5f5f7;--rgbC:#f5f5f7;--rgbD:#f5f5f7}
 :root[data-theme="clean"] body[data-tt]{--ac:#0071e3;--ac2:#0071e3;--hA:#0071e3;--hB:#0071e3}
 :root[data-theme="dark"]  body[data-tt]{--ac:#0a84ff;--ac2:#0a84ff;--hA:#0a84ff;--hB:#0a84ff}
 
-/* page canvas: flat, no washes, no decorative objects */
-:root[data-theme="clean"] body{background:#ffffff}
-:root[data-theme="dark"]  body{background:#000000}
-:root[data-theme="clean"] body::before,:root[data-theme="dark"] body::before{background-image:none;-webkit-mask:none;mask:none;opacity:0}
+/* ---- canvas: flat, nothing floating ---- */
+:root[data-theme="clean"] body{background:#fff}
+:root[data-theme="dark"]  body{background:#000}
+:root[data-theme="clean"] body::before,:root[data-theme="dark"] body::before{background:none!important;background-image:none!important;-webkit-mask:none;mask:none;opacity:0}
 :root[data-theme="clean"] .blob,:root[data-theme="dark"] .blob,
-:root[data-theme="clean"] #skyGround,:root[data-theme="dark"] #skyGround{display:none!important}
+:root[data-theme="clean"] #skyGround,:root[data-theme="dark"] #skyGround,
+:root[data-theme="clean"] .brk,:root[data-theme="dark"] .brk,
+:root[data-theme="clean"] .ring,:root[data-theme="dark"] .ring,
+:root[data-theme="clean"] .tile,:root[data-theme="dark"] .tile,
+:root[data-theme="clean"] .sec-emo,:root[data-theme="dark"] .sec-emo,
+:root[data-theme="clean"] .slim-emoji,:root[data-theme="dark"] .slim-emoji,
+:root[data-theme="clean"] .bigflag,:root[data-theme="dark"] .bigflag,
+:root[data-theme="clean"] .allcaught,:root[data-theme="dark"] .allcaught{display:none!important}
 
-/* typography — SF stack, tight Apple tracking */
+/* ---- type ---- */
 :root[data-theme="clean"] body,:root[data-theme="dark"] body{
   font-family:-apple-system,BlinkMacSystemFont,"SF Pro Text","SF Pro Display","Helvetica Neue",Inter,system-ui,"Hind Mysuru",sans-serif;
-  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.01em}
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;letter-spacing:-.011em;font-size:.96rem;line-height:1.62}
+:root[data-theme="clean"] .wrap,:root[data-theme="dark"] .wrap{max-width:760px}
+:root[data-theme="clean"] .panel,:root[data-theme="dark"] .panel{column-count:initial!important;display:block!important;grid-template-columns:none!important}
 
-/* surfaces — flat cards, hairline border, no blur, no gradient border-box */
+/* ---- THE core move: cards become document rows ---- */
 :root[data-theme="clean"] .glass,:root[data-theme="clean"] .gcard,:root[data-theme="clean"] .hero,
-:root[data-theme="clean"] .fab-sheet,:root[data-theme="clean"] .sheet,:root[data-theme="clean"] .kbd-card,
-:root[data-theme="clean"] .more-menu,:root[data-theme="clean"] .filter-bar,:root[data-theme="clean"] .mast{
-  background:#ffffff!important;border:1px solid rgba(0,0,0,.09)!important;border-radius:18px;
-  box-shadow:0 1px 2px rgba(0,0,0,.04),0 12px 28px -20px rgba(0,0,0,.22)!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+:root[data-theme="clean"] .story,:root[data-theme="clean"] .trend,:root[data-theme="clean"] .q,
+:root[data-theme="clean"] .mast,:root[data-theme="clean"] .som-head,:root[data-theme="clean"] .costbar,
 :root[data-theme="dark"] .glass,:root[data-theme="dark"] .gcard,:root[data-theme="dark"] .hero,
-:root[data-theme="dark"] .fab-sheet,:root[data-theme="dark"] .sheet,:root[data-theme="dark"] .kbd-card,
-:root[data-theme="dark"] .more-menu,:root[data-theme="dark"] .filter-bar,:root[data-theme="dark"] .mast{
-  background:#1c1c1e!important;border:1px solid rgba(255,255,255,.10)!important;border-radius:18px;
-  box-shadow:0 1px 2px rgba(0,0,0,.5)!important;
-  backdrop-filter:none!important;-webkit-backdrop-filter:none!important}
+:root[data-theme="dark"] .story,:root[data-theme="dark"] .trend,:root[data-theme="dark"] .q,
+:root[data-theme="dark"] .mast,:root[data-theme="dark"] .som-head,:root[data-theme="dark"] .costbar{
+  background:none!important;background-color:transparent!important;border:0!important;border-radius:0!important;
+  box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;
+  padding:22px 0 24px!important;margin:0!important;border-bottom:1px solid var(--line)!important}
+:root[data-theme="clean"] .panel>*:last-child,:root[data-theme="dark"] .panel>*:last-child{border-bottom:0!important}
 @media (hover:hover){
-  :root[data-theme="clean"] .story.gcard:hover,:root[data-theme="clean"] .trend.gcard:hover{
-    box-shadow:0 1px 2px rgba(0,0,0,.05),0 18px 36px -22px rgba(0,0,0,.3)!important;transform:none}
-  :root[data-theme="dark"] .story.gcard:hover,:root[data-theme="dark"] .trend.gcard:hover{
-    background:#2c2c2e!important;transform:none}}
+ :root[data-theme="clean"] .story:hover,:root[data-theme="clean"] .trend:hover,
+ :root[data-theme="dark"] .story:hover,:root[data-theme="dark"] .trend:hover{
+   transform:none!important;box-shadow:none!important;outline:0!important;background:none!important}
+ :root[data-theme="clean"] .story:hover .st-t,:root[data-theme="dark"] .story:hover .st-t{color:var(--ac)!important}}
+:root[data-theme="clean"] .st-t,:root[data-theme="dark"] .st-t{font-size:1.06rem;font-weight:600;line-height:1.32;letter-spacing:-.021em;color:var(--ink)}
+:root[data-theme="clean"] .st-s,:root[data-theme="dark"] .st-s{font-size:.93rem;line-height:1.66;color:var(--ink2);margin-top:7px}
+:root[data-theme="clean"] .meta,:root[data-theme="clean"] .src,:root[data-theme="dark"] .meta,:root[data-theme="dark"] .src{
+  font-size:.76rem;color:var(--mut);font-weight:400;letter-spacing:0;margin-top:9px}
 
-/* headings & accents — solid ink, no gradient text */
+/* ---- hero is just a bigger first paragraph ---- */
+:root[data-theme="clean"] .hero .st-t,:root[data-theme="dark"] .hero .st-t{font-size:1.48rem;line-height:1.22;letter-spacing:-.026em;font-weight:600}
+:root[data-theme="clean"] .hero .st-s,:root[data-theme="dark"] .hero .st-s{font-size:1rem}
+
+/* ---- section headings: small grey label, no rule, no emoji ---- */
 :root[data-theme="clean"] .sec,:root[data-theme="dark"] .sec{
-  font-weight:700;font-size:.78rem;letter-spacing:-.01em;text-transform:none;color:var(--ink)}
-:root[data-theme="clean"] .sec::before,:root[data-theme="dark"] .sec::before{display:none}
-:root[data-theme="clean"] .ring .rn,:root[data-theme="dark"] .ring .rn,
+  font-size:.72rem;font-weight:600;letter-spacing:.02em;text-transform:uppercase;color:var(--mut);
+  margin:38px 0 4px;padding:0;background:none;border:0}
+:root[data-theme="clean"] .sec::before,:root[data-theme="dark"] .sec::before,
+:root[data-theme="clean"] .sec::after,:root[data-theme="dark"] .sec::after{display:none!important}
+
+/* ---- strip the colour signalling: dots, heat, pills, badges ---- */
+:root[data-theme="clean"] .dot,:root[data-theme="dark"] .dot,
+:root[data-theme="clean"] .heat,:root[data-theme="dark"] .heat,
+:root[data-theme="clean"] .trank,:root[data-theme="dark"] .trank,
+:root[data-theme="clean"] .glance-tag,:root[data-theme="dark"] .glance-tag{display:none!important}
+:root[data-theme="clean"] .pill,:root[data-theme="clean"] .mag,:root[data-theme="clean"] .as-tier,:root[data-theme="clean"] .chiprow>*,
+:root[data-theme="clean"] .reader-chip,:root[data-theme="clean"] .cx,:root[data-theme="clean"] .lbl{
+  background:var(--sub)!important;color:var(--ink2)!important;border:0!important;border-radius:6px!important;
+  box-shadow:none!important;font-weight:500!important;letter-spacing:0!important;text-transform:none!important}
+:root[data-theme="dark"] .pill,:root[data-theme="dark"] .mag,:root[data-theme="dark"] .as-tier,:root[data-theme="dark"] .chiprow>*,
+:root[data-theme="dark"] .reader-chip,:root[data-theme="dark"] .cx,:root[data-theme="dark"] .lbl{
+  background:var(--sub)!important;color:var(--ink2)!important;border:0!important;border-radius:6px!important;
+  box-shadow:none!important;font-weight:500!important;letter-spacing:0!important;text-transform:none!important}
+:root[data-theme="clean"] .as-lbl,:root[data-theme="dark"] .as-lbl{color:var(--mut)!important;font-weight:400!important}
+:root[data-theme="clean"] .as-row,:root[data-theme="dark"] .as-row{border:0!important;background:none!important;padding-left:0!important}
+
+/* ---- glance / "in 30 seconds" box: indented note, not a panel ---- */
+:root[data-theme="clean"] .glance-body,:root[data-theme="dark"] .glance-body{background:none!important;border:0!important;padding:0!important}
+:root[data-theme="clean"] .glance-row,:root[data-theme="dark"] .glance-row{padding:4px 0!important;border:0!important}
+
+/* ---- navigation: text only ---- */
+:root[data-theme="clean"] nav,:root[data-theme="clean"] .dock{background:rgba(255,255,255,.94)!important;border-color:var(--line)!important;box-shadow:none!important;backdrop-filter:saturate(1.8) blur(14px)}
+:root[data-theme="dark"] nav,:root[data-theme="dark"] .dock{background:rgba(0,0,0,.94)!important;border-color:var(--line)!important;box-shadow:none!important;backdrop-filter:saturate(1.8) blur(14px)}
+:root[data-theme="clean"] .tab,:root[data-theme="dark"] .tab{
+  background:none!important;border:0!important;border-radius:0!important;box-shadow:none!important;
+  color:var(--mut)!important;font-weight:500!important;letter-spacing:-.01em!important;padding:9px 2px!important;margin:0 9px!important}
+:root[data-theme="clean"] .tab.on,:root[data-theme="dark"] .tab.on{
+  color:var(--ink)!important;font-weight:600!important;box-shadow:inset 0 -2px 0 var(--ac)!important}
+
+/* ---- masthead: date + count, nothing else ---- */
+:root[data-theme="clean"] .mast,:root[data-theme="dark"] .mast{padding:26px 0 18px!important}
+:root[data-theme="clean"] .mast::before,:root[data-theme="dark"] .mast::before{display:none!important}
+:root[data-theme="clean"] #dateLbl,:root[data-theme="dark"] #dateLbl{
+  background:none!important;color:var(--ink)!important;padding:0!important;font-weight:600!important;letter-spacing:-.02em!important;box-shadow:none!important;font-size:1.3rem}
+:root[data-theme="clean"] .m-date,:root[data-theme="dark"] .m-date{color:var(--mut)!important;letter-spacing:0!important}
+:root[data-theme="clean"] .m-date span[lang="kn"],:root[data-theme="dark"] .m-date span[lang="kn"]{background:none!important;border:0!important;padding:0!important;color:var(--mut)!important}
 :root[data-theme="clean"] #slimName,:root[data-theme="dark"] #slimName,
+:root[data-theme="clean"] .slim-title,:root[data-theme="dark"] .slim-title{
+  background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;
+  -webkit-text-fill-color:currentColor!important;color:var(--ink)!important;font-weight:600!important;letter-spacing:-.024em!important}
+:root[data-theme="clean"] .slim-head,:root[data-theme="dark"] .slim-head{background:none!important;border:0!important;box-shadow:none!important;animation:none!important;padding:22px 0 6px!important}
+:root[data-theme="clean"] .slim-count,:root[data-theme="clean"] .slim-date,
+:root[data-theme="dark"] .slim-count,:root[data-theme="dark"] .slim-date{color:var(--mut)!important;background:none!important;border:0!important}
 :root[data-theme="clean"] .legend>summary,:root[data-theme="dark"] .legend>summary,
 :root[data-theme="clean"] .since .sh,:root[data-theme="dark"] .since .sh{
   background:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;
-  -webkit-text-fill-color:currentColor!important;color:var(--ink)!important;font-weight:700;letter-spacing:-.02em}
-:root[data-theme="clean"] .ring,:root[data-theme="dark"] .ring{filter:none}
-:root[data-theme="clean"] .mast::before,:root[data-theme="dark"] .mast::before{display:none}
+  -webkit-text-fill-color:currentColor!important;color:var(--mut)!important;font-weight:500!important}
 
-/* pills, chips, controls — Apple capsule grey */
+/* ---- controls: quiet grey capsules ---- */
 :root[data-theme="clean"] .tool,:root[data-theme="clean"] .fit-seg,:root[data-theme="clean"] .dens-seg,
-:root[data-theme="clean"] .cb-row .cx,:root[data-theme="clean"] .m-date span[lang="kn"]{
-  background:#f5f5f7!important;border:1px solid rgba(0,0,0,.06)!important;color:var(--ink2)!important;box-shadow:none!important}
+:root[data-theme="clean"] .more-btn,:root[data-theme="clean"] .act-ask,:root[data-theme="clean"] .ask-go,:root[data-theme="clean"] .fab-item{
+  background:var(--sub)!important;border:0!important;color:var(--ink2)!important;box-shadow:none!important;border-radius:8px!important;font-weight:500!important}
 :root[data-theme="dark"] .tool,:root[data-theme="dark"] .fit-seg,:root[data-theme="dark"] .dens-seg,
-:root[data-theme="dark"] .cb-row .cx,:root[data-theme="dark"] .m-date span[lang="kn"]{
-  background:#2c2c2e!important;border:1px solid rgba(255,255,255,.08)!important;color:var(--ink2)!important;box-shadow:none!important}
-:root[data-theme="clean"] #dateLbl{background:#1d1d1f;color:#fff;border-radius:999px;padding:5px 13px;font-weight:600;letter-spacing:0;box-shadow:none}
-:root[data-theme="dark"] #dateLbl{background:#f5f5f7;color:#000;border-radius:999px;padding:5px 13px;font-weight:600;letter-spacing:0;box-shadow:none}
-
-/* tab rail / bottom dock */
-:root[data-theme="clean"] nav,:root[data-theme="clean"] .dock{background:rgba(255,255,255,.92)!important;border-color:rgba(0,0,0,.08)!important}
-:root[data-theme="dark"] nav,:root[data-theme="dark"] .dock{background:rgba(0,0,0,.92)!important;border-color:rgba(255,255,255,.10)!important}
-
-/* buttons / selected states use the single accent */
-:root[data-theme="clean"] .theme-opt.on,:root[data-theme="dark"] .theme-opt.on{
-  background:var(--ac)!important;color:#fff!important;border-color:transparent!important;box-shadow:none!important}
-:root[data-theme="clean"] a,:root[data-theme="dark"] a{color:var(--ac)}
+:root[data-theme="dark"] .more-btn,:root[data-theme="dark"] .act-ask,:root[data-theme="dark"] .ask-go,:root[data-theme="dark"] .fab-item{
+  background:var(--sub)!important;border:0!important;color:var(--ink2)!important;box-shadow:none!important;border-radius:8px!important;font-weight:500!important}
+:root[data-theme="clean"] .fab-sheet,:root[data-theme="clean"] .sheet,:root[data-theme="clean"] .more-menu,:root[data-theme="clean"] .kbd-card,:root[data-theme="clean"] #reader{
+  background:#fff!important;border:1px solid var(--line)!important;border-radius:14px!important;box-shadow:0 20px 60px -30px rgba(0,0,0,.35)!important}
+:root[data-theme="dark"] .fab-sheet,:root[data-theme="dark"] .sheet,:root[data-theme="dark"] .more-menu,:root[data-theme="dark"] .kbd-card,:root[data-theme="dark"] #reader{
+  background:#1c1c1e!important;border:1px solid var(--line)!important;border-radius:14px!important;box-shadow:0 20px 60px -30px #000!important}
+:root[data-theme="clean"] .theme-opt.on,:root[data-theme="dark"] .theme-opt.on{background:var(--ac)!important;color:#fff!important;border:0!important;box-shadow:none!important}
+:root[data-theme="clean"] a,:root[data-theme="dark"] a{color:var(--ac);text-decoration:none}
+:root[data-theme="clean"] .read,:root[data-theme="dark"] .read{opacity:.5!important}
+:root[data-theme="clean"] .thumb,:root[data-theme="dark"] .thumb{border-radius:8px!important;border:0!important;box-shadow:none!important}
+:root[data-theme="clean"] .sompage,:root[data-theme="dark"] .sompage{border-radius:0!important;border:1px solid var(--line)!important;box-shadow:none!important;padding:0!important}
 
 </style>
 </head>
