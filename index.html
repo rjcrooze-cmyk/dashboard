@@ -666,6 +666,32 @@ body.no-ai .act-ask::after{content:" \2197"}
 :root[data-theme="clean"] #readerClose{background:#f5f5f7;color:#1d1d1f}
 :root[data-theme="dark"]  #readerClose{background:#2c2c2e;color:#f5f5f7}
 
+/* ---- ONE title per tab (2026-08-15). The template renders TWO headings:
+   .slim-head (#slimName, gradient-blue) and the in-panel .phead (plain h2).
+   The rule that hid .phead was lost with the FIXES v2 block. Keep .phead
+   hidden and let .slim-head be the single, ink-coloured tab title, closed
+   with one hairline before the content starts. ---- */
+:root[data-theme="clean"] .phead,:root[data-theme="dark"] .phead,
+:root[data-theme="clean"] .ph-badge,:root[data-theme="dark"] .ph-badge,
+:root[data-theme="clean"] .sp,:root[data-theme="dark"] .sp{display:none!important}
+:root[data-theme="clean"] .slim-head,:root[data-theme="dark"] .slim-head{
+  padding:24px 0 14px!important;margin:0 0 6px!important;border-bottom:1px solid var(--line)!important;
+  display:flex!important;align-items:baseline;gap:10px;flex-wrap:wrap}
+body:not([data-tt="news"]) :is(:root[data-theme="clean"],:root[data-theme="dark"]) .slim-head{display:flex!important}
+:root[data-theme="clean"] #slimName,:root[data-theme="dark"] #slimName,
+:root[data-theme="clean"] .slim-title,:root[data-theme="dark"] .slim-title{
+  font-size:1.62rem!important;font-weight:600!important;letter-spacing:-.028em!important;
+  background:none!important;background-image:none!important;-webkit-background-clip:initial!important;background-clip:initial!important;
+  -webkit-text-fill-color:var(--ink)!important;color:var(--ink)!important}
+:root[data-theme="clean"] .slim-count,:root[data-theme="dark"] .slim-count,
+:root[data-theme="clean"] .slim-date,:root[data-theme="dark"] .slim-date,
+:root[data-theme="clean"] #slimDate,:root[data-theme="dark"] #slimDate{
+  font-size:.78rem!important;color:var(--mut)!important;font-weight:400!important;background:none!important;border:0!important;padding:0!important}
+/* first section label sits right under the rule, no double gap */
+:root[data-theme="clean"] .slim-head + .sec,:root[data-theme="dark"] .slim-head + .sec{margin-top:20px}
+/* News keeps only the masthead date — no second heading */
+:root[data-theme="clean"] .mast,:root[data-theme="dark"] .mast{border-bottom:1px solid var(--line)!important;margin-bottom:6px!important}
+
 </style>
 </head>
 <body data-tt="news">
