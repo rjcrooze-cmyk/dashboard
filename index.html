@@ -42,8 +42,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Dashboard">
-<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+<!-- Google Fonts links removed 2026-09-30: the page uses only system fonts, and an external
+     stylesheet is the one request that hangs the first paint when offline. Do NOT re-add them. -->
+<link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%232563eb'/%3E%3Cstop%20offset='1'%20stop-color='%235b46e5'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width='512'%20height='512'%20rx='110'%20fill='%23080b13'/%3E%3Ccircle%20cx='256'%20cy='230'%20r='120'%20fill='none'%20stroke='url(%23g)'%20stroke-width='34'/%3E%3Crect%20x='140'%20y='388'%20width='232'%20height='30'%20rx='15'%20fill='url(%23g)'/%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box}
@@ -2296,6 +2297,92 @@ document.addEventListener("click",function(e){
     document.querySelectorAll("#viewGrid .theme-opt").forEach(b=>b.classList.toggle("on",b.dataset.vw===v)); };
   document.querySelectorAll("#viewGrid .theme-opt").forEach(b=>{ b.onclick=()=>{ store.set("view",b.dataset.vw); applyView(); }; });
   applyView();
+})();
+
+/* ---- OFFLINE / PWA (added 2026-09-30) -------------------------------------------------
+   Registers sw.js so the dashboard opens instantly from cache and works with no network
+   (flight mode) — including the Star of Mysore page images, which are pre-cached on the
+   FIRST load of each new build rather than waiting for the SOM tab to be opened.
+   A newer build never swaps in mid-read: it waits and offers a "tap to refresh" chip.
+   Lives outside the DATA/THUMBS/SOM regions and is preserved by the daily region-replace. --- */
+(function(){
+  if(!("serviceWorker" in navigator)) return;
+  var chip=null, toastT=null;
+  function mk(html,bg,fg,onclick){
+    var el=document.createElement("div");
+    el.setAttribute("role","status");
+    el.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));"
+      +"z-index:2147483000;max-width:calc(100vw - 32px);padding:10px 14px;border-radius:999px;"
+      +"font:600 13px/1.25 -apple-system,BlinkMacSystemFont,'SF Pro Text',system-ui,sans-serif;"
+      +"background:"+bg+";color:"+fg+";box-shadow:0 6px 24px rgba(0,0,0,.28);cursor:"+(onclick?"pointer":"default")+";"
+      +"display:flex;align-items:center;gap:9px;white-space:nowrap;opacity:0;transition:opacity .22s ease";
+    el.innerHTML=html;
+    if(onclick) el.addEventListener("click",onclick);
+    document.body.appendChild(el);
+    requestAnimationFrame(function(){ el.style.opacity="1"; });
+    return el;
+  }
+  function toast(html){
+    var t=mk(html,"rgba(28,28,30,.95)","#fff",null);
+    clearTimeout(toastT);
+    toastT=setTimeout(function(){ t.style.opacity="0"; setTimeout(function(){ t.remove(); },260); },2600);
+  }
+  function offerUpdate(reg){
+    if(chip) return;
+    chip=mk("<span>New update ready</span><span style='opacity:.65;font-weight:500'>Tap to refresh</span>",
+            "#0071e3","#fff",function(){
+      chip.innerHTML="<span>Refreshing…</span>";
+      var w=reg.waiting||reg.installing;
+      if(w) w.postMessage({type:"SKIP_WAITING"});
+      setTimeout(function(){ location.reload(); },900);
+    });
+  }
+  // collect everything the page needs offline: the SOM page images (relative, same-origin)
+  function assets(){
+    var out=[];
+    try{
+      var s=window.__SOM;
+      if(s&&s.pages&&s.pages.length) s.pages.forEach(function(u){ out.push(u); });
+    }catch(e){}
+    return out;
+  }
+  navigator.serviceWorker.addEventListener("message",function(ev){
+    var d=ev.data||{};
+    if(d.type==="CACHED"&&d.added>0) toast("<span>✓ Saved for offline</span><span style='opacity:.65;font-weight:500'>"+d.have+"/"+d.total+" pages</span>");
+  });
+  var reloading=false;
+  navigator.serviceWorker.addEventListener("controllerchange",function(){
+    if(reloading) return; reloading=true;
+  });
+  window.addEventListener("load",function(){
+    navigator.serviceWorker.register("sw.js",{scope:"./",updateViaCache:"none"}).then(function(reg){
+      function check(w){
+        if(!w) return;
+        w.addEventListener("statechange",function(){
+          if(w.state==="installed"&&navigator.serviceWorker.controller) offerUpdate(reg);
+        });
+      }
+      if(reg.waiting&&navigator.serviceWorker.controller) offerUpdate(reg);
+      check(reg.installing);
+      reg.addEventListener("updatefound",function(){ check(reg.installing); });
+      // ask the active worker to top up anything the build stamp missed
+      function push(){
+        var sw=reg.active||navigator.serviceWorker.controller;
+        var a=assets();
+        if(sw&&a.length) sw.postMessage({type:"CACHE_ASSETS",urls:a});
+      }
+      if(navigator.serviceWorker.controller) push(); else navigator.serviceWorker.ready.then(push);
+      // check for a newer build when the app is brought back to the foreground
+      document.addEventListener("visibilitychange",function(){
+        if(document.visibilityState==="visible"){ try{ reg.update(); }catch(e){} }
+      });
+    }).catch(function(e){ /* private mode / unsupported: page still works, just not offline */ });
+  });
+  // a quiet marker so it is obvious when the page is being served with no network
+  function net(){ document.documentElement.setAttribute("data-net", navigator.onLine?"on":"off"); }
+  window.addEventListener("online",function(){ net(); });
+  window.addEventListener("offline",function(){ net(); toast("<span>Offline</span><span style='opacity:.65;font-weight:500'>Showing today's saved copy</span>"); });
+  net();
 })();
 
 </script>
