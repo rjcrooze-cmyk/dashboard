@@ -10,8 +10,8 @@
    instead of swapping the page out from under someone mid-read. */
 
 /*SWBUILD_START*/
-const BUILD = "2026-10-08T01:55:43Z";
-const SOM_PAGES = ["som/page-01.webp?v=3490", "som/page-02.webp?v=3490", "som/page-03.webp?v=3490", "som/page-04.webp?v=3490", "som/page-05.webp?v=3490", "som/page-06.webp?v=3490", "som/page-07.webp?v=3490", "som/page-08.webp?v=3490", "som/page-09.webp?v=3490", "som/page-10.webp?v=3490", "som/page-11.webp?v=3490", "som/page-12.webp?v=3490"];
+const BUILD = "2026-10-09T01:52:24Z";
+const SOM_PAGES = ["som/page-01.webp?v=3491", "som/page-02.webp?v=3491", "som/page-03.webp?v=3491", "som/page-04.webp?v=3491", "som/page-05.webp?v=3491", "som/page-06.webp?v=3491", "som/page-07.webp?v=3491", "som/page-08.webp?v=3491", "som/page-09.webp?v=3491", "som/page-10.webp?v=3491", "som/page-11.webp?v=3491", "som/page-12.webp?v=3491"];
 /*SWBUILD_END*/
 
 const CACHE = "dash-" + BUILD;
